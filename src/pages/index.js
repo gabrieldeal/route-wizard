@@ -1,12 +1,11 @@
 import Button from '@material-ui/core/Button';
-import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
-import LineString from 'jsts/org/locationtech/jts/geom/LineString';
 import React from 'react';
 import compose from 'recompose/compose';
 import withState from 'recompose/withState';
 import { withStyles } from '@material-ui/core/styles';
 
 import Layout from '../components/layout';
+import Route from '../lib/Route';
 
 const styles = (theme) => ({
   button: {
@@ -26,15 +25,8 @@ const IndexPage = (props) => {
     const fileReader = new FileReader();
     fileReader.onload = (event) => {
       const routeGeoJson = event.target.result;
-      const geoJsonReader = new GeoJSONReader();
-      const route = geoJsonReader.read(routeGeoJson);
-      setLines(
-        route.features
-          .filter((feature) => feature.geometry instanceof LineString)
-          .map((line) => ({
-            title: line.properties.title,
-          }))
-      );
+      const route = new Route({ geoJson: routeGeoJson });
+      setLines(route.lines());
     };
     fileReader.readAsText(file);
   };
