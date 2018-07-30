@@ -24,7 +24,7 @@ const IndexPage = (props) => {
     const file = event.target.files[0];
     const receiveFileContents = (geoJson) => {
       const route = new Route({ geoJson });
-      setLines(route.lines());
+      setLines(route.data());
     };
     readFile({ file, receiveFileContents });
   };
@@ -50,7 +50,9 @@ const IndexPage = (props) => {
       </label>
       <ol>
         {lines.map((line) => (
-          <li>{line.title}</li>
+          <li key={line.title}>
+            {line.title} ({line.points.join(', ')})
+          </li>
         ))}
       </ol>
     </Layout>
