@@ -5,6 +5,7 @@ import withState from 'recompose/withState';
 import { withStyles } from '@material-ui/core/styles';
 
 import Layout from '../components/layout';
+import readFile from '../lib/readFile';
 import Route from '../lib/Route';
 
 const styles = (theme) => ({
@@ -21,14 +22,11 @@ const IndexPage = (props) => {
 
   const handleSelectedFile = (event) => {
     const file = event.target.files[0];
-
-    const fileReader = new FileReader();
-    fileReader.onload = (event) => {
-      const routeGeoJson = event.target.result;
-      const route = new Route({ geoJson: routeGeoJson });
+    const receiveFileContents = (geoJson) => {
+      const route = new Route({ geoJson });
       setLines(route.lines());
     };
-    fileReader.readAsText(file);
+    readFile({ file, receiveFileContents });
   };
 
   return (
