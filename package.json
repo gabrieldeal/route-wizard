@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "@material-ui/core": "^1.4.2",
     "gatsby": "next",
     "gatsby-plugin-react-helmet": "next",
     "react": "^16.4.1",
