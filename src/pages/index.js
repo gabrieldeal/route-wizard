@@ -1,30 +1,30 @@
-import Button from '@material-ui/core/Button'
-import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button';
+import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
 
-import Layout from '../components/layout'
+import Layout from '../components/layout';
 
-const styles = theme => ({
+const styles = (theme) => ({
   button: {
     margin: theme.spacing.unit,
   },
   input: {
     display: 'none',
   },
-})
+});
 
-const IndexPage = props => {
-  const { classes } = props
+const IndexPage = (props) => {
+  const { classes } = props;
 
-  const handleSelectedFile = event => {
-    const file = event.target.files[0]
+  const handleSelectedFile = (event) => {
+    const file = event.target.files[0];
 
-    const reader = new FileReader()
-    reader.onload = event => {
-      console.log(event.target.result)
-    }
-    reader.readAsText(file)
-  }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      console.log(event.target.result);
+    };
+    reader.readAsText(file);
+  };
 
   return (
     <Layout>
@@ -46,9 +46,9 @@ const IndexPage = props => {
         </Button>
       </label>
     </Layout>
-  )
-}
+  );
+};
 
-const enhance = withStyles(styles)
+const enhance = withStyles(styles);
 
-export default enhance(IndexPage)
+export default enhance(IndexPage);
