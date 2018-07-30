@@ -10,8 +10,7 @@ export default class Route {
   lines() {
     return this.route.features
       .filter((feature) => feature.geometry instanceof LineString)
-      .map((line) => ({
-        title: line.properties.title,
-      }));
+      .map((line) => ({ title: line.properties.title }))
+      .sort((a, b) => a.title.localeCompare(b.title)); // FIXME: sort by line endpoints
   }
 }
