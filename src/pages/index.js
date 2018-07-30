@@ -16,12 +16,23 @@ const styles = theme => ({
 const IndexPage = props => {
   const { classes } = props
 
+  const handleSelectedFile = event => {
+    const file = event.target.files[0]
+
+    const reader = new FileReader()
+    reader.onload = event => {
+      console.log(event.target.result)
+    }
+    reader.readAsText(file)
+  }
+
   return (
     <Layout>
       <input
-        accept="image/*"
+        accept="application/json"
         className={classes.input}
         id="route-file"
+        onChange={handleSelectedFile}
         type="file"
       />
       <label htmlFor="route-file">
