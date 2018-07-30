@@ -1,4 +1,5 @@
 import Button from '@material-ui/core/Button';
+import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -19,11 +20,14 @@ const IndexPage = (props) => {
   const handleSelectedFile = (event) => {
     const file = event.target.files[0];
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      console.log(event.target.result);
+    const fileReader = new FileReader();
+    fileReader.onload = (event) => {
+      const geoJson = event.target.result;
+      const geoJsonReader = new GeoJSONReader();
+      const geometry = geoJsonReader.read(geoJson);
+      console.log(geometry);
     };
-    reader.readAsText(file);
+    fileReader.readAsText(file);
   };
 
   return (
