@@ -1,4 +1,3 @@
-import DistanceOp from 'jsts/org/locationtech/jts/operation/distance/DistanceOp';
 import DistanceToPoint from 'jsts/org/locationtech/jts/algorithm/distance/DistanceToPoint';
 import flatten from 'lodash/flatten';
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
@@ -34,7 +33,7 @@ export default class Route {
 
     const segments = this.segments
       .sort((a, b) => a.title.localeCompare(b.title)) // FIXME
-      .map((segment) => this.splitOnPoints(segment));
+      .map((segment) => segment.splitOnMarkers());
     this.segments = flatten(segments);
   }
 
@@ -50,88 +49,6 @@ export default class Route {
       const segment = this.closestSegment(marker);
       segment.markers.push(marker);
     });
-  }
-
-  computeMinDistance(segment, marker) {
-    console.log('computeMinDistance');
-    console.log('    segment.title', segment.title);
-    console.log('    segment.line', segment.line);
-    console.log('    marker.title', marker.title);
-    console.log('    marker.point', marker.point);
-
-    const locGeom = [];
-    const distanceOp = new DistanceOp();
-    distanceOp.computeMinDistance(segment.line, marker.point, locGeom);
-
-    console.log('    locGeom', locGeom);
-
-    return locGeom;
-  }
-
-  // FIXME: Move into Segment
-  splitOnPoints(segment) {
-    console.log('splitOnPoints');
-    const segments = [];
-    let remainingSegment = segment;
-    segment.markers
-      .map((marker) => ({
-        locGeom: this.computeMinDistance(segment, marker),
-        marker,
-      }))
-      .sort((a, b) =>
-        Math.sign(
-          a.locGeom[0].getSegmentIndex() - b.locGeom[0].getSegmentIndex()
-        )
-      )
-      .reverse()
-      .forEach((split) => {
-        let newSegment;
-        [remainingSegment, newSegment] = this.split({
-          lineGeometryLocation: split.locGeom[0],
-          marker: split.marker,
-          segment: remainingSegment,
-        });
-        segments.push(newSegment);
-      });
-
-    segments.push(remainingSegment);
-
-    return segments.reverse();
-  }
-
-  // FIXME: Move into Segment
-  split({ lineGeometryLocation, marker, segment }) {
-    const coordinates = segment.line.getCoordinates();
-    console.log('segment', segment.title);
-    console.log('    coordinate count', coordinates.length);
-    console.log('    marker', marker.title);
-    console.log('    lineGeometryLocation', lineGeometryLocation);
-
-    const splitIndex = lineGeometryLocation.getSegmentIndex();
-    const left = coordinates.slice(0, splitIndex + 1);
-    const right = coordinates.slice(splitIndex, coordinates.length);
-
-    if (!right[0].equals(lineGeometryLocation.getCoordinate())) {
-      // The split is between points on the line.
-      left.push(lineGeometryLocation.getCoordinate());
-      right.unshift(lineGeometryLocation.getCoordinate());
-    }
-
-    return [
-      new Segment({
-        coordinates: left,
-        description: segment.description,
-        factory: segment.line.getFactory(),
-        title: segment.title,
-      }),
-      new Segment({
-        coordinates: right,
-        description: segment.description,
-        factory: segment.line.getFactory(),
-        marker,
-        title: marker.title,
-      }),
-    ];
   }
 
   closestSegment(marker) {
