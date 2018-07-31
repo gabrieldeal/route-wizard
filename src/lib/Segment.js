@@ -36,36 +36,23 @@ export default class Segment {
 
     let distance = 0;
     for (let i = 1; i < latLons.length; ++i) {
-      console.log('lat-1', latLons[i - 1]);
-      console.log('lat', latLons[i]);
-      const d = geodist(latLons[i - 1], latLons[i], {
+      distance += geodist(latLons[i - 1], latLons[i], {
         exact: true,
         unit: 'miles',
       });
-      console.log('d', d);
-      distance += d;
     }
 
     return distance;
   }
 
   computeMinDistance(marker) {
-    console.log('computeMinDistance');
-    console.log('    segment.title', this.title);
-    console.log('    this.line', this.line);
-    console.log('    marker.title', marker.title);
-    console.log('    marker.point', marker.point);
-
     const locGeom = [];
     const distanceOp = new DistanceOp();
     distanceOp.computeMinDistance(this.line, marker.point, locGeom);
 
-    console.log('    locGeom', locGeom);
-
     return locGeom;
   }
 
-  // FIXME: Move into Segment
   splitOnMarkers() {
     const segments = [];
     let remainingSegment = this;
@@ -95,13 +82,8 @@ export default class Segment {
     return segments.reverse();
   }
 
-  // FIXME: Move into Segment
   split({ lineGeometryLocation, marker }) {
     const coordinates = this.line.getCoordinates();
-    console.log('segment', this.title);
-    console.log('    coordinate count', coordinates.length);
-    console.log('    marker', marker.title);
-    console.log('    lineGeometryLocation', lineGeometryLocation);
 
     const splitIndex = lineGeometryLocation.getSegmentIndex();
     const left = coordinates.slice(0, splitIndex + 1);
