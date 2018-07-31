@@ -18,13 +18,13 @@ const styles = (theme) => ({
 });
 
 const IndexPage = (props) => {
-  const { classes, lines, setLines } = props;
+  const { classes, segments, setSegments } = props;
 
   const handleSelectedFile = (event) => {
     const file = event.target.files[0];
     const receiveFileContents = (geoJson) => {
       const route = new Route({ geoJson });
-      setLines(route.data());
+      setSegments(route.data());
     };
     readFile({ file, receiveFileContents });
   };
@@ -49,9 +49,9 @@ const IndexPage = (props) => {
         </Button>
       </label>
       <ol>
-        {lines.map((line) => (
-          <li key={line.title}>
-            {line.title} ({line.points.join(', ')})
+        {segments.map((segment) => (
+          <li key={segment.title}>
+            {segment.title} ({segment.markers.join(', ')})
           </li>
         ))}
       </ol>
@@ -61,7 +61,7 @@ const IndexPage = (props) => {
 
 const enhance = compose(
   withStyles(styles),
-  withState('lines', 'setLines', [])
+  withState('segments', 'setSegments', [])
 );
 
 export default enhance(IndexPage);
