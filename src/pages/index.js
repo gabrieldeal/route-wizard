@@ -23,7 +23,7 @@ const IndexPage = (props) => {
     const file = event.target.files[0];
     const receiveFileContents = (geoJson) => {
       const route = new Route({ geoJson });
-      setSegments(route.data());
+      route.data().then((data) => setSegments(data));
     };
     readFile({ file, receiveFileContents });
   };
@@ -50,7 +50,9 @@ const IndexPage = (props) => {
       <ol>
         {segments.map((segment) => (
           <li key={segment.title}>
-            {segment.title} ({segment.distance})
+            {segment.title},{segment.distance} miles,
+            {segment.gain}' gain,
+            {segment.loss}' loss
           </li>
         ))}
       </ol>
