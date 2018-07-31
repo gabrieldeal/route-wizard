@@ -1,10 +1,10 @@
-//import Distance from 'jsts/org/locationtech/jts/algorithm/Distance';
-import DistanceToPoint from 'jsts/org/locationtech/jts/algorithm/distance/DistanceToPoint';
-import PointPairDistance from 'jsts/org/locationtech/jts/algorithm/distance/PointPairDistance';
 import DistanceOp from 'jsts/org/locationtech/jts/operation/distance/DistanceOp';
+import DistanceToPoint from 'jsts/org/locationtech/jts/algorithm/distance/DistanceToPoint';
+import flatten from 'lodash/flatten';
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import LineString from 'jsts/org/locationtech/jts/geom/LineString';
 import Point from 'jsts/org/locationtech/jts/geom/Point';
+import PointPairDistance from 'jsts/org/locationtech/jts/algorithm/distance/PointPairDistance';
 
 import Marker from './Marker';
 import Segment from './Segment';
@@ -32,17 +32,17 @@ export default class Route {
 
     this.associate();
 
-    // FIXME
-    //    this.lines().forEach((line) => this.splitOnPoints(line));
+    const segments = this.segments
+      .sort((a, b) => a.title.localeCompare(b.title)) // FIXME
+      .map((segment) => this.splitOnPoints(segment));
+    this.segments = flatten(segments);
   }
 
   data() {
-    return this.segments
-      .map((segment) => ({
-        title: segment.title,
-        markers: segment.markers.map((marker) => marker.title),
-      }))
-      .sort((a, b) => a.title.localeCompare(b.title)); // FIXME: sort by segment endpoints
+    return this.segments.map((segment) => ({
+      title: segment.title,
+      markers: segment.markers.map((marker) => marker.title),
+    }));
   }
 
   associate() {
@@ -53,16 +53,17 @@ export default class Route {
   }
 
   computeMinDistance(segment, marker) {
-    /* console.log('computeMinDistance');
-     * console.log('    line.title', line.properties.title);
-     * console.log('    line', line);
-     * console.log('    point', point);
-     */
+    console.log('computeMinDistance');
+    console.log('    segment.title', segment.title);
+    console.log('    segment.line', segment.line);
+    console.log('    marker.title', marker.title);
+    console.log('    marker.point', marker.point);
+
     const locGeom = [];
     const distanceOp = new DistanceOp();
     distanceOp.computeMinDistance(segment.line, marker.point, locGeom);
 
-    //console.log('    locGeom', locGeom);
+    console.log('    locGeom', locGeom);
 
     return locGeom;
   }
@@ -73,7 +74,7 @@ export default class Route {
     let remainingSegment = segment;
     segment.markers
       .map((marker) => ({
-        locGeom: this.computeMinDistance(segment.line, marker.point),
+        locGeom: this.computeMinDistance(segment, marker),
         marker,
       }))
       .sort((a, b) =>
@@ -84,37 +85,49 @@ export default class Route {
       .reverse()
       .forEach((split) => {
         let newSegment;
-        [newSegment, remainingSegment] = this.split({
-          coordinateToSplit: split.locGeom[0].getCoordinate(),
+        [remainingSegment, newSegment] = this.split({
+          lineGeometryLocation: split.locGeom[0],
           marker: split.marker,
           segment: remainingSegment,
         });
         segments.push(newSegment);
       });
 
-    console.log(segments);
+    segments.push(remainingSegment);
+
+    return segments.reverse();
   }
 
-  split({ coordinateToSplit, marker, segment }) {
+  split({ lineGeometryLocation, marker, segment }) {
     const coordinates = segment.line.getCoordinates();
-    const splitIndex = coordinates.findIndex((coordinate, i) =>
-      coordinate.equals(coordinateToSplit)
-    );
+    console.log('segment', segment.title);
+    console.log('    coordinate count', coordinates.length);
+    console.log('    marker', marker.title);
+    console.log('    lineGeometryLocation', lineGeometryLocation);
 
+    const splitIndex = lineGeometryLocation.getSegmentIndex();
     const left = coordinates.slice(0, splitIndex + 1);
     const right = coordinates.slice(splitIndex, coordinates.length);
+
+    if (!right[0].equals(lineGeometryLocation.getCoordinate())) {
+      // The split is between points on the line.
+      left.push(lineGeometryLocation.getCoordinate());
+      right.unshift(lineGeometryLocation.getCoordinate());
+    }
 
     return [
       new Segment({
         coordinates: left,
         description: segment.description,
+        factory: segment.line.getFactory(),
         title: segment.title,
       }),
-      new LineString({
+      new Segment({
         coordinates: right,
         description: segment.description,
+        factory: segment.line.getFactory(),
         marker,
-        title: segment.title,
+        title: marker.title,
       }),
     ];
   }
