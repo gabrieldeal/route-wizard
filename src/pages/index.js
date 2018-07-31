@@ -1,12 +1,11 @@
 import Button from '@material-ui/core/Button';
-import React from 'react';
 import compose from 'recompose/compose';
+import React from 'react';
+import { readFile, Route } from 'route-wizard-lib';
 import withState from 'recompose/withState';
 import { withStyles } from '@material-ui/core/styles';
 
 import Layout from '../components/layout';
-import readFile from '../lib/readFile';
-import Route from '../lib/Route';
 
 const styles = (theme) => ({
   button: {

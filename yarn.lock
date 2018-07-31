@@ -4065,9 +4065,9 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-geodist@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/geodist/-/geodist-0.2.1.tgz#9619a5d935529335716faafad32228c29dc0b920"
+geolib@^2.0.24:
+  version "2.0.24"
+  resolved "https://registry.yarnpkg.com/geolib/-/geolib-2.0.24.tgz#eb3d7fbc65f5ea3354a5af6054563ebe9f33e5f4"
 
 get-caller-file@^1.0.1:
   version "1.0.3"
@@ -4201,6 +4201,10 @@ globby@^6.1.0:
     object-assign "^4.0.1"
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
+
+google-maps@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/google-maps/-/google-maps-3.3.0.tgz#4432b4715406bc15268ad35b1dd1b04d974956a6"
 
 got@^6.7.1:
   version "6.7.1"
@@ -7338,6 +7342,14 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^3.0.0"
     inherits "^2.0.1"
+
+route-wizard-lib@./../route-wizard-lib:
+  version "1.0.0"
+  dependencies:
+    geolib "^2.0.24"
+    google-maps "^3.3.0"
+    jsts "^1.6.1"
+    lodash "^4.17.10"
 
 run-async@^2.2.0:
   version "2.3.0"
