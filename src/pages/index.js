@@ -51,7 +51,7 @@ const IndexPage = (props) => {
       <ol>
         {segments.map((segment) => (
           <li key={segment.title}>
-            {segment.title} ({segment.markers.join(', ')})
+            {segment.title} ({segment.distance})
           </li>
         ))}
       </ol>

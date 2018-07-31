@@ -41,7 +41,7 @@ export default class Route {
   data() {
     return this.segments.map((segment) => ({
       title: segment.title,
-      markers: segment.markers.map((marker) => marker.title),
+      distance: segment.distance(),
     }));
   }
 
@@ -68,6 +68,7 @@ export default class Route {
     return locGeom;
   }
 
+  // FIXME: Move into Segment
   splitOnPoints(segment) {
     console.log('splitOnPoints');
     const segments = [];
@@ -98,6 +99,7 @@ export default class Route {
     return segments.reverse();
   }
 
+  // FIXME: Move into Segment
   split({ lineGeometryLocation, marker, segment }) {
     const coordinates = segment.line.getCoordinates();
     console.log('segment', segment.title);
