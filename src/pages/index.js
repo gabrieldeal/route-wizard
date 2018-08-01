@@ -1,9 +1,8 @@
 import Button from '@material-ui/core/Button';
 import compose from 'recompose/compose';
 import React from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
-import withState from 'recompose/withState';
 import { readFile, Route } from 'route-wizard-lib';
+import withState from 'recompose/withState';
 import { withStyles } from '@material-ui/core/styles';
 
 import Layout from '../components/layout';
@@ -53,16 +52,14 @@ const IndexPage = (props) => {
         type="file"
       />
       <label htmlFor="route-file">
-        <Tooltip title="Accepts GeoJSON files">
-          <Button
-            color="primary"
-            variant="contained"
-            component="span"
-            className={classes.button}
-          >
-            Load route
-          </Button>
-        </Tooltip>
+        <Button
+          color="primary"
+          variant="contained"
+          component="span"
+          className={classes.button}
+        >
+          Load route
+        </Button>
       </label>
       {haveData && <SpreadsheetExportButton columns={columns} rows={rows} />}
       {haveData && <SpreadsheetTable columns={columns} rows={rows} />}
