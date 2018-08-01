@@ -7391,8 +7391,9 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-route-wizard-lib@./../route-wizard-lib:
+route-wizard-lib@^1.0.0:
   version "1.0.0"
+  resolved "https://registry.yarnpkg.com/route-wizard-lib/-/route-wizard-lib-1.0.0.tgz#a1255b29271ba46ec11a4304cc56a9c38f39d053"
   dependencies:
     geolib "^2.0.24"
     google-maps "^3.3.0"
