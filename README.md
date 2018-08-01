@@ -4,6 +4,8 @@ Tools for planning trips to the mountains
 
 # Todo
 
+* Accept GPX files.
+* Use the segment & marker descriptions.
 * Compute elevation gain more accurately.  Currently it only computes the gain between points in a line, which only works well if there are a lot of points.
 * Generate a spreadsheet. https://github.com/SheetJS/js-xlsx/tree/master/demos/react
 * Support folders.
