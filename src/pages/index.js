@@ -58,7 +58,7 @@ const IndexPage = (props) => {
           component="span"
           className={classes.button}
         >
-          Load route
+          Load route (GeoJSON)
         </Button>
       </label>
       {haveData && <SpreadsheetExportButton columns={columns} rows={rows} />}
