@@ -23,6 +23,7 @@ const IndexPage = (props) => {
 
   const handleSelectedFile = (event) => {
     const file = event.target.files[0];
+    setSegments([]);
     const receiveFileContents = (geoJson) => {
       const route = new Route({ geoJson });
       route.data().then((data) => setSegments(data));
