@@ -11,7 +11,8 @@
     "react-dom": "^16.4.1",
     "react-helmet": "^5.2.0",
     "recompose": "^0.28.0",
-    "route-wizard-lib": "./../route-wizard-lib"
+    "route-wizard-lib": "./../route-wizard-lib",
+    "xlsx": "^0.13.3"
   },
   "keywords": [
     "gatsby"

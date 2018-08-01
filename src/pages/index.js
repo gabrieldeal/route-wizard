@@ -6,6 +6,8 @@ import withState from 'recompose/withState';
 import { withStyles } from '@material-ui/core/styles';
 
 import Layout from '../components/layout';
+import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
+import SpreadsheetTable from '../components/spreadsheet/table';
 
 const styles = (theme) => ({
   button: {
@@ -28,6 +30,17 @@ const IndexPage = (props) => {
     readFile({ file, receiveFileContents });
   };
 
+  const columns = [
+    { key: 'title', name: 'Title' },
+    { key: 'distance', name: 'Miles' },
+    { key: 'gain', name: 'Gain' },
+    { key: 'loss', name: 'Loss' },
+  ];
+  const rows = segments.map((segment) =>
+    columns.map((column) => segment[column['key']])
+  );
+  const haveData = rows.length > 0;
+
   return (
     <Layout>
       <input
@@ -47,15 +60,8 @@ const IndexPage = (props) => {
           Upload route
         </Button>
       </label>
-      <ol>
-        {segments.map((segment) => (
-          <li key={segment.title}>
-            {segment.title},{segment.distance} miles,
-            {segment.gain}' gain,
-            {segment.loss}' loss
-          </li>
-        ))}
-      </ol>
+      {haveData && <SpreadsheetExportButton columns={columns} rows={rows} />}
+      {haveData && <SpreadsheetTable columns={columns} rows={rows} />}
     </Layout>
   );
 };
