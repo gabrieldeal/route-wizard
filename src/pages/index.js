@@ -57,7 +57,7 @@ const IndexPage = (props) => {
           component="span"
           className={classes.button}
         >
-          Upload route
+          Load route
         </Button>
       </label>
       {haveData && <SpreadsheetExportButton columns={columns} rows={rows} />}
