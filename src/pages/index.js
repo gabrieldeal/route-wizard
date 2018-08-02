@@ -19,20 +19,27 @@ const styles = (theme) => ({
 });
 
 const IndexPage = (props) => {
-  const { classes, segments, setSegments } = props;
+  const { classes, error, segments, setError, setSegments } = props;
 
   const handleSelectedFile = (event) => {
     const file = event.target.files[0];
     setSegments([]);
     const receiveFileContents = (geoJson) => {
       const route = new Route({ geoJson });
-      route.data().then((data) => setSegments(data));
+      route
+        .data()
+        .then((data) => {
+          setSegments(data);
+          setError(null);
+        })
+        .catch((error) => setError(error));
     };
     readFile({ file, receiveFileContents });
   };
 
   const columns = [
-    { key: 'title', name: 'Title' },
+    { key: 'from', name: 'From' },
+    { key: 'to', name: 'To' },
     { key: 'distance', name: 'Miles' },
     { key: 'gain', name: 'Gain' },
     { key: 'loss', name: 'Loss' },
@@ -62,6 +69,7 @@ const IndexPage = (props) => {
         </Button>
       </label>
       {haveData && <SpreadsheetExportButton columns={columns} rows={rows} />}
+      {error && <div>{error}</div>}
       {haveData && <SpreadsheetTable columns={columns} rows={rows} />}
     </Layout>
   );
@@ -69,7 +77,8 @@ const IndexPage = (props) => {
 
 const enhance = compose(
   withStyles(styles),
-  withState('segments', 'setSegments', [])
+  withState('segments', 'setSegments', []),
+  withState('error', 'setError')
 );
 
 export default enhance(IndexPage);
