@@ -1,8 +1,9 @@
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import compose from 'recompose/compose';
 import React from 'react';
-import { readFile, Route } from 'route-wizard-lib';
 import withState from 'recompose/withState';
+import { readFile, Route } from 'route-wizard-lib';
 import { withStyles } from '@material-ui/core/styles';
 
 import Layout from '../components/layout';
@@ -10,19 +11,36 @@ import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
 import SpreadsheetTable from '../components/spreadsheet/table';
 
 const styles = (theme) => ({
-  button: {
-    margin: theme.spacing.unit,
-  },
+  button: {},
   input: {
     display: 'none',
+  },
+  spinner: {
+    position: 'absolute',
+    top: 0,
+    left: '50%',
+  },
+  wrapper: {
+    display: 'inline',
+    margin: theme.spacing.unit,
+    position: 'relative',
   },
 });
 
 const IndexPage = (props) => {
-  const { classes, error, segments, setError, setSegments } = props;
+  const {
+    classes,
+    error,
+    isLoading,
+    segments,
+    setError,
+    setIsLoading,
+    setSegments,
+  } = props;
 
   const handleSelectedFile = (event) => {
     const file = event.target.files[0];
+    setIsLoading(true);
     setSegments([]);
     const receiveFileContents = (geoJson) => {
       const route = new Route({ geoJson });
@@ -31,8 +49,12 @@ const IndexPage = (props) => {
         .then((data) => {
           setSegments(data);
           setError(null);
+          setIsLoading(false);
         })
-        .catch((error) => setError(error));
+        .catch((error) => {
+          setError(error);
+          setIsLoading(false);
+        });
     };
     readFile({ file, receiveFileContents });
   };
@@ -59,14 +81,20 @@ const IndexPage = (props) => {
         type="file"
       />
       <label htmlFor="route-file">
-        <Button
-          color="primary"
-          variant="contained"
-          component="span"
-          className={classes.button}
-        >
-          Load route (GeoJSON)
-        </Button>
+        <div className={classes.wrapper}>
+          <Button
+            color="primary"
+            variant="contained"
+            component="span"
+            className={classes.button}
+            disabled={isLoading}
+          >
+            Load route (GeoJSON)
+          </Button>
+          {isLoading && (
+            <CircularProgress size={25} className={classes.spinner} />
+          )}
+        </div>
       </label>
       {haveData && <SpreadsheetExportButton columns={columns} rows={rows} />}
       {error && <div>{error}</div>}
@@ -78,7 +106,8 @@ const IndexPage = (props) => {
 const enhance = compose(
   withStyles(styles),
   withState('segments', 'setSegments', []),
-  withState('error', 'setError')
+  withState('error', 'setError'),
+  withState('isLoading', 'setIsLoading', false)
 );
 
 export default enhance(IndexPage);
