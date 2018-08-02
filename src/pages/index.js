@@ -10,6 +10,15 @@ import Layout from '../components/layout';
 import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
 import SpreadsheetTable from '../components/spreadsheet/table';
 
+function metersToFeet(meters) {
+  return meters * 3.28084;
+}
+
+function metersToMiles(meters) {
+  console.log(meters);
+  return meters * 0.000621371;
+}
+
 const styles = (theme) => ({
   button: {},
   input: {
@@ -62,13 +71,19 @@ const IndexPage = (props) => {
   const columns = [
     { key: 'from', name: 'From' },
     { key: 'to', name: 'To' },
-    { key: 'distance', name: 'Miles' },
-    { key: 'gain', name: 'Gain' },
-    { key: 'loss', name: 'Loss' },
+    { key: 'distance', name: 'Distance (mi)' },
+    { key: 'gain', name: 'Gain (feet)' },
+    { key: 'loss', name: 'Loss (feet)' },
   ];
-  const rows = segments.map((segment) =>
-    columns.map((column) => segment[column['key']])
-  );
+  const rows = segments
+    .map((segment) => ({
+      ...segment,
+      distance: metersToMiles(segment.distance),
+      gain: metersToFeet(segment.gain),
+      loss: metersToFeet(segment.loss),
+    }))
+    .map((segment) => columns.map((column) => segment[column['key']]));
+
   const haveData = rows.length > 0;
 
   return (
