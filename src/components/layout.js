@@ -1,12 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import Helmet from 'react-helmet'
-import { StaticQuery, graphql } from 'gatsby'
+import Helmet from 'react-helmet';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import { StaticQuery, graphql } from 'gatsby';
 
-import Header from './header'
-import './layout.css'
+import Header from './header';
+import './layout.css';
 
-const Layout = ({ children, data, pageTitle }) => (
+const Layout = ({ children, data, pageTitle, whatIsThis }) => (
   <StaticQuery
     query={graphql`
       query SiteTitleQuery {
@@ -17,7 +19,7 @@ const Layout = ({ children, data, pageTitle }) => (
         }
       }
     `}
-    render={data => (
+    render={(data) => (
       <>
         <Helmet
           title={data.site.siteMetadata.title}
@@ -40,17 +42,28 @@ const Layout = ({ children, data, pageTitle }) => (
             padding: '1rem 1.0875rem 1.45rem',
           }}
         >
-          <h1>{pageTitle}</h1>
+          <Tooltip title={whatIsThis}>
+            <div style={{ paddingBottom: 10 }}>
+              <Typography variant="title" style={{ display: 'inline' }}>
+                {pageTitle}
+              </Typography>
+              <a style={{ diplay: 'inline', paddingLeft: 10 }} href="#">
+                (What is this?)
+              </a>
+            </div>
+          </Tooltip>
+
           {children}
         </div>
       </>
     )}
   />
-)
+);
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-  pageTitle: PropTypes.string.isRequired
-}
+  pageTitle: PropTypes.string.isRequired,
+  whatIsThis: PropTypes.element.isRequired,
+};
 
-export default Layout
+export default Layout;

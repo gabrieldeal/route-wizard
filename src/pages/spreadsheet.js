@@ -85,9 +85,16 @@ const SpreadsheetPage = (props) => {
     .map((segment) => columns.map((column) => segment[column['key']]));
 
   const haveData = rows.length > 0;
+  const whatIsThis = (
+    <div>
+      Convert a GeoJSON file to a spreadsheet that breaks down the distance
+      between line segments and markers. Requires line segment titles to start
+      with a number representing its order.
+    </div>
+  );
 
   return (
-    <Layout pageTitle="Spreadsheet Generator">
+    <Layout pageTitle="Spreadsheet Generator" whatIsThis={whatIsThis}>
       <input
         accept="application/json"
         className={classes.input}
