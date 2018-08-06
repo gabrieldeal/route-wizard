@@ -1,6 +1,7 @@
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import compose from 'recompose/compose';
+import PropTypes from 'prop-types';
 import React from 'react';
 import withState from 'recompose/withState';
 import { readFile, Route } from 'route-wizard-lib';
@@ -115,6 +116,16 @@ const IndexPage = (props) => {
       {haveData && <SpreadsheetTable columns={columns} rows={rows} />}
     </Layout>
   );
+};
+
+IndexPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+  error: PropTypes.string,
+  isLoading: PropTypes.bool.isRequired,
+  segments: PropTypes.array,
+  setError: PropTypes.func.isRequired,
+  setIsLoading: PropTypes.func.isRequired,
+  setSegments: PropTypes.func.isRequired,
 };
 
 const enhance = compose(
