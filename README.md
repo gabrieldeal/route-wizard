@@ -16,5 +16,4 @@ http://yellowleaf.org/route-wizard/
 * Support folders.
 * Non-hacky sorting of segments. https://stackoverflow.com/questions/49883480/combine-a-sequence-of-linestring
 * Export GeoJSON file with renamed segments for ordering in Caltopo?
-* Fix color inconsistancies.
 * Get tooltip working for load route button.  https://stackoverflow.com/questions/50107641/material-ui-tooltip-on-select-menuitem-component-stays-displayed-after-selecti
