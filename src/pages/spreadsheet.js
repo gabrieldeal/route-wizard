@@ -87,7 +87,7 @@ const SpreadsheetPage = (props) => {
   const haveData = rows.length > 0;
 
   return (
-    <Layout>
+    <Layout pageTitle="Spreadsheet Generator">
       <input
         accept="application/json"
         className={classes.input}

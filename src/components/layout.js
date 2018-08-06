@@ -6,7 +6,7 @@ import { StaticQuery, graphql } from 'gatsby'
 import Header from './header'
 import './layout.css'
 
-const Layout = ({ children, data }) => (
+const Layout = ({ children, data, pageTitle }) => (
   <StaticQuery
     query={graphql`
       query SiteTitleQuery {
@@ -40,6 +40,7 @@ const Layout = ({ children, data }) => (
             padding: '1rem 1.0875rem 1.45rem',
           }}
         >
+          <h1>{pageTitle}</h1>
           {children}
         </div>
       </>
@@ -49,6 +50,7 @@ const Layout = ({ children, data }) => (
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
+  pageTitle: PropTypes.string.isRequired
 }
 
 export default Layout
