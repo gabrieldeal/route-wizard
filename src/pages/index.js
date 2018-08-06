@@ -15,7 +15,6 @@ function metersToFeet(meters) {
 }
 
 function metersToMiles(meters) {
-  console.log(meters);
   return meters * 0.000621371;
 }
 
