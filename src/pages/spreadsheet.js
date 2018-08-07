@@ -2,7 +2,7 @@ import compose from 'recompose/compose';
 import PropTypes from 'prop-types';
 import React from 'react';
 import withState from 'recompose/withState';
-import { readFile, Route } from 'route-wizard-lib';
+import { preadFile, Route } from 'route-wizard-lib';
 
 import Layout from '../components/layout';
 import ReadFileButton from '../components/readFileButton';
@@ -52,24 +52,20 @@ class SpreadsheetPage extends React.Component {
   }
 
   handleSelectedFile = (event) => {
-    const file = event.target.files[0];
     this.props.setIsLoading(true);
     this.props.setSegments([]);
-    const receiveFileContents = (geoJson) => {
-      const route = new Route({ geoJson });
-      route
-        .data()
-        .then((data) => {
-          this.props.setSegments(data);
-          this.props.setError(null);
-          this.props.setIsLoading(false);
-        })
-        .catch((error) => {
-          this.props.setError(error.message || error);
-          this.props.setIsLoading(false);
-        });
-    };
-    readFile({ file, receiveFileContents });
+
+    preadFile({ file: event.target.files[0] })
+      .then((geoJson) => new Route({ geoJson }).data())
+      .then((data) => {
+        this.props.setSegments(data);
+        this.props.setError(null);
+        this.props.setIsLoading(false);
+      })
+      .catch((error) => {
+        this.props.setError(error.message || error);
+        this.props.setIsLoading(false);
+      });
   };
 
   render() {
