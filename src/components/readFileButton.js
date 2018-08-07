@@ -24,7 +24,7 @@ const styles = (theme) => ({
 
 class ReadFileButton extends React.Component {
   static propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.node.isRequired,
     classes: PropTypes.object.isRequired,
     isLoading: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
