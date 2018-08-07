@@ -17,38 +17,18 @@ function metersToMiles(meters) {
   return meters * 0.000621371;
 }
 
-const SpreadsheetPage = (props) => {
-  const {
-    error,
-    isLoading,
-    segments,
-    setError,
-    setIsLoading,
-    setSegments,
-  } = props;
-
-  const handleSelectedFile = (event) => {
-    const file = event.target.files[0];
-    setIsLoading(true);
-    setSegments([]);
-    const receiveFileContents = (geoJson) => {
-      const route = new Route({ geoJson });
-      route
-        .data()
-        .then((data) => {
-          setSegments(data);
-          setError(null);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          setError(error.message || error);
-          setIsLoading(false);
-        });
-    };
-    readFile({ file, receiveFileContents });
+class SpreadsheetPage extends React.Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    error: PropTypes.string,
+    isLoading: PropTypes.bool.isRequired,
+    segments: PropTypes.array,
+    setError: PropTypes.func.isRequired,
+    setIsLoading: PropTypes.func.isRequired,
+    setSegments: PropTypes.func.isRequired,
   };
 
-  const columns = [
+  columns = [
     { key: 'from', name: 'From' },
     { key: 'to', name: 'To' },
     { key: 'distance', name: 'Distance (mi)' },
@@ -59,45 +39,69 @@ const SpreadsheetPage = (props) => {
     { key: 'locomotion', name: 'Locomotion' },
     { key: 'description', name: 'Description' },
   ];
-  const rows = segments
-    .map((segment) => ({
-      ...segment,
-      distance: metersToMiles(segment.distance).toFixed(1),
-      gain: metersToFeet(segment.gain).toFixed(0),
-      loss: metersToFeet(segment.loss).toFixed(0),
-    }))
-    .map((segment) => columns.map((column) => segment[column['key']]));
 
-  const haveData = rows.length > 0;
-  const whatIsThis = (
-    <div>
-      Convert a GeoJSON file to a spreadsheet that breaks down the distance
-      between line segments and markers. Requires the line in the GeoJSON file
-      to be ordered.
-    </div>
-  );
+  rows() {
+    return this.props.segments
+      .map((segment) => ({
+        ...segment,
+        distance: metersToMiles(segment.distance).toFixed(1),
+        gain: metersToFeet(segment.gain).toFixed(0),
+        loss: metersToFeet(segment.loss).toFixed(0),
+      }))
+      .map((segment) => this.columns.map((column) => segment[column['key']]));
+  }
 
-  return (
-    <Layout pageTitle="Spreadsheet Generator" whatIsThis={whatIsThis}>
-      <ReadFileButton onChange={handleSelectedFile} isLoading={isLoading}>
-        Load route (GeoJSON)
-      </ReadFileButton>
-      {haveData && <SpreadsheetExportButton columns={columns} rows={rows} />}
-      {error && <div>{error}</div>}
-      {haveData && <SpreadsheetTable columns={columns} rows={rows} />}
-    </Layout>
-  );
-};
+  handleSelectedFile = (event) => {
+    const file = event.target.files[0];
+    this.props.setIsLoading(true);
+    this.props.setSegments([]);
+    const receiveFileContents = (geoJson) => {
+      const route = new Route({ geoJson });
+      route
+        .data()
+        .then((data) => {
+          this.props.setSegments(data);
+          this.props.setError(null);
+          this.props.setIsLoading(false);
+        })
+        .catch((error) => {
+          this.props.setError(error.message || error);
+          this.props.setIsLoading(false);
+        });
+    };
+    readFile({ file, receiveFileContents });
+  };
 
-SpreadsheetPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-  error: PropTypes.string,
-  isLoading: PropTypes.bool.isRequired,
-  segments: PropTypes.array,
-  setError: PropTypes.func.isRequired,
-  setIsLoading: PropTypes.func.isRequired,
-  setSegments: PropTypes.func.isRequired,
-};
+  render() {
+    const { error, isLoading } = this.props;
+
+    const rows = this.rows();
+    const haveData = rows.length > 0;
+    const whatIsThis = (
+      <div>
+        Convert a GeoJSON file to a spreadsheet that breaks down the distance
+        between line segments and markers. Requires the line in the GeoJSON file
+        to be ordered.
+      </div>
+    );
+
+    return (
+      <Layout pageTitle="Spreadsheet Generator" whatIsThis={whatIsThis}>
+        <ReadFileButton
+          onChange={this.handleSelectedFile}
+          isLoading={isLoading}
+        >
+          Load route (GeoJSON)
+        </ReadFileButton>
+        {haveData && (
+          <SpreadsheetExportButton columns={this.columns} rows={rows} />
+        )}
+        {error && <div>{error}</div>}
+        {haveData && <SpreadsheetTable columns={this.columns} rows={rows} />}
+      </Layout>
+    );
+  }
+}
 
 const enhance = compose(
   withState('segments', 'setSegments', []),
