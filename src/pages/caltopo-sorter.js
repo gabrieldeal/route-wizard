@@ -1,6 +1,4 @@
-import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import compose from 'recompose/compose';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -14,24 +12,11 @@ import { withStyles } from '@material-ui/core/styles';
 
 import CaltopoSorterExportButton from '../components/caltopoSorter/exportButton';
 import Layout from '../components/layout';
+import ReadFileButton from '../components/readFileButton';
 
-const styles = (theme) => ({
+const styles = () => ({
   newOrder: {
     paddingTop: '1em',
-  },
-  button: {},
-  input: {
-    display: 'none',
-  },
-  spinner: {
-    position: 'absolute',
-    top: 0,
-    left: '50%',
-  },
-  wrapper: {
-    display: 'inline',
-    margin: theme.spacing.unit,
-    position: 'relative',
   },
 });
 
@@ -126,29 +111,9 @@ class CaltopoSorterPage extends React.Component {
     return (
       <Layout pageTitle="Caltopo Sorter" whatIsThis={whatIsThis}>
         <FormGroup row>
-          <input
-            accept="application/json"
-            className={classes.input}
-            id="route-file"
-            onChange={handleSelectedFile}
-            type="file"
-          />
-          <label htmlFor="route-file">
-            <div className={classes.wrapper}>
-              <Button
-                color="primary"
-                variant="contained"
-                component="span"
-                className={classes.button}
-                disabled={isLoading}
-              >
-                Load route (GeoJSON)
-              </Button>
-              {isLoading && (
-                <CircularProgress size={25} className={classes.spinner} />
-              )}
-            </div>
-          </label>
+          <ReadFileButton onChange={handleSelectedFile} isLoading={isLoading}>
+            Load route (GeoJSON)
+          </ReadFileButton>
           <FormControlLabel
             control={
               <Checkbox
