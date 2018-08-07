@@ -6,7 +6,6 @@ http://yellowleaf.org/route-wizard/
 
 # Todo
 
-* Propogate marker descriptions to the spreadsheet.
 * Accept GPX files.
 * Compute elevation gain more accurately.  Currently it only computes the gain between points in a line, which only works well if there are a lot of points.
 * Support folders.
