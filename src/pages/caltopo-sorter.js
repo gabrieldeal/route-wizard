@@ -133,13 +133,11 @@ class CaltopoSorterPage extends React.Component {
     return (
       <div className={this.props.classes.newOrder}>
         <Typography variant="subheading">New order</Typography>
-        <Typography variant="body1">
-          <ol>
-            {titles.map((title, index) => (
-              <li key={index}>{title}</li>
-            ))}
-          </ol>
-        </Typography>
+        <ol>
+          {titles.map((title, index) => (
+            <li key={index}>{title}</li>
+          ))}
+        </ol>
       </div>
     );
   };
