@@ -10,6 +10,7 @@ const styles = (theme) => ({
     display: 'none',
   },
   spinner: {
+    color: 'white',
     position: 'absolute',
     top: 0,
     left: '50%',
@@ -53,7 +54,11 @@ class ReadFileButton extends React.Component {
               {children}
             </Button>
             {isLoading && (
-              <CircularProgress size={25} className={classes.spinner} />
+              <CircularProgress
+                className={classes.spinner}
+                size={25}
+                thickness={7}
+              />
             )}
           </div>
         </label>
