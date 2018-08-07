@@ -1,4 +1,5 @@
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import compose from 'recompose/compose';
 import PropTypes from 'prop-types';
@@ -43,6 +44,8 @@ class CaltopoSorterPage extends React.Component {
     setFileName: PropTypes.func.isRequired,
     setIsLoading: PropTypes.func.isRequired,
     setGeoJson: PropTypes.func.isRequired,
+    setShouldStripTitleNumber: PropTypes.func.isRequired,
+    shouldStripTitleNumber: PropTypes.bool.isRequired,
   };
 
   renderGeoJson = () => {
@@ -75,6 +78,8 @@ class CaltopoSorterPage extends React.Component {
       setFileName,
       setIsLoading,
       setGeoJson,
+      setShouldStripTitleNumber,
+      shouldStripTitleNumber,
     } = this.props;
 
     const handleSelectedFile = (event) => {
@@ -86,11 +91,16 @@ class CaltopoSorterPage extends React.Component {
       preadJson({ file })
         .then((geoJson) => {
           setFileName('sorted-' + file.name);
-          setGeoJson(new CaltopoSorter({ geoJson }).sort());
+          setGeoJson(
+            new CaltopoSorter({
+              geoJson,
+              shouldStripTitleNumber,
+            }).sort()
+          );
           setIsLoading(false);
         })
         .catch((error) => {
-          setError(error);
+          setError(error.message || error);
           setIsLoading(false);
         });
     };
@@ -136,6 +146,11 @@ class CaltopoSorterPage extends React.Component {
             )}
           </div>
         </label>
+        <Checkbox
+          checked={shouldStripTitleNumber}
+          color="primary"
+          onChange={(_event, value) => setShouldStripTitleNumber(value)}
+        />
         {geoJson && (
           <CaltopoSorterExportButton fileName={fileName} geoJson={geoJson} />
         )}
@@ -151,7 +166,8 @@ const enhance = compose(
   withState('fileName', 'setFileName'),
   withState('geoJson', 'setGeoJson'),
   withState('error', 'setError'),
-  withState('isLoading', 'setIsLoading', false)
+  withState('isLoading', 'setIsLoading', false),
+  withState('shouldStripTitleNumber', 'setShouldStripTitleNumber', false)
 );
 
 export default enhance(CaltopoSorterPage);

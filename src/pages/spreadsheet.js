@@ -63,7 +63,7 @@ const SpreadsheetPage = (props) => {
           setIsLoading(false);
         })
         .catch((error) => {
-          setError(error);
+          setError(error.message || error);
           setIsLoading(false);
         });
     };
@@ -94,8 +94,8 @@ const SpreadsheetPage = (props) => {
   const whatIsThis = (
     <div>
       Convert a GeoJSON file to a spreadsheet that breaks down the distance
-      between line segments and markers. Requires line segment titles to start
-      with a number representing its order.
+      between line segments and markers. Requires the line in the GeoJSON file
+      to be ordered.
     </div>
   );
 
