@@ -84,9 +84,9 @@ const SpreadsheetPage = (props) => {
   const rows = segments
     .map((segment) => ({
       ...segment,
-      distance: metersToMiles(segment.distance),
-      gain: metersToFeet(segment.gain),
-      loss: metersToFeet(segment.loss),
+      distance: metersToMiles(segment.distance).toFixed(1),
+      gain: metersToFeet(segment.gain).toFixed(0),
+      loss: metersToFeet(segment.loss).toFixed(0),
     }))
     .map((segment) => columns.map((column) => segment[column['key']]));
 
