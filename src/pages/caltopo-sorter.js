@@ -36,8 +36,8 @@ class CaltopoSorterPage extends React.Component {
   };
 
   handleSelectedFile = (event) => {
-    this.props.setGeoJson(null);
     this.props.setFileName(null);
+    this.props.setGeoJson(null);
     this.props.setIsLoading(true);
 
     const file = event.target.files[0];
@@ -63,27 +63,6 @@ class CaltopoSorterPage extends React.Component {
       shouldStripTitleNumber: this.props.shouldStripTitleNumber,
     }).sort();
   }
-
-  renderGeoJson = (geoJson) => {
-    if (!geoJson) {
-      return null;
-    }
-
-    const titles = geoJson.features.map((feature) => feature.properties.title);
-
-    return (
-      <div className={this.props.classes.newOrder}>
-        <Typography variant="subheading">New order</Typography>
-        <Typography variant="body1">
-          <ol>
-            {titles.map((title, index) => (
-              <li key={index}>{title}</li>
-            ))}
-          </ol>
-        </Typography>
-      </div>
-    );
-  };
 
   renderWhatIsThisText() {
     return (
@@ -143,6 +122,27 @@ class CaltopoSorterPage extends React.Component {
   renderError() {
     return this.props.error && <div>{this.props.error}</div>;
   }
+
+  renderGeoJson = (geoJson) => {
+    if (!geoJson) {
+      return null;
+    }
+
+    const titles = geoJson.features.map((feature) => feature.properties.title);
+
+    return (
+      <div className={this.props.classes.newOrder}>
+        <Typography variant="subheading">New order</Typography>
+        <Typography variant="body1">
+          <ol>
+            {titles.map((title, index) => (
+              <li key={index}>{title}</li>
+            ))}
+          </ol>
+        </Typography>
+      </div>
+    );
+  };
 
   render() {
     const sortedGeoJson = this.sortGeoJson();
