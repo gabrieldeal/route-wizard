@@ -2,6 +2,8 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import compose from 'recompose/compose';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -48,10 +50,8 @@ class CaltopoSorterPage extends React.Component {
     shouldStripTitleNumber: PropTypes.bool.isRequired,
   };
 
-  renderGeoJson = () => {
-    const titles = this.props.geoJson.features.map(
-      (feature) => feature.properties.title
-    );
+  renderGeoJson = (geoJson) => {
+    const titles = geoJson.features.map((feature) => feature.properties.title);
 
     return (
       <div className={this.props.classes.newOrder}>
@@ -91,12 +91,7 @@ class CaltopoSorterPage extends React.Component {
       preadJson({ file })
         .then((geoJson) => {
           setFileName('sorted-' + file.name);
-          setGeoJson(
-            new CaltopoSorter({
-              geoJson,
-              shouldStripTitleNumber,
-            }).sort()
-          );
+          setGeoJson(geoJson);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -121,41 +116,58 @@ class CaltopoSorterPage extends React.Component {
       </div>
     );
 
+    const sortedGeoJson =
+      geoJson &&
+      new CaltopoSorter({
+        geoJson,
+        shouldStripTitleNumber,
+      }).sort();
+
     return (
       <Layout pageTitle="Caltopo Sorter" whatIsThis={whatIsThis}>
-        <input
-          accept="application/json"
-          className={classes.input}
-          id="route-file"
-          onChange={handleSelectedFile}
-          type="file"
-        />
-        <label htmlFor="route-file">
-          <div className={classes.wrapper}>
-            <Button
-              color="primary"
-              variant="contained"
-              component="span"
-              className={classes.button}
-              disabled={isLoading}
-            >
-              Load route (GeoJSON)
-            </Button>
-            {isLoading && (
-              <CircularProgress size={25} className={classes.spinner} />
-            )}
-          </div>
-        </label>
-        <Checkbox
-          checked={shouldStripTitleNumber}
-          color="primary"
-          onChange={(_event, value) => setShouldStripTitleNumber(value)}
-        />
+        <FormGroup row>
+          <input
+            accept="application/json"
+            className={classes.input}
+            id="route-file"
+            onChange={handleSelectedFile}
+            type="file"
+          />
+          <label htmlFor="route-file">
+            <div className={classes.wrapper}>
+              <Button
+                color="primary"
+                variant="contained"
+                component="span"
+                className={classes.button}
+                disabled={isLoading}
+              >
+                Load route (GeoJSON)
+              </Button>
+              {isLoading && (
+                <CircularProgress size={25} className={classes.spinner} />
+              )}
+            </div>
+          </label>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={shouldStripTitleNumber}
+                color="primary"
+                onChange={(_event, value) => setShouldStripTitleNumber(value)}
+              />
+            }
+            label="Strip ordering numbers from titles"
+          />
+        </FormGroup>
         {geoJson && (
-          <CaltopoSorterExportButton fileName={fileName} geoJson={geoJson} />
+          <CaltopoSorterExportButton
+            fileName={fileName}
+            geoJson={sortedGeoJson}
+          />
         )}
         {error && <div>{error}</div>}
-        {geoJson && this.renderGeoJson()}
+        {geoJson && this.renderGeoJson(sortedGeoJson)}
       </Layout>
     );
   }
