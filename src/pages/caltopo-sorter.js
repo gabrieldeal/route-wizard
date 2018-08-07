@@ -35,7 +35,40 @@ class CaltopoSorterPage extends React.Component {
     shouldStripTitleNumber: PropTypes.bool.isRequired,
   };
 
+  handleSelectedFile = (event) => {
+    this.props.setGeoJson(null);
+    this.props.setFileName(null);
+    this.props.setIsLoading(true);
+
+    const file = event.target.files[0];
+    preadJson({ file })
+      .then((geoJson) => {
+        this.props.setFileName('sorted-' + file.name);
+        this.props.setGeoJson(geoJson);
+        this.props.setIsLoading(false);
+      })
+      .catch((error) => {
+        this.props.setError(error.message || error);
+        this.props.setIsLoading(false);
+      });
+  };
+
+  sortGeoJson() {
+    if (!this.props.geoJson) {
+      return null;
+    }
+
+    return new CaltopoSorter({
+      geoJson: this.props.geoJson,
+      shouldStripTitleNumber: this.props.shouldStripTitleNumber,
+    }).sort();
+  }
+
   renderGeoJson = (geoJson) => {
+    if (!geoJson) {
+      return null;
+    }
+
     const titles = geoJson.features.map((feature) => feature.properties.title);
 
     return (
@@ -52,40 +85,8 @@ class CaltopoSorterPage extends React.Component {
     );
   };
 
-  render() {
-    const {
-      classes,
-      error,
-      isLoading,
-      fileName,
-      geoJson,
-      setError,
-      setFileName,
-      setIsLoading,
-      setGeoJson,
-      setShouldStripTitleNumber,
-      shouldStripTitleNumber,
-    } = this.props;
-
-    const handleSelectedFile = (event) => {
-      setGeoJson(null);
-      setFileName(null);
-      setIsLoading(true);
-
-      const file = event.target.files[0];
-      preadJson({ file })
-        .then((geoJson) => {
-          setFileName('sorted-' + file.name);
-          setGeoJson(geoJson);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          setError(error.message || error);
-          setIsLoading(false);
-        });
-    };
-
-    const whatIsThis = (
+  renderWhatIsThisText() {
+    return (
       <div>
         Rename lines with titles like this:
         <blockquote>
@@ -100,39 +101,61 @@ class CaltopoSorterPage extends React.Component {
         That way they display in the correct order in http://caltopo.com.
       </div>
     );
+  }
 
-    const sortedGeoJson =
-      geoJson &&
-      new CaltopoSorter({
-        geoJson,
-        shouldStripTitleNumber,
-      }).sort();
+  renderInputs() {
+    return (
+      <FormGroup row>
+        <ReadFileButton
+          onChange={this.handleSelectedFile}
+          isLoading={this.props.isLoading}
+        >
+          Load route (GeoJSON)
+        </ReadFileButton>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={this.props.shouldStripTitleNumber}
+              color="primary"
+              onChange={(_event, value) =>
+                this.props.setShouldStripTitleNumber(value)
+              }
+            />
+          }
+          label="Strip ordering numbers from titles"
+        />
+      </FormGroup>
+    );
+  }
+
+  renderExportButton(sortedGeoJson) {
+    if (!this.props.geoJson) {
+      return null;
+    }
+    return (
+      <CaltopoSorterExportButton
+        fileName={this.props.fileName}
+        geoJson={sortedGeoJson}
+      />
+    );
+  }
+
+  renderError() {
+    return this.props.error && <div>{this.props.error}</div>;
+  }
+
+  render() {
+    const sortedGeoJson = this.sortGeoJson();
 
     return (
-      <Layout pageTitle="Caltopo Sorter" whatIsThis={whatIsThis}>
-        <FormGroup row>
-          <ReadFileButton onChange={handleSelectedFile} isLoading={isLoading}>
-            Load route (GeoJSON)
-          </ReadFileButton>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={shouldStripTitleNumber}
-                color="primary"
-                onChange={(_event, value) => setShouldStripTitleNumber(value)}
-              />
-            }
-            label="Strip ordering numbers from titles"
-          />
-        </FormGroup>
-        {geoJson && (
-          <CaltopoSorterExportButton
-            fileName={fileName}
-            geoJson={sortedGeoJson}
-          />
-        )}
-        {error && <div>{error}</div>}
-        {geoJson && this.renderGeoJson(sortedGeoJson)}
+      <Layout
+        pageTitle="Caltopo Sorter"
+        whatIsThis={this.renderWhatIsThisText()}
+      >
+        {this.renderInputs()}
+        {this.renderExportButton(sortedGeoJson)}
+        {this.renderError()}
+        {this.renderGeoJson(sortedGeoJson)}
       </Layout>
     );
   }
