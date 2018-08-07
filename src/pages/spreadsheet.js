@@ -25,9 +25,11 @@ const styles = (theme) => ({
     display: 'none',
   },
   spinner: {
+    color: 'white',
     position: 'absolute',
     top: 0,
     left: '50%',
+    zIndex: 100,
   },
   wrapper: {
     display: 'inline',
@@ -72,8 +74,12 @@ const SpreadsheetPage = (props) => {
     { key: 'from', name: 'From' },
     { key: 'to', name: 'To' },
     { key: 'distance', name: 'Distance (mi)' },
-    { key: 'gain', name: 'Gain (feet)' },
-    { key: 'loss', name: 'Loss (feet)' },
+    //    { key: 'gain', name: 'Gain (feet)' },
+    //    { key: 'loss', name: 'Loss (feet)' },
+    { key: 'users', name: 'Users' },
+    { key: 'surface', name: 'Surface' },
+    { key: 'locomotion', name: 'Locomotion' },
+    { key: 'description', name: 'Description' },
   ];
   const rows = segments
     .map((segment) => ({
@@ -114,7 +120,11 @@ const SpreadsheetPage = (props) => {
             Load route (GeoJSON)
           </Button>
           {isLoading && (
-            <CircularProgress size={25} className={classes.spinner} />
+            <CircularProgress
+              size={25}
+              thickness={5}
+              className={classes.spinner}
+            />
           )}
         </div>
       </label>

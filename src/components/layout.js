@@ -52,7 +52,6 @@ const Layout = ({ children, data, pageTitle, whatIsThis }) => {
           <div
             style={{
               margin: '0 auto',
-              maxWidth: 960,
               padding: '1rem 1.0875rem 1.45rem',
             }}
           >
