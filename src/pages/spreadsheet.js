@@ -73,8 +73,6 @@ class SpreadsheetPage extends React.Component {
   };
 
   render() {
-    const { error, isLoading } = this.props;
-
     const rows = this.rows();
     const haveData = rows.length > 0;
     const whatIsThis = (
@@ -89,14 +87,14 @@ class SpreadsheetPage extends React.Component {
       <Layout pageTitle="Spreadsheet Generator" whatIsThis={whatIsThis}>
         <ReadFileButton
           onChange={this.handleSelectedFile}
-          isLoading={isLoading}
+          isLoading={this.props.isLoading}
         >
           Load route (GeoJSON)
         </ReadFileButton>
         {haveData && (
           <SpreadsheetExportButton columns={this.columns} rows={rows} />
         )}
-        {error && <div>{error}</div>}
+        {this.props.error && <div>{this.props.error}</div>}
         {haveData && <SpreadsheetTable columns={this.columns} rows={rows} />}
       </Layout>
     );
