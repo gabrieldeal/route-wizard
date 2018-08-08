@@ -6,6 +6,10 @@ http://yellowleaf.org/route-wizard/
 
 # Todo
 
+* Change To & From columns to "Starting point" and "Ending point".
+  * Rename Description column to "Starting point information"
+  * Stop propogating the line description to all of the lines it gets split to.
+* Add a "cumulative distance" column.
 * Accept GPX files.
 * Compute elevation gain more accurately.  Currently it only computes the gain between points in a line, which only works well if there are a lot of points.
 * Support folders.
