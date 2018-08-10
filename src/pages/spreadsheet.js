@@ -32,6 +32,10 @@ class SpreadsheetPage extends React.Component {
     { key: 'from', name: 'Starting point' },
     { key: 'to', name: 'Ending point' },
     { key: 'distance', name: 'Distance (mi)' },
+    {
+      key: 'cumulativeDistance',
+      name: 'Cumulative distance to starting point (mi)',
+    },
     //    { key: 'gain', name: 'Gain (feet)' },
     //    { key: 'loss', name: 'Loss (feet)' },
     { key: 'users', name: 'Users' },
@@ -44,6 +48,9 @@ class SpreadsheetPage extends React.Component {
     return this.props.segments
       .map((segment) => ({
         ...segment,
+        cumulativeDistance: metersToMiles(segment.cumulativeDistance).toFixed(
+          1
+        ),
         distance: metersToMiles(segment.distance).toFixed(1),
         gain: metersToFeet(segment.gain).toFixed(0),
         loss: metersToFeet(segment.loss).toFixed(0),
