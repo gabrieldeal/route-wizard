@@ -29,15 +29,15 @@ class SpreadsheetPage extends React.Component {
   };
 
   columns = [
-    { key: 'from', name: 'From' },
-    { key: 'to', name: 'To' },
+    { key: 'from', name: 'Starting point' },
+    { key: 'to', name: 'Ending point' },
     { key: 'distance', name: 'Distance (mi)' },
     //    { key: 'gain', name: 'Gain (feet)' },
     //    { key: 'loss', name: 'Loss (feet)' },
     { key: 'users', name: 'Users' },
     { key: 'surface', name: 'Surface' },
     { key: 'locomotion', name: 'Locomotion' },
-    { key: 'description', name: 'Description' },
+    { key: 'description', name: 'Starting point info' },
   ];
 
   rows() {
