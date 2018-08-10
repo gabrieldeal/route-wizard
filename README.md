@@ -15,3 +15,4 @@ http://yellowleaf.org/route-wizard/
 * Support folders.
 * Non-hacky sorting of segments. https://stackoverflow.com/questions/49883480/combine-a-sequence-of-linestring
 * Get tooltip working for load route button.  https://stackoverflow.com/questions/50107641/material-ui-tooltip-on-select-menuitem-component-stays-displayed-after-selecti
+* Display errors in red and prefix with "Error:".
