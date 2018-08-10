@@ -81,8 +81,8 @@ class SpreadsheetPage extends React.Component {
     const whatIsThis = (
       <div>
         Convert a GeoJSON file to a spreadsheet that breaks down the distance
-        between line segments and markers. Requires the line in the GeoJSON file
-        to be ordered.
+        between line segments and markers. Requires the lines in the GeoJSON
+        file to be ordered.
       </div>
     );
 
