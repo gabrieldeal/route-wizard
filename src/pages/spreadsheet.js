@@ -36,12 +36,12 @@ class SpreadsheetPage extends React.Component {
       key: 'cumulativeDistance',
       name: 'Cumulative distance to starting point (mi)',
     },
+    { key: 'description', name: 'Starting point info' },
     //    { key: 'gain', name: 'Gain (feet)' },
     //    { key: 'loss', name: 'Loss (feet)' },
     { key: 'users', name: 'Users' },
     { key: 'surface', name: 'Surface' },
     { key: 'locomotion', name: 'Locomotion' },
-    { key: 'description', name: 'Starting point info' },
   ];
 
   rows() {
