@@ -16,3 +16,13 @@ http://yellowleaf.org/route-wizard/
 * Non-hacky sorting of segments. https://stackoverflow.com/questions/49883480/combine-a-sequence-of-linestring
 * Get tooltip working for load route button.  https://stackoverflow.com/questions/50107641/material-ui-tooltip-on-select-menuitem-component-stays-displayed-after-selecti
 * Display errors in red and prefix with "Error:".
+* Clear errors after a successful load.
+* Do not give an error when the user clicks cancel on the file dialog.
+
+# greenway notes
+
+water
+camping (seattle->NB, NB->ellensburg, MF Camp->NB, Issaquah Alps->seattle)
+resupply/caching
+offtrail & paris creek
+cycle/hike
