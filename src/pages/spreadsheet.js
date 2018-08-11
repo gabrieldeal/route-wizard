@@ -17,6 +17,10 @@ function metersToMiles(meters) {
   return meters * 0.000621371;
 }
 
+function roundTo(number, position) {
+  return Number(number.toFixed(position));
+}
+
 class SpreadsheetPage extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
@@ -48,12 +52,13 @@ class SpreadsheetPage extends React.Component {
     return this.props.segments
       .map((segment) => ({
         ...segment,
-        cumulativeDistance: metersToMiles(segment.cumulativeDistance).toFixed(
+        cumulativeDistance: roundTo(
+          metersToMiles(segment.cumulativeDistance),
           1
         ),
-        distance: metersToMiles(segment.distance).toFixed(1),
-        gain: metersToFeet(segment.gain).toFixed(0),
-        loss: metersToFeet(segment.loss).toFixed(0),
+        distance: roundTo(metersToMiles(segment.distance), 1),
+        gain: roundTo(metersToFeet(segment.gain), 0),
+        loss: roundTo(metersToFeet(segment.loss), 0),
       }))
       .map((segment) => this.columns.map((column) => segment[column['key']]));
   }
