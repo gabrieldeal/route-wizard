@@ -1,3 +1,4 @@
+import CaltopoSorter from '../lib/CaltopoSorter';
 import Checkbox from '@material-ui/core/Checkbox';
 import compose from 'recompose/compose';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -6,8 +7,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import withState from 'recompose/withState';
-import { CaltopoSorter } from 'route-wizard-lib';
-import { preadJson } from 'route-wizard-lib';
+import { preadJson } from '../lib/readFile';
 import { withStyles } from '@material-ui/core/styles';
 
 import CaltopoSorterExportButton from '../components/caltopoSorter/exportButton';

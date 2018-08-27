@@ -1,8 +1,9 @@
 import compose from 'recompose/compose';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Route from '../lib/Route';
 import withState from 'recompose/withState';
-import { preadFile, Route } from 'route-wizard-lib';
+import { preadFile } from '../lib/readFile';
 
 import Layout from '../components/layout';
 import ReadFileButton from '../components/readFileButton';

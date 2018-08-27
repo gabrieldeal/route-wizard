@@ -1,0 +1,85 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "9fc25057-7c95-48ff-befc-35ef545a1cd7",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -120.89600000000002,
+          47.4676,
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "marker-symbol": "point",
+        "marker-color": "#FF0000",
+        "description": "",
+        "title": "Getting close to the summit!",
+        "class": "Marker",
+        "updated": 1533227361000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "df1f6483-002f-4b60-8833-b702b0a55239",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -120.89369999999997,
+          47.4601,
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "marker-symbol": "point",
+        "marker-color": "#FF0000",
+        "description": "",
+        "title": "Getting excited about the summit!",
+        "class": "Marker",
+        "updated": 1533227361000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bbb16e23-e17e-497b-b012-23296172721b",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -120.89638710021973,
+            47.454239382837734
+          ],
+          [
+            -120.89415550231934,
+            47.459288350298436
+          ],
+          [
+            -120.89527130126953,
+            47.46555535957973
+          ],
+          [
+            -120.90145111083984,
+            47.47530255574356
+          ]
+        ]
+      },
+      "properties": {
+        "stroke-opacity": 1,
+        "pattern": "solid",
+        "description": "gravel road, motorized, cycle\nThe line description",
+        "stroke-width": 2,
+        "title": "The line",
+        "fill": "#FF0000",
+        "class": "Shape",
+        "updated": 1533227361000,
+        "stroke": "#FF0000",
+        "fill-opacity": 0.1,
+        "gpstype": "TRACK"
+      }
+    }
+  ]
+}
