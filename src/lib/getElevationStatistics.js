@@ -1,5 +1,3 @@
-// FIXME: Rename this to getElevationStatistics.js
-
 // FIXME: Move this function to https://github.com/gabrielmdeal/open-elevation
 function lookup({
   locations,

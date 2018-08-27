@@ -2,7 +2,7 @@ import DistanceOp from 'jsts/org/locationtech/jts/operation/distance/DistanceOp'
 import LineString from 'jsts/org/locationtech/jts/geom/LineString';
 import geolib from 'geolib';
 
-import getElevationStatistics from './getElevation';
+import getElevationStatistics from './getElevationStatistics';
 
 export default class Segment {
   constructor({

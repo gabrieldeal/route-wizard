@@ -1,9 +1,9 @@
 import fetchMock from 'fetch-mock';
 
-import getElevation from '../../src/lib/getElevation';
+import getElevationStatistics from '../../src/lib/getElevationStatistics';
 import mockElevationService from '../support/mockElevationService';
 
-describe('getElevation', () => {
+describe('getElevationStatistics', () => {
   beforeEach(mockElevationService);
   afterEach(function() {
     fetchMock.restore();
@@ -20,7 +20,7 @@ describe('getElevation', () => {
       { latitude: 47.4828437883422, longitude: -120.88934898376465 },
     ];
 
-    getElevation(markers)
+    getElevationStatistics(markers)
       .then(({ gain, loss }) => {
         expect(gain).toEqual(10);
         expect(loss).toEqual(15);
