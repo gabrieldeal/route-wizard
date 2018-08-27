@@ -24,7 +24,6 @@ function roundTo(number, position) {
 
 class SpreadsheetPage extends React.Component {
   static propTypes = {
-    classes: PropTypes.object.isRequired,
     error: PropTypes.string,
     isLoading: PropTypes.bool.isRequired,
     segments: PropTypes.array,
