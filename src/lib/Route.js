@@ -7,10 +7,33 @@ import Marker from './Marker';
 import Segment from './Segment';
 import SegmentSplitter from './SegmentSplitter';
 
+function findFeature(id, geoJson) {
+  if (id === geoJson.id) {
+    return geoJson;
+  }
+
+  if (geoJson.features) {
+    return geoJson.features.find((feature) => findFeature(id, feature));
+  }
+
+  return undefined;
+}
+
+// FIXME: use the elevation data!
+function getElevations(id, geoJson) {
+  const feature = findFeature(id, geoJson);
+  if (!feature) {
+    throw `Cannot find feature ID '${id}'.`;
+  }
+
+  return feature.geometry.coordinates.map((coordinate) => coordinate[2]);
+}
+
 export default class Route {
-  constructor({ geoJson }) {
+  constructor({ geoJson: geoJsonString }) {
     const geoJsonReader = new GeoJSONReader();
-    this.jsts = geoJsonReader.read(geoJson);
+    this.jstsRoot = geoJsonReader.read(geoJsonString);
+    this.geoJson = JSON.parse(geoJsonString);
 
     const segments = this.features(LineString).map(
       (line) =>
@@ -18,6 +41,7 @@ export default class Route {
           title: line.properties.title,
           description: line.properties.description,
           line: line.geometry,
+          elevations: getElevations(line.id, this.geoJson),
         })
     );
     const markers = this.features(Point).map(
@@ -85,7 +109,7 @@ export default class Route {
   }
 
   features(type) {
-    return this.jsts.features.filter(
+    return this.jstsRoot.features.filter(
       (feature) => feature.geometry instanceof type
     );
   }

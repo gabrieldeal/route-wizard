@@ -8,6 +8,7 @@ export default class Segment {
   constructor({
     coordinates,
     description,
+    elevations,
     factory,
     line,
     locomotion,
@@ -17,6 +18,7 @@ export default class Segment {
     users,
   }) {
     this.description = description;
+    this.elevations = elevations;
     this._locomotion = locomotion; // FIXME: rationalize this._locomotion & this.locomotion().
     this.markers = markers;
     this._surface = surface;
