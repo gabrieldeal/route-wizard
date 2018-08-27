@@ -10,7 +10,7 @@ import SegmentSplitter from './SegmentSplitter';
 export default class Route {
   constructor({ geoJson }) {
     const geoJsonReader = new GeoJSONReader();
-    this.route = geoJsonReader.read(geoJson);
+    this.jsts = geoJsonReader.read(geoJson);
 
     const segments = this.features(LineString).map(
       (line) =>
@@ -85,7 +85,7 @@ export default class Route {
   }
 
   features(type) {
-    return this.route.features.filter(
+    return this.jsts.features.filter(
       (feature) => feature.geometry instanceof type
     );
   }
