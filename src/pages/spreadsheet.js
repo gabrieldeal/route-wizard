@@ -32,7 +32,7 @@ class SpreadsheetPage extends React.Component {
     setSegments: PropTypes.func.isRequired,
   };
 
-  columns = [
+  allColumns = [
     { key: 'from', name: 'Starting point' },
     { key: 'to', name: 'Ending point' },
     { key: 'distance', name: 'Distance (mi)' },
@@ -48,6 +48,18 @@ class SpreadsheetPage extends React.Component {
     { key: 'locomotion', name: 'Locomotion' },
   ];
 
+  columns() {
+    const optionalColumns = ['users', 'surface', 'locomotion'];
+    const unusedOptionalColumns = optionalColumns.filter(
+      (optionalColumn) =>
+        !this.props.segments.find((segment) => segment[optionalColumn])
+    );
+
+    return this.allColumns.filter(
+      (column) => !unusedOptionalColumns.includes(column.key)
+    );
+  }
+
   rows() {
     return this.props.segments
       .map((segment) => ({
@@ -60,10 +72,11 @@ class SpreadsheetPage extends React.Component {
         gain: roundTo(metersToFeet(segment.gain), 0),
         loss: roundTo(metersToFeet(segment.loss), 0),
       }))
-      .map((segment) => this.columns.map((column) => segment[column['key']]));
+      .map((segment) => this.columns().map((column) => segment[column['key']]));
   }
 
   handleSelectedFile = (event) => {
+    this.props.setError(null);
     this.props.setIsLoading(true);
     this.props.setSegments([]);
 
@@ -100,10 +113,10 @@ class SpreadsheetPage extends React.Component {
           Load route (GeoJSON)
         </ReadFileButton>
         {haveData && (
-          <SpreadsheetExportButton columns={this.columns} rows={rows} />
+          <SpreadsheetExportButton columns={this.columns()} rows={rows} />
         )}
         {this.props.error && <div>{this.props.error}</div>}
-        {haveData && <SpreadsheetTable columns={this.columns} rows={rows} />}
+        {haveData && <SpreadsheetTable columns={this.columns()} rows={rows} />}
       </Layout>
     );
   }
