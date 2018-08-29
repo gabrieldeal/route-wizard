@@ -109,6 +109,7 @@ export default class SegmentSplitter {
 
   splitAt({ lineGeometryLocation, marker, segment }) {
     const coordinates = segment.line.getCoordinates();
+    const elevations = segment.elevations;
 
     const fields = {
       locomotion: segment.locomotion(),
@@ -128,17 +129,21 @@ export default class SegmentSplitter {
       left = {
         coordinates,
         description: segment.strippedDescription(),
+        elevations,
         title: segment.title,
       };
 
       const lastCoordinate = coordinates[coordinates.length - 1];
+      const lastElevation = elevations[elevations.length - 1];
       right = {
         coordinates: [lastCoordinate, lastCoordinate],
         description: marker.description,
+        elevations: [lastElevation, lastElevation],
         title: marker.title,
       };
     } else if (isMarkerAtStart) {
       const firstCoordinate = coordinates[0];
+      const firstElevation = elevations[0];
       left = {
         coordinates: [firstCoordinate, firstCoordinate],
         description: this.joinDescriptions(
@@ -146,24 +151,28 @@ export default class SegmentSplitter {
           marker.description
         ),
         description: marker.description,
+        elevations: [firstElevation, firstElevation],
         title: marker.title,
       };
 
       right = {
         coordinates,
         description: '',
+        elevations,
         title: segment.title,
       };
     } else {
       left = {
         coordinates: coordinates.slice(0, splitIndex + 1),
         description: segment.strippedDescription(),
+        elevations: elevations.slice(0, splitIndex + 1),
         title: segment.title,
       };
 
       right = {
         coordinates: coordinates.slice(splitIndex, coordinates.length),
         description: marker.description,
+        elevations: elevations.slice(splitIndex, elevations.length),
         title: marker.title,
       };
 
@@ -171,6 +180,8 @@ export default class SegmentSplitter {
         // The split is between points on the line.
         left.coordinates.push(lineGeometryLocation.getCoordinate());
         right.coordinates.unshift(lineGeometryLocation.getCoordinate());
+        left.elevations.push(left.elevations[left.elevations.length - 1]);
+        right.elevations.unshift(right.elevations[0]);
       }
     }
 

@@ -6,6 +6,7 @@ import Point from 'jsts/org/locationtech/jts/geom/Point';
 import Marker from './Marker';
 import Segment from './Segment';
 import SegmentSplitter from './SegmentSplitter';
+import { calculateElevationStatistics } from './getElevationStatistics';
 
 function findFeature(id, geoJson) {
   if (id === geoJson.id) {
@@ -74,9 +75,10 @@ export default class Route {
         index + 1 == this.segments.length
           ? 'End'
           : this.segments[index + 1].title;
-      const elevationStatistics = error
-        ? { gain: error }
-        : allElevationStatistics;
+      const elevationStatistics = calculateElevationStatistics(
+        segment.elevations
+      );
+
       if (index > 0) {
         cumulativeDistance += this.segments[index - 1].distance();
       }

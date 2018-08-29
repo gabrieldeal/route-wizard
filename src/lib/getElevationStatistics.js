@@ -28,12 +28,12 @@ function lookup({
     });
 }
 
-function handleResponse(locations) {
+export function calculateElevationStatistics(elevations) {
   let gain = 0;
   let loss = 0;
-  for (let i = 1; i < locations.length; ++i) {
-    const prevElevation = locations[i - 1].elevation;
-    const elevation = locations[i].elevation;
+  for (let i = 1; i < elevations.length; ++i) {
+    const prevElevation = elevations[i - 1];
+    const elevation = elevations[i];
     if (prevElevation < elevation) {
       gain += elevation - prevElevation;
     } else {
@@ -45,6 +45,12 @@ function handleResponse(locations) {
     gain: gain,
     loss: loss,
   };
+}
+
+function handleResponse(locations) {
+  const elevations = locations.map((location) => location.elevation);
+
+  return calculateElevationStatistics(elevations);
 }
 
 // FIXME: This underestimates the gain & loss if the points are sparse because it

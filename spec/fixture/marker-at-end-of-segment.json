@@ -1,1 +1,58 @@
-{"type":"FeatureCollection","features":[{"type":"Feature","id":"745b7018-d856-443a-af77-16d8bde27060","geometry":{"type":"Point","coordinates":[-120.8868,47.4711,0,0]},"properties":{"marker-symbol":"point","marker-color":"#FF0000","description":"","title":"Marker at end of line","class":"Marker","updated":1533142659000}},{"type":"Feature","id":"3b24ca4b-0d01-440e-9196-5b7f6722d056","geometry":{"type":"LineString","coordinates":[[-120.90248107910156,47.47524454206689],[-120.88891983032227,47.47182162177658]]},"properties":{"stroke-opacity":1,"pattern":"solid","description":"","stroke-width":2,"title":"The line","fill":"#FF0000","class":"Shape","updated":1533142659000,"stroke":"#FF0000","fill-opacity":0.1,"gpstype":"TRACK"}}]}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "745b7018-d856-443a-af77-16d8bde27060",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -120.8868,
+          47.4711,
+          2469.755199999577,
+          0
+        ]
+      },
+      "properties": {
+        "marker-symbol": "point",
+        "marker-color": "#FF0000",
+        "description": "",
+        "title": "Marker at end of line",
+        "class": "Marker",
+        "updated": 1533142659000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "3b24ca4b-0d01-440e-9196-5b7f6722d056",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -120.90248107910156,
+            47.47524454206689,
+            2814.148230142693
+          ],
+          [
+            -120.88891983032227,
+            47.47182162177658,
+            2566.0397770642203
+          ]
+        ]
+      },
+      "properties": {
+        "stroke-opacity": 1,
+        "pattern": "solid",
+        "description": "",
+        "stroke-width": 2,
+        "title": "The line",
+        "fill": "#FF0000",
+        "class": "Shape",
+        "updated": 1533142659000,
+        "stroke": "#FF0000",
+        "fill-opacity": 0.1,
+        "gpstype": "TRACK"
+      }
+    }
+  ]
+}
