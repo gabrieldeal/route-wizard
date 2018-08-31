@@ -24,7 +24,7 @@ function roundToMiles(meters) {
   return roundTo(meters * 0.000621371, 1);
 }
 
-export default function(realSegments) {
+function createRows(realSegments) {
   if (realSegments.length == 0) {
     return [];
   }
@@ -52,4 +52,22 @@ export default function(realSegments) {
       users: segment.users(),
     };
   });
+}
+
+function filterColumns(filteredRows, unfilteredColumns) {
+  const optionalColumns = ['users', 'surface', 'locomotion'];
+  const unusedOptionalColumns = optionalColumns.filter(
+    (optionalColumn) => !filteredRows.find((row) => row[optionalColumn])
+  );
+
+  return unfilteredColumns.filter(
+    (column) => !unusedOptionalColumns.includes(column.key)
+  );
+}
+
+export default function(segments, unfilteredColumns) {
+  const rows = createRows(segments);
+  const columns = filterColumns(rows, unfilteredColumns);
+
+  return { rows, columns };
 }

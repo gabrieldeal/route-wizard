@@ -1,7 +1,22 @@
 import fetchMock from 'fetch-mock';
 
-import createSpreadsheetRows from '../../src/lib/createSpreadsheetRows';
+import createSpreadsheet from '../../src/lib/createSpreadsheetRows';
 import parseGeoJson from '../../src/lib/parseGeoJson';
+
+const ALL_COLUMNS = [
+  {
+    key: 'cumulativeDistance',
+    name: 'Cumulative distance (mi)',
+  },
+  { key: 'location', name: 'Location' },
+  { key: 'distance', name: 'Distance (mi)' },
+  { key: 'gain', name: 'Elevation gain (feet)' },
+  { key: 'loss', name: 'Elevation loss (feet)' },
+  { key: 'description', name: 'Notes' },
+  { key: 'users', name: 'Users' },
+  { key: 'surface', name: 'Surface' },
+  { key: 'locomotion', name: 'Locomotion' },
+];
 
 // FIXME: Split this spec up now that the Route class has been split up.
 describe('Route', function() {
@@ -17,16 +32,17 @@ describe('Route', function() {
     fetchMock.restore();
   });
 
-  function expectRouteToEqual({ fixtureName, expectedData }) {
+  function expectRouteToEqual({ fixtureName, expectedRows }) {
     const geoJson = readJSON(`./spec/fixture/${fixtureName}`);
     const segments = parseGeoJson(JSON.stringify(geoJson));
-    const data = createSpreadsheetRows(segments);
+    const { rows, _columns } = createSpreadsheet(segments, ALL_COLUMNS);
+    // FIXME: add expectation on the columns.
 
-    expect(data).toEqual(expectedData);
+    expect(rows).toEqual(expectedRows);
   }
 
   it('handles multiple segments & markers', function() {
-    const expectedData = [
+    const expectedRows = [
       {
         ...this.descriptionFields,
         location: 'Start',
@@ -72,11 +88,11 @@ describe('Route', function() {
       },
     ];
     const fixtureName = 'two-segments.json'; // https://caltopo.com/m/PLN5
-    expectRouteToEqual({ fixtureName, expectedData });
+    expectRouteToEqual({ fixtureName, expectedRows });
   });
 
   it('handles markers at the start of a segment', function() {
-    const expectedData = [
+    const expectedRows = [
       {
         ...this.descriptionFields,
         location: 'Start', // This replaces "Marker at start of line".
@@ -107,11 +123,11 @@ describe('Route', function() {
       },
     ];
     const fixtureName = 'marker-at-start-of-segment.json'; // https://caltopo.com/m/8J5M
-    expectRouteToEqual({ fixtureName, expectedData });
+    expectRouteToEqual({ fixtureName, expectedRows });
   });
 
   it('handles markers at the end of a segment', function() {
-    const expectedData = [
+    const expectedRows = [
       {
         ...this.descriptionFields,
         location: 'Start',
@@ -142,7 +158,7 @@ describe('Route', function() {
       },
     ];
     const fixtureName = 'marker-at-end-of-segment.json'; // https://caltopo.com/m/8J5M
-    expectRouteToEqual({ fixtureName, expectedData });
+    expectRouteToEqual({ fixtureName, expectedRows });
   });
 
   it('handles markers in the middle of a segment', function() {
@@ -151,7 +167,7 @@ describe('Route', function() {
       surface: 'gravel road',
       users: 'motorized',
     };
-    const expectedData = [
+    const expectedRows = [
       {
         ...descriptionFields,
         description: 'The line description',
@@ -193,6 +209,6 @@ describe('Route', function() {
       },
     ];
     const fixtureName = 'markers-in-middle-of-segment.json';
-    expectRouteToEqual({ fixtureName, expectedData });
+    expectRouteToEqual({ fixtureName, expectedRows });
   });
 });

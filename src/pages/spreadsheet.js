@@ -4,7 +4,7 @@ import React from 'react';
 import withState from 'recompose/withState';
 import { preadFile } from '../lib/readFile';
 
-import createSpreadsheetRows from '../lib/createSpreadsheetRows';
+import createSpreadsheet from '../lib/createSpreadsheetRows';
 import Layout from '../components/layout';
 import parseGeoJson from '../lib/parseGeoJson';
 import ReadFileButton from '../components/readFileButton';
@@ -13,14 +13,17 @@ import SpreadsheetTable from '../components/spreadsheet/table';
 
 class SpreadsheetPage extends React.Component {
   static propTypes = {
+    columns: PropTypes.array,
     error: PropTypes.string,
     isLoading: PropTypes.bool.isRequired,
     rows: PropTypes.array,
+    setColumns: PropTypes.func.isRequired,
     setError: PropTypes.func.isRequired,
     setIsLoading: PropTypes.func.isRequired,
     setRows: PropTypes.func.isRequired,
   };
 
+  // A column might not be used if there is no row with a value for that column.
   allColumns = [
     {
       key: 'cumulativeDistance',
@@ -36,37 +39,28 @@ class SpreadsheetPage extends React.Component {
     { key: 'locomotion', name: 'Locomotion' },
   ];
 
-  columns() {
-    const optionalColumns = ['users', 'surface', 'locomotion'];
-    const unusedOptionalColumns = optionalColumns.filter(
-      (optionalColumn) => !this.props.rows.find((row) => row[optionalColumn])
-    );
-
-    return this.allColumns.filter(
-      (column) => !unusedOptionalColumns.includes(column.key)
-    );
-  }
-
   rows() {
     return this.props.rows.map((row) =>
-      this.columns().map((column) => row[column['key']])
+      this.props.columns.map((column) => row[column['key']])
     );
   }
+  parseGeoJson(geoJson) {
+    const segments = parseGeoJson(geoJson);
 
-  geoJsonToSpreadsheetRows(geoJson) {
-    const rows = parseGeoJson(geoJson);
-
-    return createSpreadsheetRows(rows);
+    return createSpreadsheet(segments, this.allColumns);
   }
 
   handleSelectedFile = (event) => {
+    this.props.setRows([]);
+    this.props.setColumns([]);
     this.props.setError(null);
     this.props.setIsLoading(true);
-    this.props.setRows([]);
 
     preadFile({ file: event.target.files[0] })
       .then((geoJson) => {
-        this.props.setRows(this.geoJsonToSpreadsheetRows(geoJson));
+        const { rows, columns } = this.parseGeoJson(geoJson);
+        this.props.setRows(rows);
+        this.props.setColumns(columns);
         this.props.setError(null);
         this.props.setIsLoading(false);
       })
@@ -96,16 +90,19 @@ class SpreadsheetPage extends React.Component {
           Load route (GeoJSON)
         </ReadFileButton>
         {haveData && (
-          <SpreadsheetExportButton columns={this.columns()} rows={rows} />
+          <SpreadsheetExportButton columns={this.props.columns} rows={rows} />
         )}
         {this.props.error && <div>{this.props.error}</div>}
-        {haveData && <SpreadsheetTable columns={this.columns()} rows={rows} />}
+        {haveData && (
+          <SpreadsheetTable columns={this.props.columns} rows={rows} />
+        )}
       </Layout>
     );
   }
 }
 
 const enhance = compose(
+  withState('columns', 'setColumns', []),
   withState('rows', 'setRows', []),
   withState('error', 'setError'),
   withState('isLoading', 'setIsLoading', false)
