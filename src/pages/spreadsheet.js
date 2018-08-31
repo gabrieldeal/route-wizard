@@ -33,13 +33,13 @@ class SpreadsheetPage extends React.Component {
   };
 
   allColumns = [
-    { key: 'from', name: 'Starting point' },
-    { key: 'to', name: 'Ending point' },
-    { key: 'distance', name: 'Distance (mi)' },
     {
       key: 'cumulativeDistance',
       name: 'Cumulative distance to starting point (mi)',
     },
+    { key: 'from', name: 'Starting point' },
+    { key: 'to', name: 'Ending point' },
+    { key: 'distance', name: 'Distance (mi)' },
     { key: 'gain', name: 'Elevation gain (feet)' },
     { key: 'loss', name: 'Elevation loss (feet)' },
     { key: 'description', name: 'Info about the starting point' },
