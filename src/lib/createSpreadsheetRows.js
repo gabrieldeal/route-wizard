@@ -1,7 +1,7 @@
 import DummySegment from './DummySegment';
 
 function isBlank(str) {
-  return str === undefined || str === null || str === '';
+  return str === undefined || str === null || str === '' || isNaN(str);
 }
 
 function roundTo(number, position) {

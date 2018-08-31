@@ -4,13 +4,13 @@ describe('calculateElevationStatistics', () => {
   it('no elevations', () => {
     const elevations = [];
     const stats = calculateElevationStatistics(elevations);
-    expect(stats).toEqual({ gain: 0, loss: 0 });
+    expect(stats).toEqual({ gain: undefined, loss: undefined });
   });
 
   it('one elevation', () => {
     const elevations = [10];
     const stats = calculateElevationStatistics(elevations);
-    expect(stats).toEqual({ gain: 0, loss: 0 });
+    expect(stats).toEqual({ gain: undefined, loss: undefined });
   });
 
   it('up & down', () => {
