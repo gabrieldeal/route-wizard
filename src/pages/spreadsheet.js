@@ -15,10 +15,10 @@ class SpreadsheetPage extends React.Component {
   static propTypes = {
     error: PropTypes.string,
     isLoading: PropTypes.bool.isRequired,
-    segments: PropTypes.array,
+    rows: PropTypes.array,
     setError: PropTypes.func.isRequired,
     setIsLoading: PropTypes.func.isRequired,
-    setSegments: PropTypes.func.isRequired,
+    setRows: PropTypes.func.isRequired,
   };
 
   allColumns = [
@@ -39,8 +39,7 @@ class SpreadsheetPage extends React.Component {
   columns() {
     const optionalColumns = ['users', 'surface', 'locomotion'];
     const unusedOptionalColumns = optionalColumns.filter(
-      (optionalColumn) =>
-        !this.props.segments.find((segment) => segment[optionalColumn])
+      (optionalColumn) => !this.props.rows.find((row) => row[optionalColumn])
     );
 
     return this.allColumns.filter(
@@ -49,25 +48,25 @@ class SpreadsheetPage extends React.Component {
   }
 
   rows() {
-    return this.props.segments.map((segment) =>
-      this.columns().map((column) => segment[column['key']])
+    return this.props.rows.map((row) =>
+      this.columns().map((column) => row[column['key']])
     );
   }
 
   geoJsonToSpreadsheetRows(geoJson) {
-    const segments = parseGeoJson(geoJson);
+    const rows = parseGeoJson(geoJson);
 
-    return createSpreadsheetRows(segments);
+    return createSpreadsheetRows(rows);
   }
 
   handleSelectedFile = (event) => {
     this.props.setError(null);
     this.props.setIsLoading(true);
-    this.props.setSegments([]);
+    this.props.setRows([]);
 
     preadFile({ file: event.target.files[0] })
       .then((geoJson) => {
-        this.props.setSegments(this.geoJsonToSpreadsheetRows(geoJson));
+        this.props.setRows(this.geoJsonToSpreadsheetRows(geoJson));
         this.props.setError(null);
         this.props.setIsLoading(false);
       })
@@ -107,7 +106,7 @@ class SpreadsheetPage extends React.Component {
 }
 
 const enhance = compose(
-  withState('segments', 'setSegments', []),
+  withState('rows', 'setRows', []),
   withState('error', 'setError'),
   withState('isLoading', 'setIsLoading', false)
 );
