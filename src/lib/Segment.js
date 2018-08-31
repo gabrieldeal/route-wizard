@@ -2,7 +2,6 @@ import DistanceOp from 'jsts/org/locationtech/jts/operation/distance/DistanceOp'
 import LineString from 'jsts/org/locationtech/jts/geom/LineString';
 import geolib from 'geolib';
 
-import getElevationStatistics from './getElevationStatistics';
 import { calculateElevationStatistics } from './getElevationStatistics';
 
 export default class Segment {
@@ -41,10 +40,6 @@ export default class Segment {
         .create(coordinates);
       this.line = new LineString(coordinatesSeq, factory);
     }
-  }
-
-  elevationStatistics() {
-    return getElevationStatistics(this.locations());
   }
 
   jstsPointToGeolib(coordinate) {

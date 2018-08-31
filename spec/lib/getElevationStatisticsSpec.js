@@ -1,33 +1,21 @@
-import fetchMock from 'fetch-mock';
+import { calculateElevationStatistics } from '../../src/lib/getElevationStatistics';
 
-import getElevationStatistics from '../../src/lib/getElevationStatistics';
-import mockElevationService from '../support/mockElevationService';
-
-describe('getElevationStatistics', () => {
-  beforeEach(mockElevationService);
-  afterEach(function() {
-    fetchMock.restore();
+describe('calculateElevationStatistics', () => {
+  it('no elevations', () => {
+    const elevations = [];
+    const stats = calculateElevationStatistics(elevations);
+    expect(stats).toEqual({ gain: 0, loss: 0 });
   });
 
-  it('calculate gain & loss', (done) => {
-    // https://caltopo.com/m/850B
-    const markers = [
-      { latitude: 47.45435545649966, longitude: -120.89595794677734 },
-      { latitude: 47.459868660320694, longitude: -120.89587211608887 },
-      { latitude: 47.467818262663286, longitude: -120.8979320526123 },
-      { latitude: 47.475070500652556, longitude: -120.90145111083984 },
-      { latitude: 47.47704293626134, longitude: -120.89921951293945 },
-      { latitude: 47.4828437883422, longitude: -120.88934898376465 },
-    ];
+  it('one elevation', () => {
+    const elevations = [10];
+    const stats = calculateElevationStatistics(elevations);
+    expect(stats).toEqual({ gain: 0, loss: 0 });
+  });
 
-    getElevationStatistics(markers)
-      .then(({ gain, loss }) => {
-        expect(gain).toEqual(10);
-        expect(loss).toEqual(15);
-        done();
-      })
-      .catch((status) => {
-        fail(status);
-      });
+  it('up & down', () => {
+    const elevations = [0, 10, 20, 10];
+    const stats = calculateElevationStatistics(elevations);
+    expect(stats).toEqual({ gain: 20, loss: 10 });
   });
 });
