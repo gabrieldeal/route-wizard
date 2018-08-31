@@ -13,7 +13,7 @@ import SpreadsheetTable from '../components/spreadsheet/table';
 
 class SpreadsheetPage extends React.Component {
   static propTypes = {
-    columns: PropTypes.array,
+    columns: PropTypes.array, // Just the columns that we are displaying.
     error: PropTypes.string,
     isLoading: PropTypes.bool.isRequired,
     rows: PropTypes.array,
@@ -23,7 +23,7 @@ class SpreadsheetPage extends React.Component {
     setRows: PropTypes.func.isRequired,
   };
 
-  // A column might not be used if there is no row with a value for that column.
+  // A column might not be displayed if there is no row with a value for that column.
   allColumns = [
     {
       key: 'cumulativeDistance',
@@ -40,11 +40,14 @@ class SpreadsheetPage extends React.Component {
     { key: 'locomotion', name: 'Locomotion' },
   ];
 
+  // Convert each row from a hash to an array of values.  This also filters
+  // out the values for columns that we are not displaying.
   rows() {
     return this.props.rows.map((row) =>
       this.props.columns.map((column) => row[column['key']])
     );
   }
+
   parseGeoJson(geoJson) {
     const segments = parseGeoJson(geoJson);
 
