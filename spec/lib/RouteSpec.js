@@ -1,7 +1,9 @@
 import fetchMock from 'fetch-mock';
 
-import Route from '../../src/lib/Route';
+import createSpreadsheetRows from '../../src/lib/createSpreadsheetRows';
+import parseGeoJson from '../../src/lib/parseGeoJson';
 
+// FIXME: Split this spec up now that the Route class has been split up.
 describe('Route', function() {
   beforeEach(function() {
     this.descriptionFields = {
@@ -15,15 +17,12 @@ describe('Route', function() {
     fetchMock.restore();
   });
 
-  function createRoute(fixtureName) {
-    const geoJson = readJSON(`./spec/fixture/${fixtureName}`);
-    return new Route({ geoJson: JSON.stringify(geoJson) });
-  }
-
   function expectRouteToEqual({ fixtureName, expectedData }) {
-    const route = createRoute(fixtureName);
+    const geoJson = readJSON(`./spec/fixture/${fixtureName}`);
+    const segments = parseGeoJson(JSON.stringify(geoJson));
+    const data = createSpreadsheetRows(segments);
 
-    expect(route.data()).toEqual(expectedData);
+    expect(data).toEqual(expectedData);
   }
 
   it('handles multiple segments & markers', function() {

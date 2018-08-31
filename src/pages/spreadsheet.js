@@ -1,11 +1,12 @@
 import compose from 'recompose/compose';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Route from '../lib/Route';
 import withState from 'recompose/withState';
 import { preadFile } from '../lib/readFile';
 
+import createSpreadsheetRows from '../lib/createSpreadsheetRows';
 import Layout from '../components/layout';
+import parseGeoJson from '../lib/parseGeoJson';
 import ReadFileButton from '../components/readFileButton';
 import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
 import SpreadsheetTable from '../components/spreadsheet/table';
@@ -92,6 +93,11 @@ class SpreadsheetPage extends React.Component {
       .map((segment) => this.columns().map((column) => segment[column['key']]));
   }
 
+  geoJsonToSpreadsheetRows(geoJson) {
+    const segments = parseGeoJson(geoJson);
+    return createSpreadsheetRows(segments);
+  }
+
   handleSelectedFile = (event) => {
     this.props.setError(null);
     this.props.setIsLoading(true);
@@ -99,7 +105,7 @@ class SpreadsheetPage extends React.Component {
 
     preadFile({ file: event.target.files[0] })
       .then((geoJson) => {
-        this.props.setSegments(new Route({ geoJson }).data());
+        this.props.setSegments(this.geoJsonToSpreadsheetRows(geoJson));
         this.props.setError(null);
         this.props.setIsLoading(false);
       })

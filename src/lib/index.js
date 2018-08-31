@@ -1,7 +1,16 @@
 import CaltopoSorter from './CaltopoSorter';
+import createSpreadsheetRows from './createSpreadsheetRows';
 import Marker from './Marker';
-import { preadFile, preadJson } from './readFile';
-import Route from './Route';
+import parseGeoJson from './parseGeoJson';
 import Segment from './Segment';
+import { preadFile, preadJson } from './readFile';
 
-export { CaltopoSorter, Marker, preadFile, preadJson, Route, Segment };
+export {
+  CaltopoSorter,
+  createSpreadsheetRows,
+  Marker,
+  parseGeoJson,
+  preadFile,
+  preadJson,
+  Segment,
+};
