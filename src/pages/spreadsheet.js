@@ -31,8 +31,6 @@ class SpreadsheetPage extends React.Component {
     { key: 'gain', name: 'Elevation gain (feet)' },
     { key: 'loss', name: 'Elevation loss (feet)' },
     { key: 'description', name: 'Notes' },
-    //    { key: 'gain', name: 'Gain (feet)' },
-    //    { key: 'loss', name: 'Loss (feet)' },
     { key: 'users', name: 'Users' },
     { key: 'surface', name: 'Surface' },
     { key: 'locomotion', name: 'Locomotion' },
