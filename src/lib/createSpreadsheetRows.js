@@ -52,8 +52,7 @@ function createRows(realSegments) {
 }
 
 function filterColumns(filteredRows, unfilteredColumns) {
-  // TODO: Make gain & loss optional
-  const optionalColumns = ['users', 'surface', 'locomotion'];
+  const optionalColumns = ['users', 'surface', 'locomotion', 'gain', 'loss'];
   const unusedOptionalColumns = optionalColumns.filter(
     (optionalColumn) => !filteredRows.find((row) => row[optionalColumn])
   );
