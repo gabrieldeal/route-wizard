@@ -23,23 +23,6 @@ class SpreadsheetPage extends React.Component {
     setRows: PropTypes.func.isRequired,
   };
 
-  // A column might not be displayed if there is no row with a value for that column.
-  allColumns = [
-    {
-      key: 'cumulativeDistance',
-      name: 'Cumulative distance to ending point (mi)',
-    },
-    { key: 'from', name: 'Starting point' },
-    { key: 'to', name: 'Ending point' },
-    { key: 'distance', name: 'Distance (mi)' },
-    { key: 'gain', name: 'Elevation gain (feet)' },
-    { key: 'loss', name: 'Elevation loss (feet)' },
-    { key: 'description', name: 'Notes about starting point' },
-    { key: 'users', name: 'Users' },
-    { key: 'surface', name: 'Surface' },
-    { key: 'locomotion', name: 'Locomotion' },
-  ];
-
   // Convert each row from a hash to an array of values.  This also filters
   // out the values for columns that we are not displaying.
   rows() {
@@ -51,7 +34,7 @@ class SpreadsheetPage extends React.Component {
   parseGeoJson(geoJson) {
     const segments = parseGeoJson(geoJson);
 
-    return createSpreadsheet(segments, this.allColumns);
+    return createSpreadsheet(segments);
   }
 
   handleSelectedFile = (event) => {

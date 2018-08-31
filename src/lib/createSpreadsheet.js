@@ -51,7 +51,24 @@ function createRows(realSegments) {
   });
 }
 
-function filterColumns(filteredRows, unfilteredColumns) {
+// A column might not be displayed if there is no row with a value for that column.
+const unfilteredColumns = [
+  {
+    key: 'cumulativeDistance',
+    name: 'Cumulative distance to ending point (mi)',
+  },
+  { key: 'from', name: 'Starting point' },
+  { key: 'to', name: 'Ending point' },
+  { key: 'distance', name: 'Distance (mi)' },
+  { key: 'gain', name: 'Elevation gain (feet)' },
+  { key: 'loss', name: 'Elevation loss (feet)' },
+  { key: 'description', name: 'Notes about starting point' },
+  { key: 'users', name: 'Users' },
+  { key: 'surface', name: 'Surface' },
+  { key: 'locomotion', name: 'Locomotion' },
+];
+
+function filterColumns(filteredRows) {
   const optionalColumns = ['users', 'surface', 'locomotion', 'gain', 'loss'];
   const unusedOptionalColumns = optionalColumns.filter(
     (optionalColumn) => !filteredRows.find((row) => row[optionalColumn])
