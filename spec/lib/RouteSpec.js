@@ -1,11 +1,9 @@
 import fetchMock from 'fetch-mock';
 
 import Route from '../../src/lib/Route';
-import mockElevationService from '../support/mockElevationService';
 
 describe('Route', function() {
   beforeEach(function() {
-    mockElevationService();
     this.descriptionFields = {
       description: '',
       locomotion: '',
@@ -22,64 +20,75 @@ describe('Route', function() {
     return new Route({ geoJson: JSON.stringify(geoJson) });
   }
 
-  function expectRouteToEqual({ fixtureName, expectedData, done }) {
+  function expectRouteToEqual({ fixtureName, expectedData }) {
     const route = createRoute(fixtureName);
 
-    route.data().then((data) => {
-      expect(data).toEqual(expectedData);
-      done();
-    });
+    expect(route.data()).toEqual(expectedData);
   }
 
-  it('handles multiple segments & markers', function(done) {
+  it('handles multiple segments & markers', function() {
     const expectedData = [
       {
         ...this.descriptionFields,
-        from: '01 Stuart/Sherpa ridge',
-        to: 'Stuart/Sherpa col',
+        location: 'Start',
         cumulativeDistance: 0,
+        distance: null,
+        gain: null,
+        loss: null,
+      },
+      {
+        ...this.descriptionFields,
+        location: 'Stuart/Sherpa col',
+        cumulativeDistance: 879,
         distance: 879,
         gain: 0,
         loss: 0, //1,
       },
       {
         ...this.descriptionFields,
-        from: 'Stuart/Sherpa col',
-        to: '02 Sherpa/Argonaut ridge',
-        cumulativeDistance: 879,
+        location: '02 Sherpa/Argonaut ridge',
+        cumulativeDistance: 879 + 1959,
         distance: 1959,
-        gain: 0, //3,
-        loss: 0,
+        gain: 0,
+        loss: 261.1142065917488,
       },
       {
         ...this.descriptionFields,
-        from: '02 Sherpa/Argonaut ridge',
-        to: 'Sherpa/Argonaut col',
-        cumulativeDistance: 879 + 1959,
+        location: 'Sherpa/Argonaut col',
+        cumulativeDistance: 879 + 1959 + 1097,
         distance: 1097,
         gain: 0, //7,
         loss: 0,
       },
       {
-        ...this.descriptionFields,
-        from: 'Sherpa/Argonaut col',
-        to: 'End',
-        cumulativeDistance: 879 + 1959 + 1097,
+        location: 'End',
+        cumulativeDistance: 879 + 1959 + 1097 + 3492,
         distance: 3492,
-        gain: 0, //11,
-        loss: 0, //9,
+        gain: 342.59821906724346,
+        loss: 434.0569564411212,
+        description: null,
+        locomotion: null,
+        surface: null,
+        users: null,
       },
     ];
     const fixtureName = 'two-segments.json'; // https://caltopo.com/m/PLN5
-    expectRouteToEqual({ fixtureName, expectedData, done });
+    expectRouteToEqual({ fixtureName, expectedData });
   });
 
-  it('handles markers at the start of a segment', function(done) {
+  it('handles markers at the start of a segment', function() {
     const expectedData = [
       {
         ...this.descriptionFields,
-        from: 'Marker at start of line',
-        to: 'The line',
+        location: 'Start', // This replaces "Marker at start of line".
+        cumulativeDistance: 0,
+        distance: null,
+        gain: null,
+        loss: null,
+      },
+      {
+        ...this.descriptionFields,
+        location: 'The line',
         cumulativeDistance: 0,
         distance: 0,
         gain: 0,
@@ -87,44 +96,57 @@ describe('Route', function() {
       },
       {
         ...this.descriptionFields,
-        from: 'The line',
-        to: 'End',
-        cumulativeDistance: 0,
+        location: 'End',
+        cumulativeDistance: 1091,
         distance: 1091,
         gain: 0,
-        loss: 0, //1,
+        loss: 248.10845307847285,
+        description: null,
+        locomotion: null,
+        surface: null,
+        users: null,
       },
     ];
     const fixtureName = 'marker-at-start-of-segment.json'; // https://caltopo.com/m/8J5M
-    expectRouteToEqual({ fixtureName, expectedData, done });
+    expectRouteToEqual({ fixtureName, expectedData });
   });
 
-  it('handles markers at the end of a segment', function(done) {
+  it('handles markers at the end of a segment', function() {
     const expectedData = [
       {
         ...this.descriptionFields,
-        from: 'The line',
-        to: 'Marker at end of line',
+        location: 'Start',
         cumulativeDistance: 0,
-        distance: 1091,
-        gain: 0,
-        loss: 0, //1,
+        distance: null,
+        gain: null,
+        loss: null,
       },
       {
         ...this.descriptionFields,
-        from: 'Marker at end of line',
-        to: 'End',
+        location: 'Marker at end of line',
+        cumulativeDistance: 1091,
+        distance: 1091,
+        gain: 0,
+        loss: 248.10845307847285,
+      },
+      {
+        ...this.descriptionFields,
+        description: null,
+        location: 'End',
         cumulativeDistance: 1091,
         distance: 0,
         gain: 0,
         loss: 0,
+        locomotion: null,
+        surface: null,
+        users: null,
       },
     ];
     const fixtureName = 'marker-at-end-of-segment.json'; // https://caltopo.com/m/8J5M
-    expectRouteToEqual({ fixtureName, expectedData, done });
+    expectRouteToEqual({ fixtureName, expectedData });
   });
 
-  it('handles markers in the middle of a segment', function(done) {
+  it('handles markers in the middle of a segment', function() {
     const descriptionFields = {
       locomotion: 'cycle',
       surface: 'gravel road',
@@ -134,35 +156,44 @@ describe('Route', function() {
       {
         ...descriptionFields,
         description: 'The line description',
-        from: 'The line',
-        to: 'Getting excited about the summit!',
+        location: 'Start',
         cumulativeDistance: 0,
-        distance: 665,
-        gain: 0, //3,
-        loss: 0, //1,
+        distance: null,
+        gain: null,
+        loss: null,
       },
       {
         ...descriptionFields,
         description: '',
-        from: 'Getting excited about the summit!',
-        to: 'Getting close to the summit!',
+        location: 'Getting excited about the summit!',
         cumulativeDistance: 665,
-        distance: 997,
-        gain: 0, //7,
-        loss: 0, //5,
+        distance: 665,
+        gain: 269.25798601420615,
+        loss: 0,
       },
       {
         ...descriptionFields,
         description: '',
-        from: 'Getting close to the summit!',
-        to: 'End',
-        gain: 0,
-        loss: 0, //9,
+        location: 'Getting close to the summit!',
         cumulativeDistance: 665 + 997,
+        distance: 997,
+        gain: 425.9778273414306,
+        loss: 0,
+      },
+      {
+        ...descriptionFields,
+        description: null,
+        location: 'End',
+        gain: 630.048621330563,
+        loss: 0,
+        cumulativeDistance: 665 + 997 + 1396,
         distance: 1396,
+        locomotion: null,
+        surface: null,
+        users: null,
       },
     ];
     const fixtureName = 'markers-in-middle-of-segment.json';
-    expectRouteToEqual({ done, fixtureName, expectedData });
+    expectRouteToEqual({ fixtureName, expectedData });
   });
 });

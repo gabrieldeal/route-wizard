@@ -3,6 +3,7 @@ import LineString from 'jsts/org/locationtech/jts/geom/LineString';
 import geolib from 'geolib';
 
 import getElevationStatistics from './getElevationStatistics';
+import { calculateElevationStatistics } from './getElevationStatistics';
 
 export default class Segment {
   constructor({
@@ -24,6 +25,10 @@ export default class Segment {
     this._surface = surface;
     this.title = title;
     this._users = users;
+
+    ({ gain: this._gain, loss: this._loss } = calculateElevationStatistics(
+      elevations
+    ));
 
     this.usersRegexp = /((?:non-)?motorized)/;
     this.surfaceRegexp = /((?:paved|gravel|rail)?[ -]?(?:road|trail|sidewalk|cross-country))/;
@@ -89,6 +94,14 @@ export default class Segment {
     return this.line
       .getCoordinates()
       .map((coordinate) => this.jstsPointToGeolib(coordinate));
+  }
+
+  gain() {
+    return this._gain;
+  }
+
+  loss() {
+    return this._loss;
   }
 
   // In meters

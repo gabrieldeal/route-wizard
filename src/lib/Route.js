@@ -1,12 +1,11 @@
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import LineString from 'jsts/org/locationtech/jts/geom/LineString';
-import pLimit from 'p-limit';
 import Point from 'jsts/org/locationtech/jts/geom/Point';
 
+import DummySegment from './DummySegment';
 import Marker from './Marker';
 import Segment from './Segment';
 import SegmentSplitter from './SegmentSplitter';
-import { calculateElevationStatistics } from './getElevationStatistics';
 
 function findFeature(id, geoJson) {
   if (id === geoJson.id) {
@@ -20,7 +19,6 @@ function findFeature(id, geoJson) {
   return undefined;
 }
 
-// FIXME: use the elevation data!
 function getElevations(id, geoJson) {
   const feature = findFeature(id, geoJson);
   if (!feature) {
@@ -60,54 +58,33 @@ export default class Route {
 
   // FIXME: This seems like it should not live here.
   data() {
-    const maxConcurrentRequests = 5;
-    const limit = pLimit(maxConcurrentRequests);
-
-    const elevationStatisticsPromises = this.segments.map(
-      (segment) => Promise.resolve({ gain: 0, loss: 0 })
-      // limit(() => segment.elevationStatistics())
-    );
+    if (this.segments.length == 0) {
+      return [];
+    }
 
     let cumulativeDistance = 0;
-    const handleResponse = ({ index, allElevationStatistics, error }) => {
-      const segment = this.segments[index];
-      const to =
-        index + 1 == this.segments.length
-          ? 'End'
-          : this.segments[index + 1].title;
-      const elevationStatistics = calculateElevationStatistics(
-        segment.elevations
-      );
+    const segments = [
+      new DummySegment({}),
+      ...this.segments,
+      new DummySegment({ title: 'End' }),
+    ];
 
-      if (index > 0) {
-        cumulativeDistance += this.segments[index - 1].distance();
-      }
+    return segments.slice(1).map((segment, index) => {
+      const prevSegment = segments[index];
+      cumulativeDistance += prevSegment.distance() || 0;
+
       return {
-        from: segment.title,
-        to,
-        users: segment.users(),
-        surface: segment.surface(),
-        locomotion: segment.locomotion(),
         cumulativeDistance,
         description: segment.strippedDescription(),
-        distance: segment.distance(),
-        ...elevationStatistics,
+        distance: prevSegment.distance(),
+        gain: prevSegment.gain(),
+        location: index == 0 ? 'Start' : segment.title,
+        locomotion: segment.locomotion(),
+        loss: prevSegment.loss(),
+        surface: segment.surface(),
+        users: segment.users(),
       };
-    };
-    const handleResponses = (responses) =>
-      responses.map((response, index) =>
-        handleResponse({ index, ...response })
-      );
-
-    const alwaysResolve = (promise) =>
-      promise.then(
-        (allElevationStatistics) => ({ allElevationStatistics }),
-        (error) => ({ error })
-      );
-
-    return Promise.all(elevationStatisticsPromises.map(alwaysResolve)).then(
-      handleResponses
-    );
+    });
   }
 
   features(type) {

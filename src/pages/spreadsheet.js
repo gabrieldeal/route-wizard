@@ -10,15 +10,31 @@ import ReadFileButton from '../components/readFileButton';
 import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
 import SpreadsheetTable from '../components/spreadsheet/table';
 
+function isBlank(str) {
+  return str === undefined || str === null || str === '';
+}
+
 function metersToFeet(meters) {
+  if (isBlank(meters)) {
+    return '';
+  }
+
   return meters * 3.28084;
 }
 
 function metersToMiles(meters) {
+  if (isBlank(meters)) {
+    return '';
+  }
+
   return meters * 0.000621371;
 }
 
 function roundTo(number, position) {
+  if (isBlank(number)) {
+    return '';
+  }
+
   return Number(number.toFixed(position));
 }
 
@@ -35,14 +51,13 @@ class SpreadsheetPage extends React.Component {
   allColumns = [
     {
       key: 'cumulativeDistance',
-      name: 'Cumulative distance to starting point (mi)',
+      name: 'Cumulative distance (mi)',
     },
-    { key: 'from', name: 'Starting point' },
-    { key: 'to', name: 'Ending point' },
+    { key: 'location', name: 'Location' },
     { key: 'distance', name: 'Distance (mi)' },
     { key: 'gain', name: 'Elevation gain (feet)' },
     { key: 'loss', name: 'Elevation loss (feet)' },
-    { key: 'description', name: 'Info about the starting point' },
+    { key: 'description', name: 'Notes' },
     //    { key: 'gain', name: 'Gain (feet)' },
     //    { key: 'loss', name: 'Loss (feet)' },
     { key: 'users', name: 'Users' },
@@ -83,9 +98,8 @@ class SpreadsheetPage extends React.Component {
     this.props.setSegments([]);
 
     preadFile({ file: event.target.files[0] })
-      .then((geoJson) => new Route({ geoJson }).data())
-      .then((data) => {
-        this.props.setSegments(data);
+      .then((geoJson) => {
+        this.props.setSegments(new Route({ geoJson }).data());
         this.props.setError(null);
         this.props.setIsLoading(false);
       })
