@@ -27,13 +27,14 @@ class SpreadsheetPage extends React.Component {
   allColumns = [
     {
       key: 'cumulativeDistance',
-      name: 'Cumulative distance (mi)',
+      name: 'Cumulative distance to ending point (mi)',
     },
-    { key: 'location', name: 'Location' },
+    { key: 'from', name: 'Starting point' },
+    { key: 'to', name: 'Ending point' },
     { key: 'distance', name: 'Distance (mi)' },
     { key: 'gain', name: 'Elevation gain (feet)' },
     { key: 'loss', name: 'Elevation loss (feet)' },
-    { key: 'description', name: 'Notes' },
+    { key: 'description', name: 'Notes about starting point' },
     { key: 'users', name: 'Users' },
     { key: 'surface', name: 'Surface' },
     { key: 'locomotion', name: 'Locomotion' },

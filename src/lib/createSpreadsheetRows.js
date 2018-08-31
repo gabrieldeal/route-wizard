@@ -30,24 +30,21 @@ function createRows(realSegments) {
   }
 
   let cumulativeDistance = 0;
-  const segments = [
-    new DummySegment({}),
-    ...realSegments,
-    new DummySegment({ title: 'End' }),
-  ];
+  const segments = [...realSegments, new DummySegment({ title: 'The End' })];
 
-  return segments.slice(1).map((segment, index) => {
-    const prevSegment = segments[index];
-    cumulativeDistance += prevSegment.distance() || 0;
+  return segments.slice(0, segments.length - 1).map((segment, index) => {
+    const nextSegment = segments[index + 1];
+    cumulativeDistance += segment.distance() || 0;
 
     return {
       cumulativeDistance: roundToMiles(cumulativeDistance),
       description: segment.description(),
-      distance: roundToMiles(prevSegment.distance()),
-      gain: roundToFeet(prevSegment.gain()),
-      location: index == 0 ? 'Start' : segment.title,
+      distance: roundToMiles(segment.distance()),
+      gain: roundToFeet(segment.gain()),
+      from: segment.title,
+      to: nextSegment.title,
       locomotion: segment.locomotion(),
-      loss: roundToFeet(prevSegment.loss()),
+      loss: roundToFeet(segment.loss()),
       surface: segment.surface(),
       users: segment.users(),
     };
@@ -55,6 +52,7 @@ function createRows(realSegments) {
 }
 
 function filterColumns(filteredRows, unfilteredColumns) {
+  // TODO: Make gain & loss optional
   const optionalColumns = ['users', 'surface', 'locomotion'];
   const unusedOptionalColumns = optionalColumns.filter(
     (optionalColumn) => !filteredRows.find((row) => row[optionalColumn])
