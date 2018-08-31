@@ -3,21 +3,6 @@ import fetchMock from 'fetch-mock';
 import createSegments from '../../src/lib/createSegments';
 import createSpreadsheet from '../../src/lib/createSpreadsheet';
 
-const ALL_COLUMNS = [
-  {
-    key: 'cumulativeDistance',
-    name: 'Cumulative distance (mi)',
-  },
-  { key: 'location', name: 'Location' },
-  { key: 'distance', name: 'Distance (mi)' },
-  { key: 'gain', name: 'Elevation gain (feet)' },
-  { key: 'loss', name: 'Elevation loss (feet)' },
-  { key: 'description', name: 'Notes' },
-  { key: 'users', name: 'Users' },
-  { key: 'surface', name: 'Surface' },
-  { key: 'locomotion', name: 'Locomotion' },
-];
-
 // FIXME: Split this spec up now that the Route class has been split up.
 describe('Route', function() {
   beforeEach(function() {
@@ -35,7 +20,7 @@ describe('Route', function() {
   function expectRouteToEqual({ fixtureName, expectedRows }) {
     const geoJson = readJSON(`./spec/fixture/${fixtureName}`);
     const segments = createSegments(JSON.stringify(geoJson));
-    const { rows, _columns } = createSpreadsheet(segments, ALL_COLUMNS);
+    const { rows, _columns } = createSpreadsheet(segments);
     // FIXME: add expectation on the columns.
 
     expect(rows).toEqual(expectedRows);

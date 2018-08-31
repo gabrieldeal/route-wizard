@@ -79,9 +79,9 @@ function filterColumns(filteredRows) {
   );
 }
 
-export default function(segments, unfilteredColumns) {
+export default function(segments) {
   const rows = createRows(segments);
-  const columns = filterColumns(rows, unfilteredColumns);
+  const columns = filterColumns(rows);
 
   return { rows, columns };
 }
