@@ -4,7 +4,7 @@ import React from 'react';
 import withState from 'recompose/withState';
 import { preadFile } from '../lib/readFile';
 
-import createSpreadsheet from '../lib/createSpreadsheetRows';
+import createSpreadsheet from '../lib/createSpreadsheet';
 import Layout from '../components/layout';
 import parseGeoJson from '../lib/parseGeoJson';
 import ReadFileButton from '../components/readFileButton';

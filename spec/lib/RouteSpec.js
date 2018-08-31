@@ -1,6 +1,6 @@
 import fetchMock from 'fetch-mock';
 
-import createSpreadsheet from '../../src/lib/createSpreadsheetRows';
+import createSpreadsheet from '../../src/lib/createSpreadsheet';
 import parseGeoJson from '../../src/lib/parseGeoJson';
 
 const ALL_COLUMNS = [
