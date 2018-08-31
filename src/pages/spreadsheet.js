@@ -31,7 +31,7 @@ class SpreadsheetPage extends React.Component {
     );
   }
 
-  parseGeoJson(geoJson) {
+  createSpreadsheet(geoJson) {
     const segments = parseGeoJson(geoJson);
 
     return createSpreadsheet(segments);
@@ -45,7 +45,7 @@ class SpreadsheetPage extends React.Component {
 
     preadFile({ file: event.target.files[0] })
       .then((geoJson) => {
-        const { rows, columns } = this.parseGeoJson(geoJson);
+        const { rows, columns } = this.createSpreadsheet(geoJson);
         this.props.setRows(rows);
         this.props.setColumns(columns);
         this.props.setError(null);
