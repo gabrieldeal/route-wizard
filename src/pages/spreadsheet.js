@@ -11,34 +11,6 @@ import ReadFileButton from '../components/readFileButton';
 import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
 import SpreadsheetTable from '../components/spreadsheet/table';
 
-function isBlank(str) {
-  return str === undefined || str === null || str === '';
-}
-
-function metersToFeet(meters) {
-  if (isBlank(meters)) {
-    return '';
-  }
-
-  return meters * 3.28084;
-}
-
-function metersToMiles(meters) {
-  if (isBlank(meters)) {
-    return '';
-  }
-
-  return meters * 0.000621371;
-}
-
-function roundTo(number, position) {
-  if (isBlank(number)) {
-    return '';
-  }
-
-  return Number(number.toFixed(position));
-}
-
 class SpreadsheetPage extends React.Component {
   static propTypes = {
     error: PropTypes.string,
@@ -79,22 +51,14 @@ class SpreadsheetPage extends React.Component {
   }
 
   rows() {
-    return this.props.segments
-      .map((segment) => ({
-        ...segment,
-        cumulativeDistance: roundTo(
-          metersToMiles(segment.cumulativeDistance),
-          1
-        ),
-        distance: roundTo(metersToMiles(segment.distance), 1),
-        gain: roundTo(metersToFeet(segment.gain), 0),
-        loss: roundTo(metersToFeet(segment.loss), 0),
-      }))
-      .map((segment) => this.columns().map((column) => segment[column['key']]));
+    return this.props.segments.map((segment) =>
+      this.columns().map((column) => segment[column['key']])
+    );
   }
 
   geoJsonToSpreadsheetRows(geoJson) {
     const segments = parseGeoJson(geoJson);
+
     return createSpreadsheetRows(segments);
   }
 

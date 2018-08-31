@@ -1,5 +1,29 @@
 import DummySegment from './DummySegment';
 
+function isBlank(str) {
+  return str === undefined || str === null || str === '';
+}
+
+function roundTo(number, position) {
+  return Number(number.toFixed(position));
+}
+
+function roundToFeet(meters) {
+  if (isBlank(meters)) {
+    return null;
+  }
+
+  return roundTo(meters * 3.28084, 0);
+}
+
+function roundToMiles(meters) {
+  if (isBlank(meters)) {
+    return null;
+  }
+
+  return roundTo(meters * 0.000621371, 1);
+}
+
 export default function(realSegments) {
   if (realSegments.length == 0) {
     return [];
@@ -17,13 +41,13 @@ export default function(realSegments) {
     cumulativeDistance += prevSegment.distance() || 0;
 
     return {
-      cumulativeDistance,
+      cumulativeDistance: roundToMiles(cumulativeDistance),
       description: segment.strippedDescription(),
-      distance: prevSegment.distance(),
-      gain: prevSegment.gain(),
+      distance: roundToMiles(prevSegment.distance()),
+      gain: roundToFeet(prevSegment.gain()),
       location: index == 0 ? 'Start' : segment.title,
       locomotion: segment.locomotion(),
-      loss: prevSegment.loss(),
+      loss: roundToFeet(prevSegment.loss()),
       surface: segment.surface(),
       users: segment.users(),
     };
