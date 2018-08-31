@@ -4,9 +4,9 @@ import React from 'react';
 import withState from 'recompose/withState';
 import { preadFile } from '../lib/readFile';
 
+import createSegments from '../lib/createSegments';
 import createSpreadsheet from '../lib/createSpreadsheet';
 import Layout from '../components/layout';
-import parseGeoJson from '../lib/parseGeoJson';
 import ReadFileButton from '../components/readFileButton';
 import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
 import SpreadsheetTable from '../components/spreadsheet/table';
@@ -32,7 +32,7 @@ class SpreadsheetPage extends React.Component {
   }
 
   createSpreadsheet(geoJson) {
-    const segments = parseGeoJson(geoJson);
+    const segments = createSegments(geoJson);
 
     return createSpreadsheet(segments);
   }

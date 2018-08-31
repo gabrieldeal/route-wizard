@@ -1,7 +1,7 @@
 import fetchMock from 'fetch-mock';
 
+import createSegments from '../../src/lib/createSegments';
 import createSpreadsheet from '../../src/lib/createSpreadsheet';
-import parseGeoJson from '../../src/lib/parseGeoJson';
 
 const ALL_COLUMNS = [
   {
@@ -34,7 +34,7 @@ describe('Route', function() {
 
   function expectRouteToEqual({ fixtureName, expectedRows }) {
     const geoJson = readJSON(`./spec/fixture/${fixtureName}`);
-    const segments = parseGeoJson(JSON.stringify(geoJson));
+    const segments = createSegments(JSON.stringify(geoJson));
     const { rows, _columns } = createSpreadsheet(segments, ALL_COLUMNS);
     // FIXME: add expectation on the columns.
 
