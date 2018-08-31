@@ -12,11 +12,11 @@ describe('CaltopoSorter', function() {
       '2 North Ridge',
       '3 Cascadian Couloir',
       '4 Camp',
+      'Unnumbered line 1',
+      'Unnumbered line 2',
       'A folder',
       'Mount Stuart',
       'A polygon',
-      'Unnumbered line 1',
-      'Unnumbered line 2',
     ];
     const sorted = sortGeoJson('CaltopoSorter-route.json'); // https://caltopo.com/m/FBTQ
     const titles = sorted.features.map((feature) => feature.properties.title);

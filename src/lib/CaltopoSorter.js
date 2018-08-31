@@ -10,17 +10,35 @@ export default class CaltopoSorter {
 
   shouldConvert = (feature) => {
     return (
-      feature.geometry &&
-      feature.geometry.type === 'LineString' &&
+      this.shouldSort(feature) &&
       this.titleRegexp.test(feature.properties.title)
     );
   };
 
-  cmpFeatures = (a, b) => {
-    const aPrefix = parseFloat(this.titleRegexp.exec(a.properties.title)[1]);
-    const bPrefix = parseFloat(this.titleRegexp.exec(b.properties.title)[1]);
+  shouldSort = (feature) => {
+    return feature.geometry && feature.geometry.type === 'LineString';
+  };
 
-    return Math.sign(aPrefix - bPrefix);
+  cmpFeatures = (a, b) => {
+    const aPrefixMatch = this.titleRegexp.exec(a.properties.title);
+    const bPrefixMatch = this.titleRegexp.exec(b.properties.title);
+
+    if (aPrefixMatch && bPrefixMatch) {
+      const aPrefix = parseFloat(aPrefixMatch[1]);
+      const bPrefix = parseFloat(bPrefixMatch[1]);
+
+      return Math.sign(aPrefix - bPrefix);
+    }
+
+    if (aPrefixMatch) {
+      return -1;
+    }
+
+    if (bPrefixMatch) {
+      return 1;
+    }
+
+    return a.properties.title.localeCompare(b.properties.title);
   };
 
   sort = () => {
@@ -40,12 +58,15 @@ export default class CaltopoSorter {
     };
 
     const otherFeatures = this.geoJson.features.filter(
-      (feature) => !this.shouldConvert(feature)
+      (feature) => !this.shouldSort(feature)
     );
     const convertedFeatures = this.geoJson.features
-      .filter(this.shouldConvert)
+      .filter(this.shouldSort)
       .sort(this.cmpFeatures)
-      .map(convertFeature);
+      .map(
+        (feature) =>
+          this.shouldConvert(feature) ? convertFeature(feature) : feature
+      );
     const features = convertedFeatures.concat(otherFeatures);
 
     return { ...this.geoJson, features };
