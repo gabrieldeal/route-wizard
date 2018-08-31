@@ -16,7 +16,7 @@ export default class Segment {
     return null;
   }
 
-  strippedDescription() {
+  description() {
     return null;
   }
 

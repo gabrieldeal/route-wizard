@@ -128,7 +128,7 @@ export default class SegmentSplitter {
     if (isMarkerAtEnd) {
       left = {
         coordinates,
-        description: segment.strippedDescription(),
+        description: segment.description(),
         elevations,
         title: segment.title,
       };
@@ -147,7 +147,7 @@ export default class SegmentSplitter {
       left = {
         coordinates: [firstCoordinate, firstCoordinate],
         description: this.joinDescriptions(
-          segment.strippedDescription(),
+          segment.description(),
           marker.description
         ),
         description: marker.description,
@@ -164,7 +164,7 @@ export default class SegmentSplitter {
     } else {
       left = {
         coordinates: coordinates.slice(0, splitIndex + 1),
-        description: segment.strippedDescription(),
+        description: segment.description(),
         elevations: elevations.slice(0, splitIndex + 1),
         title: segment.title,
       };

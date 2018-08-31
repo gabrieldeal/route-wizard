@@ -17,7 +17,7 @@ export default class Segment {
     title,
     users,
   }) {
-    this.description = description;
+    this._description = description;
     this.elevations = elevations;
     this._locomotion = locomotion; // FIXME: rationalize this._locomotion & this.locomotion().
     this.markers = markers;
@@ -50,15 +50,15 @@ export default class Segment {
   }
 
   extractField(regexp) {
-    const match = regexp.exec(this.description);
+    const match = regexp.exec(this._description);
     if (match) {
       return match[1];
     }
     return '';
   }
 
-  strippedDescription() {
-    const lines = this.description.split(/\n|\r\n|\r/);
+  description() {
+    const lines = this._description.split(/\n|\r\n|\r/);
     const firstLine = lines[0];
     const rest = lines.slice(1);
 
@@ -70,7 +70,7 @@ export default class Segment {
     if (culled === '') {
       return rest.join('\n');
     }
-    return this.description;
+    return this._description;
   }
 
   users() {

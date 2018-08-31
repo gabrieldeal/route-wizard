@@ -42,7 +42,7 @@ export default function(realSegments) {
 
     return {
       cumulativeDistance: roundToMiles(cumulativeDistance),
-      description: segment.strippedDescription(),
+      description: segment.description(),
       distance: roundToMiles(prevSegment.distance()),
       gain: roundToFeet(prevSegment.gain()),
       location: index == 0 ? 'Start' : segment.title,
