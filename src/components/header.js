@@ -53,6 +53,10 @@ class Header extends React.Component {
     this.handleMenuItemClick('/caltopo-sorter');
   };
 
+  handleElevationMenuItemClick = () => {
+    this.handleMenuItemClick('/elevation-augmenter');
+  };
+
   render() {
     const { classes, siteTitle } = this.props;
 
@@ -73,11 +77,14 @@ class Header extends React.Component {
               open={Boolean(this.state.anchorEl)}
               onClose={this.handleClose}
             >
-              <MenuItem onClick={this.handleSpreadsheetMenuItemClick}>
-                Spreadsheet Generator
+              <MenuItem onClick={this.handleElevationMenuItemClick}>
+                Elevation Augmenter
               </MenuItem>
               <MenuItem onClick={this.handleSorterMenuItemClick}>
-                Caltopo Segment Sorter
+                Caltopo Sorter
+              </MenuItem>
+              <MenuItem onClick={this.handleSpreadsheetMenuItemClick}>
+                Spreadsheet Generator
               </MenuItem>
             </Menu>
             <Typography

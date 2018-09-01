@@ -15,6 +15,10 @@ const IndexPage = () => {
           <Link to="caltopo-sorter">Caltopo Sorter</Link> - hack to get segments
           to sort right in caltopo.com
         </li>
+        <li>
+          <Link to="elevation-augmenter">Elevation augmenter</Link> - Add
+          elevation data to GeoJSON files.
+        </li>
       </ul>
     </Layout>
   );
