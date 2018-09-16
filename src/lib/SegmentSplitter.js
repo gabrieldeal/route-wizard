@@ -64,12 +64,12 @@ export default class SegmentSplitter {
         locGeom: segment.computeMinDistance(marker),
         marker,
       }))
-      .sort((a, b) =>
-        Math.sign(
-          a.locGeom[0].getSegmentIndex() - b.locGeom[0].getSegmentIndex()
-        )
+      .sort(
+        (a, b) =>
+          -Math.sign(
+            a.locGeom[0].getSegmentIndex() - b.locGeom[0].getSegmentIndex()
+          )
       )
-      .reverse()
       .forEach((split) => {
         let newSegment;
         [remainingSegment, newSegment] = this.splitAt({
