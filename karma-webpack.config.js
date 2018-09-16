@@ -4,13 +4,6 @@ module.exports = {
   devtool: 'inline-source-map',
   mode: 'development',
   entry: './src/lib/index.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'spec-lib.js',
-    globalObject: "typeof window === 'undefined' ? {} : window",
-    library: 'routeWizardLib',
-    libraryTarget: 'umd',
-  },
   module: {
     rules: [
       {
