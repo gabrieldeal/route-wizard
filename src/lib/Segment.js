@@ -105,7 +105,7 @@ export default class Segment {
   }
 
   distanceFrom(marker) {
-    const locGeom = this.computeMinDistance(marker);
+    const locGeom = this.findClosestPoint(marker);
     const segmentCoordinate = this.jstsPointToGeolib(
       locGeom[0].getCoordinate()
     );
@@ -117,7 +117,7 @@ export default class Segment {
     return geolib.convertUnit('mi', distance);
   }
 
-  computeMinDistance(marker) {
+  findClosestPoint(marker) {
     const locGeom = [];
     const distanceOp = new DistanceOp();
     distanceOp.computeMinDistance(this.line, marker.point, locGeom);

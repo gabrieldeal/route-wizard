@@ -61,7 +61,7 @@ export default class SegmentSplitter {
     let remainingSegment = segment;
     segment.markers
       .map((marker) => ({
-        locGeom: segment.computeMinDistance(marker),
+        locGeom: segment.findClosestPoint(marker),
         marker,
       }))
       .sort(
