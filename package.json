@@ -27,7 +27,8 @@
     "develop": "gatsby develop",
     "develop-vmguest": "gatsby develop -p 3000 -H 0.0.0.0",
     "format": "prettier --write '**/*.js'",
-    "test-watch": "karma start"
+    "test-watch": "karma start",
+    "test": "karma start --single-run"
   },
   "devDependencies": {
     "fetch-mock": "^6.5.2",
