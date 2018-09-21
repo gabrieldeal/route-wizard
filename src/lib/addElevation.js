@@ -1,6 +1,6 @@
 export default function addElevation({
   geoJson,
-  server = 'evening-basin-32774.herokuapp.com',
+  server = 'pure-forest-36721.herokuapp.com',
   protocol = 'https',
 }) {
   const url = `${protocol}://${server}/`;

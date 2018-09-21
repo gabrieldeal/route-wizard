@@ -1,7 +1,6 @@
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { StaticQuery, graphql } from 'gatsby';
 
@@ -10,16 +9,11 @@ import './layout.css';
 
 const Layout = ({ children, data, pageTitle, whatIsThis }) => {
   const title = pageTitle && (
-    <Tooltip title={whatIsThis}>
-      <div style={{ paddingBottom: 10 }}>
-        <Typography variant="title" style={{ display: 'inline' }}>
-          {pageTitle}
-        </Typography>
-        <a style={{ diplay: 'inline', paddingLeft: 10 }} href="#">
-          (What is this?)
-        </a>
-      </div>
-    </Tooltip>
+    <div style={{ paddingBottom: 10 }}>
+      <Typography variant="title" style={{ display: 'inline' }}>
+        {pageTitle}
+      </Typography>
+    </div>
   );
 
   return (
