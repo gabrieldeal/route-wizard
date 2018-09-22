@@ -101,7 +101,7 @@ class IndexPage extends React.Component {
     this.resetState();
     this.props.setFileName(file.name);
     this.props.setIsLoading(true);
-    this.props.setProgressMessage('Loading file');
+    this.props.setProgressMessage('Loading file...');
 
     preadFile({ file })
       .then((geoJson) => {
@@ -109,7 +109,7 @@ class IndexPage extends React.Component {
           return geoJson;
         }
 
-        this.props.setProgressMessage('Requesting elevation data');
+        this.props.setProgressMessage('Requesting elevation data...');
         return addElevation({ geoJson: geoJson });
       })
       .then((geoJson) => JSON.parse(geoJson))
@@ -118,19 +118,19 @@ class IndexPage extends React.Component {
           return geoJson;
         }
 
-        this.props.setProgressMessage('Sorting');
+        this.props.setProgressMessage('Sorting...');
         return new CaltopoSorter({
           geoJson,
           shouldStripTitleNumber: this.props.shouldStripTitleNumber,
         }).sort();
       })
       .then((geoJson) => {
-        this.props.setProgressMessage('Creating the spreadsheet');
+        this.props.setProgressMessage('Creating the spreadsheet...');
         const { rows, columns } = this.createSpreadsheet(geoJson);
         this.props.setColumns(columns);
         this.props.setGeoJson(geoJson);
         this.props.setIsLoading(false);
-        this.props.setProgressMessage(null);
+        this.props.setProgressMessage(`Loaded ${this.props.fileName}!`);
         this.props.setRows(rows);
       })
       .catch((error) => {
@@ -212,13 +212,14 @@ class IndexPage extends React.Component {
 
     return (
       <div className={this.props.classes.progressMessageContainer}>
-        <CircularProgress
-          className={this.props.classes.progressSpinner}
-          size={25}
-          thickness={7}
-        />
+        {this.props.isLoading && (
+          <CircularProgress
+            className={this.props.classes.progressSpinner}
+            size={25}
+            thickness={7}
+          />
+        )}
         {this.props.progressMessage}
-        ...
       </div>
     );
   }
