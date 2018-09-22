@@ -20,9 +20,12 @@ import SpreadsheetTable from '../components/spreadsheet/table';
 import { preadFile } from '../lib/readFile';
 
 const styles = () => ({
-  error: {
+  errorContainer: {
     color: 'red',
     fontWeight: 800,
+    marginBottom: 'auto',
+    marginLeft: '1em',
+    marginTop: 'auto',
   },
   newOrder: {
     paddingTop: '1em',
@@ -190,7 +193,13 @@ class IndexPage extends React.Component {
   }
 
   renderError() {
-    return this.props.error && <div>Error: {this.props.error}</div>;
+    return (
+      this.props.error && (
+        <div className={this.props.classes.errorContainer}>
+          Error: {this.props.error}
+        </div>
+      )
+    );
   }
 
   renderProgressMessage() {
@@ -238,8 +247,8 @@ class IndexPage extends React.Component {
         <div className={this.props.classes.readFileContainer}>
           {this.renderReadFileButton()}
           {this.renderProgressMessage()}
+          {this.renderError()}
         </div>
-        {this.renderError()}
         {this.renderExportGeoJsonButton()}
         {this.renderSpreadsheet()}
       </Layout>
