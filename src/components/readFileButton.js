@@ -25,13 +25,18 @@ class ReadFileButton extends React.Component {
   render() {
     const { children, classes, isLoading, onChange } = this.props;
 
+    const handleChange = (event) => {
+      onChange(event);
+      event.target.value = null; // Allow the user to upload the same file twice in a row.
+    };
+
     return (
       <div>
         <input
           accept="application/json"
           className={classes.input}
           id="route-file"
-          onChange={onChange}
+          onChange={handleChange}
           type="file"
         />
         <label htmlFor="route-file">
