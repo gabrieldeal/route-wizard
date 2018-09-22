@@ -22,6 +22,6 @@ export default function addElevation({
       return response.text();
     })
     .catch((error) => {
-      return Promise.reject(`Error getting elevation: ${error}`);
+      return Promise.reject(`Query to Elevation Service failed: ${error}`);
     });
 }

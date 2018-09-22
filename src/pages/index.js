@@ -20,6 +20,10 @@ import SpreadsheetTable from '../components/spreadsheet/table';
 import { preadFile } from '../lib/readFile';
 
 const styles = () => ({
+  error: {
+    color: 'red',
+    fontWeight: 800,
+  },
   newOrder: {
     paddingTop: '1em',
   },
