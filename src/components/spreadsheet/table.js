@@ -12,6 +12,9 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = (theme) => ({
   root: {
     marginTop: theme.spacing.unit * 3,
+  },
+  tableContainer: {
+    marginTop: theme.spacing.unit * 3,
     paddingLeft: theme.spacing.unit * 1,
     paddingRight: theme.spacing.unit * 1,
     width: '100%',
@@ -61,9 +64,11 @@ class Spreadsheet extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={this.props.classes.root}>
         <Typography variant="title"> Spreadsheet</Typography>
-        <Paper className={this.props.classes.root}>{this.renderTable()}</Paper>
+        <Paper className={this.props.classes.tableContainer}>
+          {this.renderTable()}
+        </Paper>
       </div>
     );
   }
