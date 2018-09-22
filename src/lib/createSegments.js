@@ -33,10 +33,9 @@ function findFeatures(jstsRoot, type) {
   );
 }
 
-export default function(geoJsonString) {
+export default function(geoJson) {
   const geoJsonReader = new GeoJSONReader();
-  const jstsRoot = geoJsonReader.read(geoJsonString);
-  const geoJson = JSON.parse(geoJsonString);
+  const jstsRoot = geoJsonReader.read(geoJson);
 
   const segments = findFeatures(jstsRoot, LineString).map(
     (line) =>

@@ -1,21 +1,12 @@
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import { StaticQuery, graphql } from 'gatsby';
 
 import Header from './header';
 import './layout.css';
 
-const Layout = ({ children, data, pageTitle, whatIsThis }) => {
-  const title = pageTitle && (
-    <div style={{ paddingBottom: 10 }}>
-      <Typography variant="title" style={{ display: 'inline' }}>
-        {pageTitle}
-      </Typography>
-    </div>
-  );
-
+const Layout = ({ children }) => {
   return (
     <StaticQuery
       query={graphql`
@@ -49,7 +40,6 @@ const Layout = ({ children, data, pageTitle, whatIsThis }) => {
               padding: '1rem 1.0875rem 1.45rem',
             }}
           >
-            {title}
             {children}
           </div>
         </>
@@ -60,7 +50,6 @@ const Layout = ({ children, data, pageTitle, whatIsThis }) => {
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-  pageTitle: PropTypes.string,
   whatIsThis: PropTypes.element,
 };
 

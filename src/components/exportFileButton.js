@@ -10,7 +10,7 @@ const styles = (theme) => ({
   },
 });
 
-class ExportButton extends React.Component {
+class ExportFileButton extends React.Component {
   exportFile = () => {
     const geoJsonString = JSON.stringify(this.props.geoJson);
     var geoJsonBlob = new Blob([geoJsonString], {
@@ -24,22 +24,22 @@ class ExportButton extends React.Component {
     return (
       <Button
         className={this.props.classes.button}
-        disabled={!this.props.geoJson}
+        disabled={!(this.props.geoJson && this.props.fileName)}
         onClick={this.exportFile}
         variant="contained"
       >
-        Export sorted GeoJSON file
+        Export updated GeoJSON file
       </Button>
     );
   }
 }
 
-ExportButton.propTypes = {
+ExportFileButton.propTypes = {
   classes: PropTypes.object.isRequired,
-  fileName: PropTypes.string.isRequired,
-  geoJson: PropTypes.object.isRequired,
+  fileName: PropTypes.string,
+  geoJson: PropTypes.object,
 };
 
 const enhance = withStyles(styles);
 
-export default enhance(ExportButton);
+export default enhance(ExportFileButton);

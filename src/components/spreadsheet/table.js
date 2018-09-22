@@ -6,6 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({
@@ -45,14 +46,25 @@ class Spreadsheet extends React.Component {
     return <TableBody>{tableRows}</TableBody>;
   }
 
+  renderTable() {
+    if (this.props.rows.length == 0) {
+      return <div>No data</div>;
+    }
+
+    return (
+      <Table className={this.props.classes.table}>
+        {this.renderTableHead()}
+        {this.renderTableBody()}
+      </Table>
+    );
+  }
+
   render() {
     return (
-      <Paper className={this.props.classes.root}>
-        <Table className={this.props.classes.table}>
-          {this.renderTableHead()}
-          {this.renderTableBody()}
-        </Table>
-      </Paper>
+      <div>
+        <Typography variant="title"> Spreadsheet</Typography>
+        <Paper className={this.props.classes.root}>{this.renderTable()}</Paper>
+      </div>
     );
   }
 }

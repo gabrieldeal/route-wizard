@@ -19,7 +19,7 @@ describe('Route', function() {
 
   function expectRouteToEqual({ fixtureName, expectedRows }) {
     const geoJson = readJSON(`./spec/fixture/${fixtureName}`);
-    const segments = createSegments(JSON.stringify(geoJson));
+    const segments = createSegments(geoJson);
     const { rows, _columns } = createSpreadsheet(segments);
     // FIXME: add expectation on the columns.
 
