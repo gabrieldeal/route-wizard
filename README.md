@@ -15,4 +15,4 @@ http://yellowleaf.org/route-wizard/
 * Compute elevation gain more accurately.  Currently it only computes the gain between points in a line, which only works well if there are a lot of points.
 * Support folders.
 * Non-hacky sorting of segments. https://stackoverflow.com/questions/49883480/combine-a-sequence-of-linestring
-
+* Fix CSS flicker on initial load. https://github.com/gatsbyjs/gatsby/issues/5667
