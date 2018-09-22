@@ -172,7 +172,7 @@ class IndexPage extends React.Component {
               }
             />
           }
-          label="Add elevation."
+          label="Add elevation data."
         />
       </FormGroup>
     );
