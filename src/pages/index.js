@@ -1,4 +1,5 @@
 import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import compose from 'recompose/compose';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -22,6 +23,17 @@ const styles = () => ({
   newOrder: {
     paddingTop: '1em',
   },
+  progressMessageContainer: {
+    marginBottom: 'auto',
+    marginLeft: '1em',
+    marginTop: 'auto',
+  },
+  progressSpinner: {
+    marginRight: '1em',
+  },
+  readFileContainer: {
+    display: 'flex',
+  },
 });
 
 class IndexPage extends React.Component {
@@ -32,12 +44,14 @@ class IndexPage extends React.Component {
     fileName: PropTypes.string,
     geoJson: PropTypes.object,
     isLoading: PropTypes.bool.isRequired,
+    progressMessage: PropTypes.string,
     rows: PropTypes.array,
     setColumns: PropTypes.func.isRequired,
     setError: PropTypes.func.isRequired,
     setFileName: PropTypes.func.isRequired,
     setGeoJson: PropTypes.func.isRequired,
     setIsLoading: PropTypes.func.isRequired,
+    setProgressMessage: PropTypes.func.isRequired,
     setRows: PropTypes.func.isRequired,
     setShouldAddElevation: PropTypes.func.isRequired,
     setShouldSort: PropTypes.func.isRequired,
@@ -67,6 +81,7 @@ class IndexPage extends React.Component {
     this.props.setFileName(null);
     this.props.setGeoJson(null);
     this.props.setIsLoading(false);
+    this.props.setProgressMessage(null);
     this.props.setRows([]);
   }
 
@@ -76,6 +91,7 @@ class IndexPage extends React.Component {
     this.resetState();
     this.props.setFileName(file.name);
     this.props.setIsLoading(true);
+    this.props.setProgressMessage('Loading file');
 
     preadFile({ file })
       .then((geoJson) => {
@@ -83,6 +99,7 @@ class IndexPage extends React.Component {
           return geoJson;
         }
 
+        this.props.setProgressMessage('Requesting elevation data');
         return addElevation({ geoJson: geoJson });
       })
       .then((geoJson) => JSON.parse(geoJson))
@@ -91,16 +108,19 @@ class IndexPage extends React.Component {
           return geoJson;
         }
 
+        this.props.setProgressMessage('Sorting');
         return new CaltopoSorter({
           geoJson,
           shouldStripTitleNumber: this.props.shouldStripTitleNumber,
         }).sort();
       })
       .then((geoJson) => {
+        this.props.setProgressMessage('Creating the spreadsheet');
         const { rows, columns } = this.createSpreadsheet(geoJson);
         this.props.setColumns(columns);
         this.props.setGeoJson(geoJson);
         this.props.setIsLoading(false);
+        this.props.setProgressMessage(null);
         this.props.setRows(rows);
       })
       .catch((error) => {
@@ -167,6 +187,24 @@ class IndexPage extends React.Component {
     return this.props.error && <div>Error: {this.props.error}</div>;
   }
 
+  renderProgressMessage() {
+    if (!this.props.progressMessage) {
+      return null;
+    }
+
+    return (
+      <div className={this.props.classes.progressMessageContainer}>
+        <CircularProgress
+          className={this.props.classes.progressSpinner}
+          size={25}
+          thickness={7}
+        />
+        {this.props.progressMessage}
+        ...
+      </div>
+    );
+  }
+
   renderExportGeoJsonButton() {
     return (
       <ExportFileButton
@@ -191,7 +229,10 @@ class IndexPage extends React.Component {
     return (
       <Layout>
         {this.renderCheckboxes()}
-        {this.renderReadFileButton()}
+        <div className={this.props.classes.readFileContainer}>
+          {this.renderReadFileButton()}
+          {this.renderProgressMessage()}
+        </div>
         {this.renderError()}
         {this.renderExportGeoJsonButton()}
         {this.renderSpreadsheet()}
@@ -210,7 +251,8 @@ const enhance = compose(
   withState('rows', 'setRows', []),
   withState('shouldAddElevation', 'setShouldAddElevation', true),
   withState('shouldSort', 'setShouldSort', true),
-  withState('shouldStripTitleNumber', 'setShouldStripTitleNumber', true)
+  withState('shouldStripTitleNumber', 'setShouldStripTitleNumber', true),
+  withState('progressMessage', 'setProgressMessage')
 );
 
 export default enhance(IndexPage);
