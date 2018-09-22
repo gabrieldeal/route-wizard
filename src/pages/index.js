@@ -27,6 +27,9 @@ const styles = () => ({
     marginLeft: '1em',
     marginTop: 'auto',
   },
+  exportButtonsContainer: {
+    display: 'flex',
+  },
   newOrder: {
     paddingTop: '1em',
   },
@@ -229,15 +232,17 @@ class IndexPage extends React.Component {
     );
   }
 
-  renderSpreadsheet() {
-    const rows = this.rows();
-
+  renderExportSpreadsheetButton() {
     return (
-      <div>
-        <SpreadsheetExportButton columns={this.props.columns} rows={rows} />
-        <SpreadsheetTable columns={this.props.columns} rows={rows} />
-      </div>
+      <SpreadsheetExportButton
+        columns={this.props.columns}
+        rows={this.rows()}
+      />
     );
+  }
+
+  renderSpreadsheet() {
+    return <SpreadsheetTable columns={this.props.columns} rows={this.rows()} />;
   }
 
   render() {
@@ -249,7 +254,10 @@ class IndexPage extends React.Component {
           {this.renderProgressMessage()}
           {this.renderError()}
         </div>
-        {this.renderExportGeoJsonButton()}
+        <div className={this.props.classes.exportButtonsContainer}>
+          {this.renderExportGeoJsonButton()}
+          {this.renderExportSpreadsheetButton()}
+        </div>
         {this.renderSpreadsheet()}
       </Layout>
     );
