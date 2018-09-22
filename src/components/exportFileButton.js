@@ -6,7 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({
   button: {
-    margin: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+    marginTop: theme.spacing.unit,
   },
 });
 
@@ -24,6 +25,7 @@ class ExportFileButton extends React.Component {
     return (
       <Button
         className={this.props.classes.button}
+        color="primary"
         disabled={!(this.props.geoJson && this.props.fileName)}
         onClick={this.exportFile}
         variant="contained"

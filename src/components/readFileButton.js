@@ -9,9 +9,8 @@ const styles = (theme) => ({
     display: 'none',
   },
   wrapper: {
-    display: 'inline',
-    margin: theme.spacing.unit,
-    position: 'relative',
+    marginBottom: theme.spacing.unit,
+    marginTop: theme.spacing.unit,
   },
 });
 
