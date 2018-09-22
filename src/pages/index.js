@@ -128,7 +128,9 @@ class IndexPage extends React.Component {
         this.props.setRows(rows);
       })
       .catch((error) => {
+        /* eslint-disable-next-line no-undef, no-console */
         console.error(error);
+
         this.resetState();
         this.props.setError(error.message || error);
       });
