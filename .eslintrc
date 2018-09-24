@@ -1,6 +1,7 @@
 {
   "env": {
     "es6": true,
+    "jasmine": true,
     "amd": true
   },
   "parser": "babel-eslint",
