@@ -244,7 +244,13 @@ class IndexPage extends React.Component {
   }
 
   renderSpreadsheet() {
-    return <SpreadsheetTable columns={this.props.columns} rows={this.rows()} />;
+    return (
+      <SpreadsheetTable
+        columns={this.props.columns}
+        isLoading={this.props.isLoading}
+        rows={this.rows()}
+      />
+    );
   }
 
   render() {

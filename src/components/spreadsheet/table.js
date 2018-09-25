@@ -50,6 +50,10 @@ class Spreadsheet extends React.Component {
   }
 
   renderTable() {
+    if (this.props.isLoading) {
+      return <div>Loading...</div>;
+    }
+
     if (this.props.rows.length == 0) {
       return <div>No data</div>;
     }
@@ -77,6 +81,7 @@ class Spreadsheet extends React.Component {
 Spreadsheet.propTypes = {
   classes: PropTypes.object.isRequired,
   columns: PropTypes.array.isRequired,
+  isLoading: PropTypes.bool.isRequired,
   rows: PropTypes.array.isRequired,
 };
 
