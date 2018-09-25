@@ -9,7 +9,7 @@ export default function addElevation({
     'Content-Type': 'text/plain',
   };
   const options = {
-    body: geoJson,
+    body: JSON.stringify(geoJson),
     headers,
     method: 'POST',
   };
@@ -21,6 +21,7 @@ export default function addElevation({
       }
       return response.text();
     })
+    .then((geoJsonStr) => JSON.parse(geoJsonStr))
     .catch((error) => {
       return Promise.reject(`Query to Elevation Service failed: ${error}`);
     });

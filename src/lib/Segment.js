@@ -17,7 +17,7 @@ export default class Segment {
     title,
     users,
   }) {
-    this._description = description;
+    this._description = description || '';
     this.elevations = elevations;
     this._locomotion = locomotion; // FIXME: rationalize this._locomotion & this.locomotion().
     this.markers = markers;

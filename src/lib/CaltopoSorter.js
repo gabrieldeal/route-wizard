@@ -49,7 +49,8 @@ export default class CaltopoSorter {
     const convertFeature = (feature) => {
       const prefix = index.toString().padStart(numDigits, '0');
       index++;
-      const suffix = this.titleRegexp.exec(feature.properties.title)[2];
+      const origTitle = feature.properties.title;
+      const suffix = this.titleRegexp.exec(origTitle)[2];
       const title = this.shouldStripTitleNumber
         ? suffix
         : prefix + ' ' + suffix;

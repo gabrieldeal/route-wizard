@@ -11,7 +11,7 @@ http://yellowleaf.org/route-wizard/
 # Todo
 
 * Gracefully handle Elevation Service failures.
-* Add GPX->GeoJSON converter.
+* Add support for exporting GPX & KML.
 * Compute elevation gain more accurately.  Currently it only computes the gain between points in a line, which only works well if there are a lot of points.
 * Support folders.
 * Non-hacky sorting of segments. https://stackoverflow.com/questions/49883480/combine-a-sequence-of-linestring

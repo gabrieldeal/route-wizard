@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import addElevation from '../lib/addElevation';
 import CaltopoSorter from '../lib/CaltopoSorter';
+import convertToGeoJson from '../lib/convertToGeoJson';
 import createSegments from '../lib/createSegments';
 import createSpreadsheet from '../lib/createSpreadsheet';
 import ExportFileButton from '../components/exportFileButton';
@@ -98,22 +99,27 @@ class IndexPage extends React.Component {
 
   handleSelectedFile = (event) => {
     const file = event.target.files[0];
+    const fileName = file.name;
 
     this.resetState();
-    this.props.setFileName(file.name);
+    this.props.setFileName(fileName);
     this.props.setIsLoading(true);
     this.props.setProgressMessage('Loading file...');
 
     preadFile({ file })
+      .then((fileContentsStr) => {
+        this.props.setProgressMessage('Parsing file...');
+        return convertToGeoJson({ fileContentsStr, fileName });
+      })
       .then((geoJson) => {
         if (!this.props.shouldAddElevation) {
           return geoJson;
         }
 
         this.props.setProgressMessage('Requesting elevation data...');
-        return addElevation({ geoJson: geoJson });
+
+        return addElevation({ geoJson });
       })
-      .then((geoJson) => JSON.parse(geoJson))
       .then((geoJson) => {
         if (!this.props.shouldSort) {
           return geoJson;
@@ -191,7 +197,7 @@ class IndexPage extends React.Component {
         onChange={this.handleSelectedFile}
         isLoading={this.props.isLoading}
       >
-        Load GeoJSON file
+        Load GPX, KML or GeoJSON file
       </ReadFileButton>
     );
   }

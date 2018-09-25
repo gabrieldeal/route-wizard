@@ -16,6 +16,8 @@
     "react-dom": "^16.4.1",
     "react-helmet": "^5.2.0",
     "recompose": "^0.28.0",
+    "togeojson": "^0.16.0",
+    "uuid": "^3.3.2",
     "xlsx": "^0.13.3"
   },
   "keywords": [

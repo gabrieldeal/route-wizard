@@ -1,6 +1,7 @@
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import LineString from 'jsts/org/locationtech/jts/geom/LineString';
 import Point from 'jsts/org/locationtech/jts/geom/Point';
+import uuid from 'uuid/v1';
 
 import Marker from './Marker';
 import Segment from './Segment';
@@ -33,7 +34,18 @@ function findFeatures(jstsRoot, type) {
   );
 }
 
+function addIds(feature) {
+  if (!feature.id) {
+    feature.id = uuid();
+  }
+  if (feature.features) {
+    feature.features.forEach((feature) => addIds(feature));
+  }
+}
+
 export default function(geoJson) {
+  addIds(geoJson);
+
   const geoJsonReader = new GeoJSONReader();
   const jstsRoot = geoJsonReader.read(geoJson);
 

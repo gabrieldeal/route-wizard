@@ -33,7 +33,6 @@ class ReadFileButton extends React.Component {
     return (
       <div>
         <input
-          accept="application/json"
           className={classes.input}
           id="route-file"
           onChange={handleChange}
