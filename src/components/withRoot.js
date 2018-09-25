@@ -1,8 +1,6 @@
 // This is lifted from https://github.com/mui-org/material-ui/tree/master/examples/gatsby
 
-import blue from '@material-ui/core/colors/blue';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import green from '@material-ui/core/colors/green';
 import JssProvider from 'react-jss/lib/JssProvider';
 import React from 'react';
 import {
@@ -17,14 +15,9 @@ import { SheetsRegistry } from 'jss';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: green[300],
-      main: green[500],
-      dark: green[700],
-    },
-    secondary: {
-      light: blue[300],
-      main: blue[500],
-      dark: blue[700],
+      light: '#52A8DA',
+      main: '#0883CA',
+      dark: '#0670BD',
     },
   },
 });
