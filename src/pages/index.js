@@ -18,7 +18,7 @@ import Layout from '../components/layout';
 import ReadFileButton from '../components/readFileButton';
 import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
 import SpreadsheetTable from '../components/spreadsheet/table';
-import withRoot from '../components/withRoot';
+import withCss from '../components/withCss';
 import { preadFile } from '../lib/readFile';
 
 const styles = () => ({
@@ -279,7 +279,7 @@ class IndexPage extends React.Component {
 }
 
 const enhance = compose(
-  withRoot, // Keep this first.
+  withCss, // Keep this first.
   withStyles(styles),
   withState('columns', 'setColumns', []),
   withState('error', 'setError'),

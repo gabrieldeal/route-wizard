@@ -49,7 +49,7 @@ function getPageContext() {
   return global.__INIT_MATERIAL_UI__;
 }
 
-function withRoot(Component) {
+function withCss(Component) {
   class WithRoot extends React.Component {
     muiPageContext = null;
 
@@ -87,4 +87,4 @@ function withRoot(Component) {
   return WithRoot;
 }
 
-export default withRoot;
+export default withCss;
