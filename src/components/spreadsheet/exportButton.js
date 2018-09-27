@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = (theme) => ({
   button: {
     marginBottom: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
     marginTop: theme.spacing.unit,
   },
 });

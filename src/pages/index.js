@@ -269,8 +269,8 @@ class IndexPage extends React.Component {
           {this.renderError()}
         </div>
         <div className={this.props.classes.exportButtonsContainer}>
-          {this.renderExportGeoJsonButton()}
           {this.renderExportSpreadsheetButton()}
+          {this.renderExportGeoJsonButton()}
         </div>
         {this.renderSpreadsheet()}
       </Layout>
