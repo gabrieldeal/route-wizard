@@ -197,7 +197,7 @@ class IndexPage extends React.Component {
         onChange={this.handleSelectedFile}
         isLoading={this.props.isLoading}
       >
-        Load GPX, KML or GeoJSON file
+        Read GPX, KML or GeoJSON file
       </ReadFileButton>
     );
   }

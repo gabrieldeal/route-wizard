@@ -39,7 +39,7 @@ class ExportButton extends React.Component {
         onClick={this.exportFile}
         variant="contained"
       >
-        Export spreadsheet
+        Download spreadsheet
       </Button>
     );
   }

@@ -31,7 +31,7 @@ class ExportFileButton extends React.Component {
         onClick={this.exportFile}
         variant="contained"
       >
-        Export updated GeoJSON file
+        Download updated GeoJSON file
       </Button>
     );
   }
