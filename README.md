@@ -10,7 +10,6 @@ http://yellowleaf.org/route-wizard/
 
 # Todo
 
-* Gracefully handle Elevation Service failures.
 * Add support for exporting GPX & KML.
 * Compute elevation gain more accurately.  Currently it only computes the gain between points in a line, which only works well if there are a lot of points.
 * Support folders.

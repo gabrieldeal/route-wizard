@@ -35,13 +35,22 @@ const styles = () => ({
   newOrder: {
     paddingTop: '1em',
   },
-  progressMessageContainer: {
+  messagesContainer: {
+    display: 'flex',
     marginBottom: 'auto',
     marginLeft: '1em',
     marginTop: 'auto',
   },
+  notificationMessageContainer: {
+    fontWeight: 800,
+  },
+  textMessagesContainer: {
+    display: 'block',
+  },
   progressSpinner: {
+    marginBottom: 'auto',
     marginRight: '1em',
+    marginTop: 'auto',
   },
   readFileContainer: {
     display: 'flex',
@@ -56,6 +65,7 @@ class IndexPage extends React.Component {
     fileName: PropTypes.string,
     geoJson: PropTypes.object,
     isLoading: PropTypes.bool.isRequired,
+    notificationMessage: PropTypes.string,
     progressMessage: PropTypes.string,
     rows: PropTypes.array,
     setColumns: PropTypes.func.isRequired,
@@ -63,6 +73,7 @@ class IndexPage extends React.Component {
     setFileName: PropTypes.func.isRequired,
     setGeoJson: PropTypes.func.isRequired,
     setIsLoading: PropTypes.func.isRequired,
+    setNotificationMessage: PropTypes.func.isRequired,
     setProgressMessage: PropTypes.func.isRequired,
     setRows: PropTypes.func.isRequired,
     setShouldAddElevation: PropTypes.func.isRequired,
@@ -93,6 +104,7 @@ class IndexPage extends React.Component {
     this.props.setFileName(null);
     this.props.setGeoJson(null);
     this.props.setIsLoading(false);
+    this.props.setNotificationMessage(null);
     this.props.setProgressMessage(null);
     this.props.setRows([]);
   }
@@ -118,7 +130,15 @@ class IndexPage extends React.Component {
 
         this.props.setProgressMessage('Requesting elevation data...');
 
-        return addElevation({ geoJson });
+        return addElevation({ geoJson }).catch((error) => {
+          /* eslint-disable-next-line no-undef, no-console */
+          console.error(error);
+          this.props.setNotificationMessage(
+            'Failed to get data from Elevation Service. Continuing without elevation data.'
+          );
+
+          return geoJson;
+        });
       })
       .then((geoJson) => {
         if (!this.props.shouldSort) {
@@ -212,13 +232,9 @@ class IndexPage extends React.Component {
     );
   }
 
-  renderProgressMessage() {
-    if (!this.props.progressMessage) {
-      return null;
-    }
-
+  renderMessages() {
     return (
-      <div className={this.props.classes.progressMessageContainer}>
+      <div className={this.props.classes.messagesContainer}>
         {this.props.isLoading && (
           <CircularProgress
             className={this.props.classes.progressSpinner}
@@ -226,7 +242,12 @@ class IndexPage extends React.Component {
             thickness={7}
           />
         )}
-        {this.props.progressMessage}
+        <div className={this.props.classes.textMessagesContainer}>
+          <div className={this.props.classes.notificationMessageContainer}>
+            {this.props.notificationMessage}
+          </div>
+          <div>{this.props.progressMessage}</div>
+        </div>
       </div>
     );
   }
@@ -265,7 +286,7 @@ class IndexPage extends React.Component {
         {this.renderCheckboxes()}
         <div className={this.props.classes.readFileContainer}>
           {this.renderReadFileButton()}
-          {this.renderProgressMessage()}
+          {this.renderMessages()}
           {this.renderError()}
         </div>
         <div className={this.props.classes.exportButtonsContainer}>
@@ -286,6 +307,7 @@ const enhance = compose(
   withState('fileName', 'setFileName'),
   withState('geoJson', 'setGeoJson'),
   withState('isLoading', 'setIsLoading', false),
+  withState('notificationMessage', 'setNotificationMessage'),
   withState('rows', 'setRows', []),
   withState('shouldAddElevation', 'setShouldAddElevation', true),
   withState('shouldSort', 'setShouldSort', true),
