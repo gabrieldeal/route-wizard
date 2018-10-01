@@ -36,7 +36,7 @@ class ExportButton extends React.Component {
       <Button
         className={this.props.classes.button}
         color="primary"
-        disabled={!this.props.rows.length}
+        disabled={this.props.disabled || !this.props.rows.length}
         onClick={this.exportFile}
         variant="contained"
       >
@@ -49,6 +49,7 @@ class ExportButton extends React.Component {
 ExportButton.propTypes = {
   classes: PropTypes.object.isRequired,
   columns: PropTypes.array.isRequired,
+  disabled: PropTypes.bool,
   rows: PropTypes.array.isRequired,
 };
 

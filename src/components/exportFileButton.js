@@ -23,11 +23,14 @@ class ExportFileButton extends React.Component {
   };
 
   render() {
+    const disabled =
+      this.props.disabled || !(this.props.geoJson && this.props.fileName);
+
     return (
       <Button
         className={this.props.classes.button}
         color="primary"
-        disabled={!(this.props.geoJson && this.props.fileName)}
+        disabled={disabled}
         onClick={this.exportFile}
         variant="contained"
       >
@@ -39,6 +42,7 @@ class ExportFileButton extends React.Component {
 
 ExportFileButton.propTypes = {
   classes: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
   fileName: PropTypes.string,
   geoJson: PropTypes.object,
 };

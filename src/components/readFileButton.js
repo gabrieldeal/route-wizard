@@ -18,12 +18,12 @@ class ReadFileButton extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     classes: PropTypes.object.isRequired,
-    isLoading: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
   };
 
   render() {
-    const { children, classes, isLoading, onChange } = this.props;
+    const { children, classes, disabled, onChange } = this.props;
 
     const handleChange = (event) => {
       onChange(event);
@@ -45,7 +45,7 @@ class ReadFileButton extends React.Component {
               variant="contained"
               component="span"
               className={classes.button}
-              disabled={isLoading}
+              disabled={disabled}
             >
               {children}
             </Button>

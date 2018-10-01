@@ -237,6 +237,7 @@ class IndexPage extends React.Component {
             <Checkbox
               checked={this.props.shouldSort}
               color="primary"
+              disabled={this.props.isLoading}
               onChange={(_event, value) => this.props.setShouldSort(value)}
             />
           }
@@ -247,7 +248,7 @@ class IndexPage extends React.Component {
             <Checkbox
               checked={this.props.shouldStripTitleNumber}
               color="primary"
-              disabled={!this.props.shouldSort}
+              disabled={this.props.isLoading || !this.props.shouldSort}
               onChange={(_event, value) =>
                 this.props.setShouldStripTitleNumber(value)
               }
@@ -260,6 +261,7 @@ class IndexPage extends React.Component {
             <Checkbox
               checked={this.props.shouldAddElevation}
               color="primary"
+              disabled={this.props.isLoading}
               onChange={(_event, value) =>
                 this.props.setShouldAddElevation(value)
               }
@@ -275,7 +277,7 @@ class IndexPage extends React.Component {
     return (
       <ReadFileButton
         onChange={this.handleSelectedFile}
-        isLoading={this.props.isLoading}
+        disabled={this.props.isLoading}
       >
         Read GPX, KML or GeoJSON file
       </ReadFileButton>
@@ -315,6 +317,7 @@ class IndexPage extends React.Component {
   renderExportGeoJsonButton() {
     return (
       <ExportFileButton
+        disabled={this.props.isLoading}
         fileName={'route-wizard-' + this.props.fileName}
         geoJson={this.props.processedGeoJson}
       />
@@ -325,6 +328,7 @@ class IndexPage extends React.Component {
     return (
       <SpreadsheetExportButton
         columns={this.props.columns}
+        disabled={this.props.isLoading}
         rows={this.rows()}
       />
     );
