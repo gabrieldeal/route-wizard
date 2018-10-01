@@ -1,9 +1,10 @@
 export default function addElevation({
   geoJson,
-  server = 'pure-forest-36721.herokuapp.com',
+  server = 'elevation-service-hosted.now.sh',
+  port = 443,
   protocol = 'https',
 }) {
-  const url = `${protocol}://${server}/`;
+  const url = `${protocol}://${server}:${port}/`;
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'text/plain',
