@@ -57,13 +57,15 @@ const styles = () => ({
   },
 });
 
+// FIXME: Use https://recompose.docsforhumans.com/withhandlers.html
+
 class IndexPage extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
     columns: PropTypes.array, // Just the columns that we are displaying.
     error: PropTypes.string,
     fileName: PropTypes.string,
-    geoJson: PropTypes.object,
+    processedGeoJson: PropTypes.object,
     isLoading: PropTypes.bool.isRequired,
     notificationMessage: PropTypes.string,
     progressMessage: PropTypes.string,
@@ -71,7 +73,7 @@ class IndexPage extends React.Component {
     setColumns: PropTypes.func.isRequired,
     setError: PropTypes.func.isRequired,
     setFileName: PropTypes.func.isRequired,
-    setGeoJson: PropTypes.func.isRequired,
+    setProcessedGeoJson: PropTypes.func.isRequired,
     setIsLoading: PropTypes.func.isRequired,
     setNotificationMessage: PropTypes.func.isRequired,
     setProgressMessage: PropTypes.func.isRequired,
@@ -79,10 +81,23 @@ class IndexPage extends React.Component {
     setShouldAddElevation: PropTypes.func.isRequired,
     setShouldSort: PropTypes.func.isRequired,
     setShouldStripTitleNumber: PropTypes.func.isRequired,
+    setUnprocessedGeoJson: PropTypes.func.isRequired,
     shouldAddElevation: PropTypes.bool.isRequired,
     shouldSort: PropTypes.bool.isRequired,
     shouldStripTitleNumber: PropTypes.bool.isRequired,
+    unprocessedGeoJson: PropTypes.object,
   };
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.unprocessedGeoJson &&
+      (prevProps.shouldAddElevation !== this.props.shouldAddElevation ||
+        prevProps.shouldSort !== this.props.shouldSort ||
+        prevProps.shouldStripTitleNumber !== this.props.shouldStripTitleNumber)
+    ) {
+      this.reprocessGeoJson();
+    }
+  }
 
   // Convert each row from a hash to an array of values.  This also filters
   // out the values for columns that we are not displaying.
@@ -92,21 +107,31 @@ class IndexPage extends React.Component {
     );
   }
 
-  createSpreadsheet(geoJson) {
-    const segments = createSegments(geoJson);
-
-    return createSpreadsheet(segments);
-  }
-
   resetState() {
     this.props.setColumns([]);
     this.props.setError(null);
     this.props.setFileName(null);
-    this.props.setGeoJson(null);
     this.props.setIsLoading(false);
     this.props.setNotificationMessage(null);
+    this.props.setProcessedGeoJson(null);
     this.props.setProgressMessage(null);
     this.props.setRows([]);
+    this.props.setUnprocessedGeoJson(null);
+  }
+
+  // Pause a bit after setting the progress message to give us a chance to render.
+  updateProgressMessage(data, progressMessage, shouldDoThisStep = true) {
+    if (!shouldDoThisStep) {
+      return Promise.resolve(data);
+    }
+
+    this.props.setProgressMessage(progressMessage);
+
+    return new Promise((resolve) => {
+      const timeoutCallback = () => resolve(data);
+      const timeoutMs = 500;
+      setTimeout(timeoutCallback, timeoutMs);
+    });
   }
 
   handleSelectedFile = (event) => {
@@ -119,55 +144,90 @@ class IndexPage extends React.Component {
     this.props.setProgressMessage('Loading file...');
 
     preadFile({ file })
+      .then((fileContentsStr) =>
+        this.updateProgressMessage(fileContentsStr, 'Parsing file...')
+      )
       .then((fileContentsStr) => {
-        this.props.setProgressMessage('Parsing file...');
-        return convertToGeoJson({ fileContentsStr, fileName });
+        const geoJson = convertToGeoJson({ fileContentsStr, fileName });
+        this.props.setUnprocessedGeoJson(geoJson);
+        this.processGeoJson(geoJson);
       })
-      .then((geoJson) => {
-        if (!this.props.shouldAddElevation) {
-          return geoJson;
-        }
+      .catch((error) => this.handleError(error));
+  };
 
-        this.props.setProgressMessage('Requesting elevation data...');
+  reprocessGeoJson() {
+    this.props.setIsLoading(true);
 
-        return addElevation({ geoJson }).catch((error) => {
-          /* eslint-disable-next-line no-undef, no-console */
-          console.error(error);
-          this.props.setNotificationMessage(
-            'Failed to get data from Elevation Service. Continuing without elevation data.'
-          );
+    this.processGeoJson(this.props.unprocessedGeoJson);
+  }
 
-          return geoJson;
-        });
-      })
-      .then((geoJson) => {
-        if (!this.props.shouldSort) {
-          return geoJson;
-        }
+  processGeoJson(geoJson) {
+    this.updateProgressMessage(
+      geoJson,
+      'Requesting elevation data...',
+      this.props.shouldAddElevation
+    )
+      .then((geoJson) => this.addElevation(geoJson))
+      .then((geoJson) =>
+        this.updateProgressMessage(geoJson, 'Sorting...', this.props.shouldSort)
+      )
+      .then((geoJson) => this.sort(geoJson))
+      .then((geoJson) =>
+        this.updateProgressMessage(geoJson, 'Creating the spreadsheet...')
+      )
+      .then((geoJson) => this.createSpreadsheet(geoJson))
+      .then((spreadsheet) => {
+        const { rows, columns } = spreadsheet;
 
-        this.props.setProgressMessage('Sorting...');
-        return new CaltopoSorter({
-          geoJson,
-          shouldStripTitleNumber: this.props.shouldStripTitleNumber,
-        }).sort();
-      })
-      .then((geoJson) => {
-        this.props.setProgressMessage('Creating the spreadsheet...');
-        const { rows, columns } = this.createSpreadsheet(geoJson);
         this.props.setColumns(columns);
-        this.props.setGeoJson(geoJson);
+        this.props.setProcessedGeoJson(geoJson);
         this.props.setIsLoading(false);
         this.props.setProgressMessage(`Loaded ${this.props.fileName}!`);
         this.props.setRows(rows);
       })
-      .catch((error) => {
-        /* eslint-disable-next-line no-undef, no-console */
-        console.error(error);
+      .catch((error) => this.handleError(error));
+  }
 
-        this.resetState();
-        this.props.setError(error.message || error);
-      });
-  };
+  addElevation(geoJson) {
+    if (!this.props.shouldAddElevation) {
+      return Promise.resolve(geoJson);
+    }
+
+    return addElevation({ geoJson }).catch((error) => {
+      /* eslint-disable-next-line no-undef, no-console */
+      console.error(error);
+      this.props.setNotificationMessage(
+        'Failed to get data from Elevation Service. Continuing without elevation data.'
+      );
+
+      return geoJson;
+    });
+  }
+
+  sort(geoJson) {
+    if (!this.props.shouldSort) {
+      return geoJson;
+    }
+
+    return new CaltopoSorter({
+      geoJson,
+      shouldStripTitleNumber: this.props.shouldStripTitleNumber,
+    }).sort();
+  }
+
+  createSpreadsheet(geoJson) {
+    const segments = createSegments(geoJson);
+
+    return createSpreadsheet(segments);
+  }
+
+  handleError(error) {
+    /* eslint-disable-next-line no-undef, no-console */
+    console.error(error);
+
+    this.resetState();
+    this.props.setError(error.message || error);
+  }
 
   renderCheckboxes() {
     return (
@@ -256,7 +316,7 @@ class IndexPage extends React.Component {
     return (
       <ExportFileButton
         fileName={'route-wizard-' + this.props.fileName}
-        geoJson={this.props.geoJson}
+        geoJson={this.props.processedGeoJson}
       />
     );
   }
@@ -305,8 +365,9 @@ const enhance = compose(
   withState('columns', 'setColumns', []),
   withState('error', 'setError'),
   withState('fileName', 'setFileName'),
-  withState('geoJson', 'setGeoJson'),
+  withState('processedGeoJson', 'setProcessedGeoJson'),
   withState('isLoading', 'setIsLoading', false),
+  withState('unprocessedGeoJson', 'setUnprocessedGeoJson'),
   withState('notificationMessage', 'setNotificationMessage'),
   withState('rows', 'setRows', []),
   withState('shouldAddElevation', 'setShouldAddElevation', true),

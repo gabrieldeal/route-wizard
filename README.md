@@ -15,4 +15,3 @@ http://yellowleaf.org/route-wizard/
 * Support folders.
 * Non-hacky sorting of segments. https://stackoverflow.com/questions/49883480/combine-a-sequence-of-linestring
 * Fix CSS flicker on initial load. https://github.com/gatsbyjs/gatsby/issues/5667
-* Re-process the GeoJSON data when a checkbox is changed
