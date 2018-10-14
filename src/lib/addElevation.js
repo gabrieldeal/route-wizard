@@ -1,10 +1,11 @@
 export default function addElevation({
   geoJson,
-  server = 'elevation-service-hosted.now.sh',
+  server = 'apps.yellowleaf.org',
+  path = '/elevation-service',
   port = 443,
   protocol = 'https',
 }) {
-  const url = `${protocol}://${server}:${port}/`;
+  const url = `${protocol}://${server}:${port}${path}`;
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'text/plain',
