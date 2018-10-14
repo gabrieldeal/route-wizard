@@ -164,12 +164,16 @@ class IndexPage extends React.Component {
   processGeoJson(geoJson) {
     this.updateProgressMessage(
       geoJson,
-      'Requesting elevation data...',
+      'Requesting elevation data (this can take a while)...',
       this.props.shouldAddElevation
     )
       .then((geoJson) => this.addElevation(geoJson))
       .then((geoJson) =>
-        this.updateProgressMessage(geoJson, 'Sorting...', this.props.shouldSort)
+        this.updateProgressMessage(
+          geoJson,
+          'Sorting lines...',
+          this.props.shouldSort
+        )
       )
       .then((geoJson) => this.sort(geoJson))
       .then((geoJson) =>
