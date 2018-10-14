@@ -12,7 +12,6 @@ http://yellowleaf.org/route-wizard/
 # Todo
 
 * Add support for exporting GPX & KML.
-* Fix CSS flicker on initial load. https://github.com/gatsbyjs/gatsby/issues/5667
 * Compute elevation gain more accurately.  Currently it only computes the gain between points in a line, which only works well if there are a lot of points.
 * Support folders.
 * Non-hacky sorting of segments. https://stackoverflow.com/questions/49883480/combine-a-sequence-of-linestring
