@@ -1,6 +1,11 @@
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 
+// Sort LineString features based on zero-padded numbers at the
+// start of their titles.  Optionally strip leading numbers from
+// the titles.
+//
+// FIXME: Move the stripping code out of this class.
 export default class CaltopoSorter {
   constructor({ geoJson, shouldStripTitleNumber }) {
     this.geoJson = cloneDeep(geoJson);
