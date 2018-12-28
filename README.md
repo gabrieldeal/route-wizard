@@ -8,10 +8,3 @@ Read a GPX, KML or GeoJSON file and then:
 # Demo
 
 http://yellowleaf.org/route-wizard/
-
-# Todo
-
-* Add support for exporting GPX & KML.
-* Compute elevation gain more accurately.  Currently it only computes the gain between points in a line, which only works well if there are a lot of points.
-* Support folders.
-* Non-hacky sorting of segments. https://stackoverflow.com/questions/49883480/combine-a-sequence-of-linestring
