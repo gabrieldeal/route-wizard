@@ -245,7 +245,7 @@ class IndexPage extends React.Component {
               onChange={(_event, value) => this.props.setShouldSort(value)}
             />
           }
-          label="Sort segments by their titles. If your route editor does not let you control the order of the segments, then prefix their titles with numbers and check this box."
+          label="Sort segments by their titles."
         />
         <FormControlLabel
           control={
@@ -258,7 +258,7 @@ class IndexPage extends React.Component {
               }
             />
           }
-          label="Strip ordering numbers from segment titles after sorting."
+          label="Remove numeric prefixes from segment titles after sorting."
         />
         <FormControlLabel
           control={
@@ -271,7 +271,7 @@ class IndexPage extends React.Component {
               }
             />
           }
-          label="Add elevation data. This will fail for large files."
+          label="Add elevation data."
         />
       </FormGroup>
     );
