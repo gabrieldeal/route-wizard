@@ -19,6 +19,7 @@ import ReadFileButton from '../components/readFileButton';
 import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
 import SpreadsheetTable from '../components/spreadsheet/table';
 import withCss from '../components/withCss';
+import workAroundCaltopoBug from '../lib/workAroundCaltopoBug';
 import { preadFile } from '../lib/readFile';
 
 const styles = () => ({
@@ -176,6 +177,7 @@ class IndexPage extends React.Component {
         )
       )
       .then((geoJson) => this.sort(geoJson))
+      .then((geoJson) => workAroundCaltopoBug(geoJson))
       .then((geoJson) =>
         this.updateProgressMessage(geoJson, 'Creating the spreadsheet...')
       )
