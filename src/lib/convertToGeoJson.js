@@ -1,4 +1,4 @@
-import toGeoJson from 'togeojson';
+import toGeoJson from '@mapbox/togeojson';
 
 function parseXml(xml) {
   return new DOMParser().parseFromString(xml, 'text/xml');
