@@ -1,7 +1,12 @@
 ---
 - hosts: all
-  remote_user: gabrielx1
+  remote_user: "{{ lookup('env', 'REMOTE_USER') }}"
   tasks:
+  - name: Run build
+    command: yarn run build
+    args:
+      chdir: ..
+    delegate_to: 127.0.0.1
   - name: Route Wizard
     synchronize:
       delete: yes
