@@ -4,10 +4,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import PropTypes from 'prop-types';
 import React from 'react';
-import togpx from 'togpx';
-import tokml from 'tokml';
 import { saveAs } from 'file-saver/FileSaver';
 import { withStyles } from '@material-ui/core/styles';
+import * as ConvertFromGeoJson from '../lib/convertFromGeoJson';
 
 import PopupState, {
   bindTrigger,
@@ -43,37 +42,15 @@ class ExportFileButton extends React.Component {
   };
 
   exportGpx = () => {
-    // Filter out folders:
-    const features = this.props.geoJson.features.filter(
-      (feature) => feature.geometry && feature.geometry.type
-    );
-    const geoJson = { ...this.props.geoJson, features };
-
-    const featureTitle = (properties) => properties && properties.title;
-    const featureDescription = (properties) =>
-      properties && properties.description;
-    const options = {
-      featureTitle,
-      featureDescription,
-    };
-
-    const gpxString = togpx(geoJson, options);
-
     this.exportFile({
-      fileContents: gpxString,
+      fileContents: ConvertFromGeoJson.toGpx(this.props.geoJson),
       fileExtension: 'gpx',
     });
   };
 
   exportKml = () => {
-    const options = {
-      name: 'title',
-      description: 'description',
-    };
-    const kmlString = tokml(this.props.geoJson, options);
-
     this.exportFile({
-      fileContents: kmlString,
+      fileContents: ConvertFromGeoJson.toGpx(this.props.geoJson),
       fileExtension: 'kml',
     });
   };
