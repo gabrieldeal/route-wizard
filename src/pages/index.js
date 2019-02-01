@@ -260,57 +260,49 @@ class IndexPage extends React.Component {
     this.props.setError(error.message || error);
   }
 
+  renderCheckbox({ checked, disabled, onChange, label }) {
+    return (
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={checked}
+            color="primary"
+            disabled={disabled}
+            onChange={(_event, value) => onChange(value)}
+          />
+        }
+        label={label}
+      />
+    );
+  }
+
   renderCheckboxes() {
     return (
       <FormGroup>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={this.props.shouldSort}
-              color="primary"
-              disabled={this.props.isLoading}
-              onChange={(_event, value) => this.props.setShouldSort(value)}
-            />
-          }
-          label="Sort segments by their titles."
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={this.props.shouldStripTitleNumber}
-              color="primary"
-              disabled={this.props.isLoading || !this.props.shouldSort}
-              onChange={(_event, value) =>
-                this.props.setShouldStripTitleNumber(value)
-              }
-            />
-          }
-          label="Remove numeric prefixes from segment titles after sorting."
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={this.props.shouldReverse}
-              color="primary"
-              disabled={this.props.isLoading}
-              onChange={(_event, value) => this.props.setShouldReverse(value)}
-            />
-          }
-          label="Reverse the route."
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={this.props.shouldAddElevation}
-              color="primary"
-              disabled={this.props.isLoading}
-              onChange={(_event, value) =>
-                this.props.setShouldAddElevation(value)
-              }
-            />
-          }
-          label="Add elevation data."
-        />
+        {this.renderCheckbox({
+          checked: this.props.shouldSort,
+          disabled: this.props.isLoading,
+          onChange: this.props.setShouldSort,
+          label: 'Sort segments by their titles',
+        })}
+        {this.renderCheckbox({
+          checked: this.props.shouldStripTitleNumber,
+          disabled: this.props.isLoading || !this.props.shouldSort,
+          onChange: this.props.setShouldStripTitleNumber,
+          label: 'Remove numeric prefixes from segment titles after sorting',
+        })}
+        {this.renderCheckbox({
+          checked: this.props.shouldReverse,
+          disabled: this.props.isLoading,
+          onChange: this.props.setShouldReverse,
+          label: 'Reverse the route',
+        })}
+        {this.renderCheckbox({
+          checked: this.props.shouldAddElevation,
+          disabled: this.props.isLoading,
+          onChange: this.props.setShouldAddElevation,
+          label: 'Add elevation data',
+        })}
       </FormGroup>
     );
   }
