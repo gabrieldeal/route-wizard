@@ -6,7 +6,7 @@ describe('convertToGeoJson', () => {
     const fileContentsStr =
       '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-120.92728614807129,47.47037116457148],[-120.93252182006836,47.48110359996791]]},"properties":{"stroke":"#FF0000","stroke-opacity":1,"stroke-width":2,"fill":"#FF0000","fill-opacity":0.10196078431372549}}]}';
     const expectedJson =
-      '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-120.92728614807129,47.47037116457148],[-120.93252182006836,47.48110359996791]]},"properties":{"stroke":"#FF0000","stroke-opacity":1,"stroke-width":2,"fill":"#FF0000","fill-opacity":0.10196078431372549,"title":""}}],"properties":{"title":""}}';
+      '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-120.92728614807129,47.47037116457148],[-120.93252182006836,47.48110359996791]]},"properties":{"stroke":"#FF0000","stroke-opacity":1,"stroke-width":2,"fill":"#FF0000","fill-opacity":0.10196078431372549,"title":"(Unnamed)"}}],"properties":{"title":"(Unnamed)"}}';
     const actualResult = convertToGeoJson({ fileContentsStr, fileName });
 
     expect(JSON.stringify(actualResult)).toEqual(expectedJson);
@@ -16,7 +16,7 @@ describe('convertToGeoJson', () => {
     const fileName = 'foo.gpx';
     const fileContentsStr = `<?xml version="1.0" encoding="UTF-8"?><gpx xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="CALTOPO"><trk><name>Short line</name><cmt/><extensions><gpxx:TrackExtension><gpxx:DisplayColor>Red</gpxx:DisplayColor></gpxx:TrackExtension></extensions><trkseg><trkpt lat="47.47037116457148" lon="-120.92728614807129"/><trkpt lat="47.48110359996791" lon="-120.93252182006836"/></trkseg></trk></gpx>`;
     const actualResult = convertToGeoJson({ fileContentsStr, fileName });
-    const expectedJson = `{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"Short line","cmt":"","title":"Short line"},"geometry":{"type":"LineString","coordinates":[[-120.92728614807129,47.47037116457148],[-120.93252182006836,47.48110359996791]]}}],"properties":{"title":""}}`;
+    const expectedJson = `{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"Short line","cmt":"","title":"Short line"},"geometry":{"type":"LineString","coordinates":[[-120.92728614807129,47.47037116457148],[-120.93252182006836,47.48110359996791]]}}],"properties":{"title":"(Unnamed)"}}`;
 
     expect(JSON.stringify(actualResult)).toEqual(expectedJson);
   });
@@ -27,7 +27,7 @@ describe('convertToGeoJson', () => {
 -120.93252182006836,47.48110359996791
 </coordinates></LineString></Placemark></Folder></Document></kml>`;
     const expectedJson =
-      '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-120.92728614807129,47.47037116457148],[-120.93252182006836,47.48110359996791]]},"properties":{"name":"Short line","stroke":"#FF0000","stroke-opacity":1,"stroke-width":2,"fill":"#FF0000","fill-opacity":0.10196078431372549,"title":"Short line"}}],"properties":{"title":""}}';
+      '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-120.92728614807129,47.47037116457148],[-120.93252182006836,47.48110359996791]]},"properties":{"name":"Short line","stroke":"#FF0000","stroke-opacity":1,"stroke-width":2,"fill":"#FF0000","fill-opacity":0.10196078431372549,"title":"Short line"}}],"properties":{"title":"(Unnamed)"}}';
     const actualResult = convertToGeoJson({ fileContentsStr, fileName });
 
     expect(JSON.stringify(actualResult)).toEqual(expectedJson);
