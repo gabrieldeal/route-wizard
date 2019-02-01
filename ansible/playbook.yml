@@ -7,7 +7,7 @@
     args:
       chdir: ..
     delegate_to: 127.0.0.1
-  - name: Route Wizard
+  - name: Deploy
     synchronize:
       delete: yes
       src: ../public/
