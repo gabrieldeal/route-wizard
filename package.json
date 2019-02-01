@@ -13,10 +13,12 @@
     "geolib": "^2.0.24",
     "jsts": "^1.6.1",
     "lodash": "^4.17.10",
+    "material-ui-popup-state": "^1.1.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-helmet": "^5.2.0",
     "recompose": "^0.28.0",
+    "togpx": "^0.5.4",
     "turf-reverse": "^1.0.0",
     "uuid": "^3.3.2",
     "xlsx": "^0.13.3"
