@@ -417,7 +417,7 @@ const enhance = compose(
   withState('notificationMessage', 'setNotificationMessage'),
   withState('rows', 'setRows', []),
   withState('shouldAddElevation', 'setShouldAddElevation', true),
-  withState('shouldReverse', 'setShouldReverse', true),
+  withState('shouldReverse', 'setShouldReverse', false),
   withState('shouldSort', 'setShouldSort', true),
   withState('shouldStripTitleNumber', 'setShouldStripTitleNumber', true),
   withState('progressMessage', 'setProgressMessage')
