@@ -1,0 +1,9 @@
+---
+- hosts: all
+  remote_user: gabrielx1
+  tasks:
+  - name: Route Wizard
+    synchronize:
+      delete: yes
+      src: ../public/
+      dest: ~/public_html/route-wizard
