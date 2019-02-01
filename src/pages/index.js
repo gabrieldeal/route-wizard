@@ -125,12 +125,12 @@ class IndexPage extends React.Component {
   }
 
   // Pause a bit after setting the progress message to give us a chance to render.
-  updateProgressMessage(data, progressMessage, shouldDoThisStep = true) {
+  msg(data, progressMessage, shouldDoThisStep = true) {
     if (!shouldDoThisStep) {
       return Promise.resolve(data);
     }
 
-    this.props.setProgressMessage(progressMessage);
+    this.props.setProgressMessage(progressMessage + '...');
 
     return new Promise((resolve) => {
       const timeoutCallback = () => resolve(data);
@@ -149,9 +149,7 @@ class IndexPage extends React.Component {
     this.props.setProgressMessage('Loading file...');
 
     preadFile({ file })
-      .then((fileContentsStr) =>
-        this.updateProgressMessage(fileContentsStr, 'Parsing file...')
-      )
+      .then((fileContentsStr) => this.msg(fileContentsStr, 'Parsing file'))
       .then((fileContentsStr) => {
         const geoJson = convertToGeoJson({ fileContentsStr, fileName });
         this.props.setUnprocessedGeoJson(geoJson);
@@ -167,32 +165,22 @@ class IndexPage extends React.Component {
   }
 
   processGeoJson(geoJson) {
-    this.updateProgressMessage(
+    this.msg(
       geoJson,
-      'Requesting elevation data (this can take a while)...',
+      'Requesting elevation data (this can take a while)',
       this.props.shouldAddElevation
     )
       .then((geoJson) => this.addElevation(geoJson))
       .then((geoJson) =>
-        this.updateProgressMessage(
-          geoJson,
-          'Sorting lines...',
-          this.props.shouldSort
-        )
+        this.msg(geoJson, 'Sorting lines', this.props.shouldSort)
       )
       .then((geoJson) => this.sort(geoJson))
       .then((geoJson) => workAroundCaltopoBug(geoJson))
       .then((geoJson) =>
-        this.updateProgressMessage(
-          geoJson,
-          'Reversing...',
-          this.props.shouldReverse
-        )
+        this.msg(geoJson, 'Reversing', this.props.shouldReverse)
       )
       .then((geoJson) => this.reverse(geoJson))
-      .then((geoJson) =>
-        this.updateProgressMessage(geoJson, 'Creating the spreadsheet...')
-      )
+      .then((geoJson) => this.msg(geoJson, 'Creating the spreadsheet'))
       .then((geoJson) => this.createSpreadsheet(geoJson))
       .then((spreadsheet) => {
         const { rows, columns } = spreadsheet;
