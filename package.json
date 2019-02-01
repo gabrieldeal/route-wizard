@@ -19,6 +19,7 @@
     "react-helmet": "^5.2.0",
     "recompose": "^0.28.0",
     "togpx": "^0.5.4",
+    "tokml": "^0.4.0",
     "turf-reverse": "^1.0.0",
     "uuid": "^3.3.2",
     "xlsx": "^0.13.3"

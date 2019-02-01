@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 import togpx from 'togpx';
+import tokml from 'tokml';
 import { saveAs } from 'file-saver/FileSaver';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -64,6 +65,19 @@ class ExportFileButton extends React.Component {
     });
   };
 
+  exportKml = () => {
+    const options = {
+      name: 'title',
+      description: 'description',
+    };
+    const kmlString = tokml(this.props.geoJson, options);
+
+    this.exportFile({
+      fileContents: kmlString,
+      fileExtension: 'kml',
+    });
+  };
+
   renderButton = (popupState) => {
     const makeHandleClick = (exportFile) => {
       return (event) => {
@@ -91,6 +105,7 @@ class ExportFileButton extends React.Component {
             GeoJson
           </MenuItem>
           <MenuItem onClick={makeHandleClick(this.exportGpx)}>GPX</MenuItem>
+          <MenuItem onClick={makeHandleClick(this.exportKml)}>KML</MenuItem>
         </Menu>
       </React.Fragment>
     );
