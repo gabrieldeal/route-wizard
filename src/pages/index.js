@@ -313,7 +313,7 @@ class IndexPage extends React.Component {
         onChange={this.handleSelectedFile}
         disabled={this.props.isLoading}
       >
-        Read route file (GPX, KML or GeoJSON)
+        Read route file
       </ReadFileButton>
     );
   }
@@ -412,7 +412,11 @@ const enhance = compose(
   withState('shouldReverse', 'setShouldReverse', false),
   withState('shouldSort', 'setShouldSort', true),
   withState('shouldStripTitleNumber', 'setShouldStripTitleNumber', true),
-  withState('progressMessage', 'setProgressMessage')
+  withState(
+    'progressMessage',
+    'setProgressMessage',
+    'Can read KML, GPX and GeoJson formats'
+  )
 );
 
 export default enhance(IndexPage);
