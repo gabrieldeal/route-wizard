@@ -9,6 +9,7 @@ import withState from 'recompose/withState';
 import { withStyles } from '@material-ui/core/styles';
 
 import CaltopoSorter from '../lib/CaltopoSorter';
+import caltopoStripper from '../lib/caltopoStripper';
 import ExportFileButton from '../components/exportFileButton';
 import Layout from '../components/layout';
 import ReadFileButton from '../components/readFileButton';
@@ -180,6 +181,10 @@ class IndexPage extends React.Component {
         this.msg(geoJson, 'Reversing', this.props.shouldReverse)
       )
       .then((geoJson) => this.reverse(geoJson))
+      .then((geoJson) =>
+        this.msg(geoJson, 'Changing titles', this.props.shouldSort)
+      )
+      .then((geoJson) => this.strip(geoJson))
       .then((geoJson) => this.msg(geoJson, 'Creating the spreadsheet'))
       .then((geoJson) => this.createSpreadsheet(geoJson))
       .then(({ geoJson, spreadsheet }) => {
@@ -215,10 +220,18 @@ class IndexPage extends React.Component {
       return geoJson;
     }
 
-    return new CaltopoSorter({
+    return new CaltopoSorter({ geoJson }).sort();
+  }
+
+  strip(geoJson) {
+    if (!this.props.shouldSort) {
+      return geoJson;
+    }
+
+    return new caltopoStripper({
       geoJson,
       shouldStripTitleNumber: this.props.shouldStripTitleNumber,
-    }).sort();
+    });
   }
 
   reverse(geoJson) {

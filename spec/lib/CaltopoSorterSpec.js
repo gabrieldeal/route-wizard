@@ -8,10 +8,10 @@ describe('CaltopoSorter', function() {
 
   it('sorts', () => {
     const expected = [
-      '1 approach',
-      '2 North Ridge',
-      '3 Cascadian Couloir',
-      '4 Camp',
+      '01.5 approach',
+      '01.51 North Ridge',
+      '02 Cascadian Couloir',
+      '02.1 Camp',
       'Unnumbered line 1',
       'Unnumbered line 2',
       'A folder',
