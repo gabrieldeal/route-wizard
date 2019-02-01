@@ -164,9 +164,9 @@ class IndexPage extends React.Component {
     this.processGeoJson(this.props.unprocessedGeoJson);
   }
 
-  processGeoJson(geoJson) {
+  processGeoJson(unprocessedGeoJson) {
     this.msg(
-      geoJson,
+      unprocessedGeoJson,
       'Requesting elevation data (this can take a while)',
       this.props.shouldAddElevation
     )
@@ -182,7 +182,7 @@ class IndexPage extends React.Component {
       .then((geoJson) => this.reverse(geoJson))
       .then((geoJson) => this.msg(geoJson, 'Creating the spreadsheet'))
       .then((geoJson) => this.createSpreadsheet(geoJson))
-      .then((spreadsheet) => {
+      .then(({ geoJson, spreadsheet }) => {
         const { rows, columns } = spreadsheet;
 
         this.props.setColumns(columns);
@@ -231,8 +231,12 @@ class IndexPage extends React.Component {
 
   createSpreadsheet(geoJson) {
     const segments = createSegments(geoJson);
+    const spreadsheet = createSpreadsheet(segments);
 
-    return createSpreadsheet(segments);
+    return {
+      geoJson,
+      spreadsheet,
+    };
   }
 
   handleError(error) {
