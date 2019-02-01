@@ -8,16 +8,17 @@ import React from 'react';
 import withState from 'recompose/withState';
 import { withStyles } from '@material-ui/core/styles';
 
-import addElevation from '../lib/addElevation';
 import CaltopoSorter from '../lib/CaltopoSorter';
-import convertToGeoJson from '../lib/convertToGeoJson';
-import createSegments from '../lib/createSegments';
-import createSpreadsheet from '../lib/createSpreadsheet';
 import ExportFileButton from '../components/exportFileButton';
 import Layout from '../components/layout';
 import ReadFileButton from '../components/readFileButton';
 import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
 import SpreadsheetTable from '../components/spreadsheet/table';
+import addElevation from '../lib/addElevation';
+import convertToGeoJson from '../lib/convertToGeoJson';
+import createSegments from '../lib/createSegments';
+import createSpreadsheet from '../lib/createSpreadsheet';
+import reverseGeoJson from '../lib/reverseGeoJson';
 import withCss from '../components/withCss';
 import workAroundCaltopoBug from '../lib/workAroundCaltopoBug';
 import { preadFile } from '../lib/readFile';
@@ -80,10 +81,12 @@ class IndexPage extends React.Component {
     setProgressMessage: PropTypes.func.isRequired,
     setRows: PropTypes.func.isRequired,
     setShouldAddElevation: PropTypes.func.isRequired,
+    setShouldReverse: PropTypes.func.isRequired,
     setShouldSort: PropTypes.func.isRequired,
     setShouldStripTitleNumber: PropTypes.func.isRequired,
     setUnprocessedGeoJson: PropTypes.func.isRequired,
     shouldAddElevation: PropTypes.bool.isRequired,
+    shouldReverse: PropTypes.bool.isRequired,
     shouldSort: PropTypes.bool.isRequired,
     shouldStripTitleNumber: PropTypes.bool.isRequired,
     unprocessedGeoJson: PropTypes.object,
@@ -93,6 +96,7 @@ class IndexPage extends React.Component {
     if (
       this.props.unprocessedGeoJson &&
       (prevProps.shouldAddElevation !== this.props.shouldAddElevation ||
+        prevProps.shouldReverse !== this.props.shouldReverse ||
         prevProps.shouldSort !== this.props.shouldSort ||
         prevProps.shouldStripTitleNumber !== this.props.shouldStripTitleNumber)
     ) {
@@ -179,6 +183,14 @@ class IndexPage extends React.Component {
       .then((geoJson) => this.sort(geoJson))
       .then((geoJson) => workAroundCaltopoBug(geoJson))
       .then((geoJson) =>
+        this.updateProgressMessage(
+          geoJson,
+          'Reversing...',
+          this.props.shouldReverse
+        )
+      )
+      .then((geoJson) => this.reverse(geoJson))
+      .then((geoJson) =>
         this.updateProgressMessage(geoJson, 'Creating the spreadsheet...')
       )
       .then((geoJson) => this.createSpreadsheet(geoJson))
@@ -221,6 +233,14 @@ class IndexPage extends React.Component {
     }).sort();
   }
 
+  reverse(geoJson) {
+    if (!this.props.shouldReverse) {
+      return geoJson;
+    }
+
+    return reverseGeoJson(geoJson);
+  }
+
   createSpreadsheet(geoJson) {
     const segments = createSegments(geoJson);
 
@@ -261,6 +281,17 @@ class IndexPage extends React.Component {
             />
           }
           label="Remove numeric prefixes from segment titles after sorting."
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={this.props.shouldReverse}
+              color="primary"
+              disabled={this.props.isLoading}
+              onChange={(_event, value) => this.props.setShouldReverse(value)}
+            />
+          }
+          label="Reverse the route."
         />
         <FormControlLabel
           control={
@@ -381,6 +412,7 @@ const enhance = compose(
   withState('notificationMessage', 'setNotificationMessage'),
   withState('rows', 'setRows', []),
   withState('shouldAddElevation', 'setShouldAddElevation', true),
+  withState('shouldReverse', 'setShouldReverse', true),
   withState('shouldSort', 'setShouldSort', true),
   withState('shouldStripTitleNumber', 'setShouldStripTitleNumber', true),
   withState('progressMessage', 'setProgressMessage')
