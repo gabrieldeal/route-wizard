@@ -11,6 +11,10 @@ export default class SegmentSplitter {
   constructor({ markers, segments }) {
     this.markers = markers;
     this.segments = segments;
+
+    if (this.segments.length == 0) {
+      throw 'The route file does not contain any lines';
+    }
   }
 
   split() {
