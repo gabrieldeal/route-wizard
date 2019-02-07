@@ -3,23 +3,23 @@
   "features": [
     {
       "type": "Feature",
-      "id": "1119eba1-443f-45d2-9c0b-9daabf716712",
+      "id": "745b7018-d856-443a-af77-16d8bde27060",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -120.90370000000001,
-          47.4755,
-          2739.7599999993945,
+          -120.8868,
+          47.4711,
+          2469.755199999577,
           0
         ]
       },
       "properties": {
         "marker-symbol": "point",
         "marker-color": "#FF0000",
-        "description": "Marker description",
-        "title": "Marker at start of line",
+        "description": "The description that does not show up (sort of a bug)",
+        "title": "",
         "class": "Marker",
-        "updated": 1533140951000
+        "updated": 1533142659000
       }
     },
     {
@@ -43,12 +43,12 @@
       "properties": {
         "stroke-opacity": 1,
         "pattern": "solid",
-        "description": "Segment description",
+        "description": "Line description",
         "stroke-width": 2,
         "title": "The line",
         "fill": "#FF0000",
         "class": "Shape",
-        "updated": 1533140557000,
+        "updated": 1533142659000,
         "stroke": "#FF0000",
         "fill-opacity": 0.1,
         "gpstype": "TRACK"

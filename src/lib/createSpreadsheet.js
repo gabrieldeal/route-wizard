@@ -30,7 +30,9 @@ function createRows(realSegments) {
   }
 
   let cumulativeDistance = 0;
-  const segments = [...realSegments, new DummySegment({ title: 'The End' })];
+  const endTitle =
+    realSegments[realSegments.length - 1].endMarkerTitle || 'The End';
+  const segments = [...realSegments, new DummySegment({ title: endTitle })];
 
   return segments.slice(0, segments.length - 1).map((segment, index) => {
     const nextSegment = segments[index + 1];

@@ -10,6 +10,7 @@ export default class Segment {
     description,
     elevations,
     factory,
+    endMarkerTitle,
     line,
     locomotion,
     markers = [], // FIXME: remove markers from Segment because it is only used for splitting.
@@ -19,6 +20,7 @@ export default class Segment {
   }) {
     this._description = description || '';
     this.elevations = elevations;
+    this.endMarkerTitle = endMarkerTitle;
     this._locomotion = locomotion; // FIXME: rationalize this._locomotion & this.locomotion().
     this.markers = markers;
     this._surface = surface;

@@ -69,20 +69,12 @@ describe('Route', function() {
     expectRouteToEqual({ fixtureName, expectedRows });
   });
 
-  it('handles markers at the start of a segment', function() {
+  it('handles a marker with a title at the start of a segment', function() {
     const expectedRows = [
       {
         ...this.descriptionFields,
+        description: 'Marker description\nSegment description',
         from: 'Marker at start of line',
-        to: 'The line',
-        cumulativeDistance: 0,
-        distance: 0,
-        gain: 0,
-        loss: 0,
-      },
-      {
-        ...this.descriptionFields,
-        from: 'The line',
         to: 'The End',
         cumulativeDistance: 0.7,
         distance: 0.7,
@@ -94,10 +86,28 @@ describe('Route', function() {
     expectRouteToEqual({ fixtureName, expectedRows });
   });
 
-  it('handles markers at the end of a segment', function() {
+  it('handles a marker without a title at the start of a segment', function() {
     const expectedRows = [
       {
         ...this.descriptionFields,
+        description: 'Marker description\nSegment description',
+        from: 'The line',
+        to: 'The End',
+        cumulativeDistance: 0.7,
+        distance: 0.7,
+        gain: 0,
+        loss: 814,
+      },
+    ];
+    const fixtureName = 'untitled-marker-at-start-of-segment.json';
+    expectRouteToEqual({ fixtureName, expectedRows });
+  });
+
+  it('handles a marker with a title at the end of a segment', function() {
+    const expectedRows = [
+      {
+        ...this.descriptionFields,
+        description: 'Line description',
         from: 'The line',
         to: 'Marker at end of line',
         cumulativeDistance: 0.7,
@@ -105,17 +115,25 @@ describe('Route', function() {
         gain: 0,
         loss: 814,
       },
-      {
-        ...this.descriptionFields,
-        from: 'Marker at end of line',
-        to: 'The End',
-        cumulativeDistance: 0.7,
-        distance: 0,
-        gain: 0,
-        loss: 0,
-      },
     ];
     const fixtureName = 'marker-at-end-of-segment.json'; // https://caltopo.com/m/8J5M
+    expectRouteToEqual({ fixtureName, expectedRows });
+  });
+
+  it('handles a marker without a title at the end of a segment', function() {
+    const expectedRows = [
+      {
+        ...this.descriptionFields,
+        description: 'Line description',
+        from: 'The line',
+        to: 'The End',
+        cumulativeDistance: 0.7,
+        distance: 0.7,
+        gain: 0,
+        loss: 814,
+      },
+    ];
+    const fixtureName = 'untitled-marker-at-end-of-segment.json';
     expectRouteToEqual({ fixtureName, expectedRows });
   });
 

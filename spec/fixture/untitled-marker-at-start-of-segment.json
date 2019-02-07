@@ -17,7 +17,7 @@
         "marker-symbol": "point",
         "marker-color": "#FF0000",
         "description": "Marker description",
-        "title": "Marker at start of line",
+        "title": "",
         "class": "Marker",
         "updated": 1533140951000
       }

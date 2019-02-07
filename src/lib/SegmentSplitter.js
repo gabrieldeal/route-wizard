@@ -81,7 +81,9 @@ export default class SegmentSplitter {
           marker: split.marker,
           segment: remainingSegment,
         });
-        segments.push(newSegment);
+        if (newSegment) {
+          segments.push(newSegment);
+        } // else: the marker was at the end of the segment.
       });
 
     segments.push(remainingSegment);
@@ -108,7 +110,13 @@ export default class SegmentSplitter {
   }
 
   joinDescriptions(a, b) {
-    return a + (b ? `\n${b}` : '');
+    if (a && b) {
+      return `${a}\n${b}`;
+    }
+    if (a) {
+      return a;
+    }
+    return b;
   }
 
   splitAt({ lineGeometryLocation, marker, segment }) {
@@ -130,40 +138,25 @@ export default class SegmentSplitter {
     let left;
     let right;
     if (isMarkerAtEnd) {
-      left = {
-        coordinates,
+      left = null;
+      right = {
+        coordinates: coordinates,
         description: segment.description(),
         elevations,
+        endMarkerTitle: marker.title,
         title: segment.title,
-      };
-
-      const lastCoordinate = coordinates[coordinates.length - 1];
-      const lastElevation = elevations[elevations.length - 1];
-      right = {
-        coordinates: [lastCoordinate, lastCoordinate],
-        description: marker.description,
-        elevations: [lastElevation, lastElevation],
-        title: marker.title,
       };
     } else if (isMarkerAtStart) {
-      const firstCoordinate = coordinates[0];
-      const firstElevation = elevations[0];
-      left = {
-        coordinates: [firstCoordinate, firstCoordinate],
-        description: this.joinDescriptions(
-          segment.description(),
-          marker.description
-        ),
-        description: marker.description,
-        elevations: [firstElevation, firstElevation],
-        title: marker.title,
-      };
-
+      left = null;
       right = {
         coordinates,
-        description: '',
+        description: this.joinDescriptions(
+          marker.description,
+          segment.description()
+        ),
         elevations,
-        title: segment.title,
+        endMarkerTitle: segment.endMarkerTitle,
+        title: marker.title || segment.title,
       };
     } else {
       left = {
@@ -177,6 +170,7 @@ export default class SegmentSplitter {
         coordinates: coordinates.slice(splitIndex, coordinates.length),
         description: marker.description,
         elevations: elevations.slice(splitIndex, elevations.length),
+        endMarkerTitle: segment.endMarkerTitle,
         title: marker.title,
       };
 
@@ -189,17 +183,26 @@ export default class SegmentSplitter {
       }
     }
 
-    return [
-      new Segment({
-        ...left,
-        ...fields,
-        factory: segment.line.getFactory(),
-      }),
-      new Segment({
-        ...right,
-        ...fields,
-        factory: segment.line.getFactory(),
-      }),
-    ];
+    const segments = [];
+    if (left) {
+      segments.push(
+        new Segment({
+          ...left,
+          ...fields,
+          factory: segment.line.getFactory(),
+        })
+      );
+    }
+    if (right) {
+      segments.push(
+        new Segment({
+          ...right,
+          ...fields,
+          factory: segment.line.getFactory(),
+        })
+      );
+    }
+
+    return segments;
   }
 }
