@@ -32,7 +32,7 @@ describe('Route', function() {
         ...this.descriptionFields,
         from: '01 Stuart/Sherpa ridge',
         to: 'Stuart/Sherpa col',
-        cumulativeDistance: 0.5,
+        cumulativeDistance: 0,
         distance: 0.5,
         gain: 0,
         loss: 0,
@@ -41,7 +41,7 @@ describe('Route', function() {
         ...this.descriptionFields,
         from: 'Stuart/Sherpa col',
         to: '02 Sherpa/Argonaut ridge',
-        cumulativeDistance: 0.5 + 1.2 + 0.1,
+        cumulativeDistance: 0.5,
         distance: 1.2,
         gain: 0,
         loss: 857,
@@ -50,7 +50,7 @@ describe('Route', function() {
         ...this.descriptionFields,
         from: '02 Sherpa/Argonaut ridge',
         to: 'Sherpa/Argonaut col',
-        cumulativeDistance: 0.5 + 1.2 + 0.7,
+        cumulativeDistance: 0.5 + 1.2 + 0.1,
         distance: 0.7,
         gain: 0,
         loss: 0,
@@ -59,10 +59,15 @@ describe('Route', function() {
         ...this.descriptionFields,
         from: 'Sherpa/Argonaut col',
         to: 'The End',
-        cumulativeDistance: 0.5 + 1.2 + 0.7 + 2.2,
+        cumulativeDistance: 0.5 + 1.2 + 0.7,
         distance: 2.2,
         gain: 1124,
         loss: 1424,
+      },
+      {
+        cumulativeDistance: 0.5 + 1.2 + 0.7 + 2.2,
+        description: '',
+        from: 'The End',
       },
     ];
     const fixtureName = 'two-segments.json'; // https://caltopo.com/m/PLN5
@@ -76,10 +81,15 @@ describe('Route', function() {
         description: 'Marker description\nSegment description',
         from: 'Marker at start of line',
         to: 'The End',
-        cumulativeDistance: 0.7,
+        cumulativeDistance: 0,
         distance: 0.7,
         gain: 0,
         loss: 814,
+      },
+      {
+        cumulativeDistance: 0.7,
+        description: '',
+        from: 'The End',
       },
     ];
     const fixtureName = 'marker-at-start-of-segment.json'; // https://caltopo.com/m/8J5M
@@ -93,10 +103,15 @@ describe('Route', function() {
         description: 'Marker description\nSegment description',
         from: 'The line',
         to: 'The End',
-        cumulativeDistance: 0.7,
+        cumulativeDistance: 0,
         distance: 0.7,
         gain: 0,
         loss: 814,
+      },
+      {
+        cumulativeDistance: 0.7,
+        description: '',
+        from: 'The End',
       },
     ];
     const fixtureName = 'untitled-marker-at-start-of-segment.json';
@@ -110,10 +125,15 @@ describe('Route', function() {
         description: 'Line description',
         from: 'The line',
         to: 'Marker at end of line',
-        cumulativeDistance: 0.7,
+        cumulativeDistance: 0,
         distance: 0.7,
         gain: 0,
         loss: 814,
+      },
+      {
+        description: 'Marker description',
+        cumulativeDistance: 0.7,
+        from: 'Marker at end of line',
       },
     ];
     const fixtureName = 'marker-at-end-of-segment.json'; // https://caltopo.com/m/8J5M
@@ -127,10 +147,15 @@ describe('Route', function() {
         description: 'Line description',
         from: 'The line',
         to: 'The End',
-        cumulativeDistance: 0.7,
+        cumulativeDistance: 0,
         distance: 0.7,
         gain: 0,
         loss: 814,
+      },
+      {
+        cumulativeDistance: 0.7,
+        description: 'Point description',
+        from: 'The End',
       },
     ];
     const fixtureName = 'untitled-marker-at-end-of-segment.json';
@@ -149,7 +174,7 @@ describe('Route', function() {
         description: 'The line description',
         from: 'The line',
         to: 'Getting excited about the summit!',
-        cumulativeDistance: 0.4,
+        cumulativeDistance: 0,
         distance: 0.4,
         gain: 883,
         loss: 0,
@@ -159,7 +184,7 @@ describe('Route', function() {
         description: '',
         from: 'Getting excited about the summit!',
         to: 'Getting close to the summit!',
-        cumulativeDistance: 0.4 + 0.6,
+        cumulativeDistance: 0.4,
         distance: 0.6,
         gain: 1398,
         loss: 0,
@@ -171,8 +196,13 @@ describe('Route', function() {
         to: 'The End',
         gain: 2067,
         loss: 0,
-        cumulativeDistance: 0.4 + 0.6 + 0.9,
+        cumulativeDistance: 0.4 + 0.6,
         distance: 0.9,
+      },
+      {
+        cumulativeDistance: 0.4 + 0.6 + 0.9,
+        description: '',
+        from: 'The End',
       },
     ];
     const fixtureName = 'markers-in-middle-of-segment.json';

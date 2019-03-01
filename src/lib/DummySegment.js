@@ -1,6 +1,7 @@
 export default class Segment {
-  constructor({ title }) {
+  constructor({ title, description }) {
     this.title = title;
+    this._description = description;
     this.elevations = [];
   }
 
@@ -17,7 +18,7 @@ export default class Segment {
   }
 
   description() {
-    return null;
+    return this._description;
   }
 
   distance() {

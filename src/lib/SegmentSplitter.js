@@ -143,6 +143,7 @@ export default class SegmentSplitter {
         coordinates: coordinates,
         description: segment.description(),
         elevations,
+        endMarkerDescription: marker.description,
         endMarkerTitle: marker.title,
         title: segment.title,
       };
@@ -155,6 +156,7 @@ export default class SegmentSplitter {
           segment.description()
         ),
         elevations,
+        endMarkerDescription: segment.endMarkerDescription,
         endMarkerTitle: segment.endMarkerTitle,
         title: marker.title || segment.title,
       };
@@ -170,6 +172,7 @@ export default class SegmentSplitter {
         coordinates: coordinates.slice(splitIndex, coordinates.length),
         description: marker.description,
         elevations: elevations.slice(splitIndex, elevations.length),
+        endMarkerDescription: segment.endMarkerDescription,
         endMarkerTitle: segment.endMarkerTitle,
         title: marker.title,
       };

@@ -30,16 +30,22 @@ function createRows(realSegments) {
   }
 
   let cumulativeDistance = 0;
-  const endTitle =
-    realSegments[realSegments.length - 1].endMarkerTitle || 'The End';
-  const segments = [...realSegments, new DummySegment({ title: endTitle })];
+  let lastSegment = realSegments[realSegments.length - 1];
+  const endTitle = lastSegment.endMarkerTitle || 'The End';
+  const endDescription = lastSegment.endMarkerDescription || '';
+  const segments = [
+    ...realSegments,
+    new DummySegment({ description: endDescription, title: endTitle }),
+  ];
 
-  return segments.slice(0, segments.length - 1).map((segment, index) => {
+  const rows = segments.slice(0, segments.length - 1).map((segment, index) => {
     const nextSegment = segments[index + 1];
+    const thisDistance = cumulativeDistance;
+
     cumulativeDistance += segment.distance() || 0;
 
     return {
-      cumulativeDistance: roundToMiles(cumulativeDistance),
+      cumulativeDistance: roundToMiles(thisDistance),
       description: segment.description(),
       distance: roundToMiles(segment.distance()),
       gain: roundToFeet(segment.gain()),
@@ -51,17 +57,28 @@ function createRows(realSegments) {
       users: segment.users(),
     };
   });
+
+  rows.push({
+    cumulativeDistance: roundToMiles(cumulativeDistance),
+    description: segments[segments.length - 1].description(),
+    from: segments[segments.length - 1].title,
+  });
+
+  return rows;
 }
 
 // A column might not be displayed if there is no row with a value for that column.
 const unfilteredColumns = [
   {
     key: 'cumulativeDistance',
-    name: 'Cumulative distance to ending point (mi)',
+    name: 'Cumulative distance to starting point (mi)',
   },
   { key: 'from', name: 'Starting point' },
   { key: 'to', name: 'Ending point' },
-  { key: 'distance', name: 'Distance (mi)' },
+  {
+    key: 'distance',
+    name: 'Distance fron starting point to ending point (mi)',
+  },
   { key: 'gain', name: 'Elevation gain (feet)' },
   { key: 'loss', name: 'Elevation loss (feet)' },
   { key: 'description', name: 'Notes about starting point' },
