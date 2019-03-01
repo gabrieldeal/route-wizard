@@ -88,7 +88,14 @@ const unfilteredColumns = [
 ];
 
 function filterColumns(filteredRows) {
-  const optionalColumns = ['users', 'surface', 'locomotion', 'gain', 'loss'];
+  const optionalColumns = [
+    'users',
+    'surface',
+    'locomotion',
+    'gain',
+    'loss',
+    'description',
+  ];
   const unusedOptionalColumns = optionalColumns.filter(
     (optionalColumn) => !filteredRows.find((row) => row[optionalColumn])
   );
