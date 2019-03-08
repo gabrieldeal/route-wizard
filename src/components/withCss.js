@@ -15,9 +15,7 @@ import { SheetsRegistry } from 'jss';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#52A8DA',
-      main: '#0883CA',
-      dark: '#0670BD',
+      main: '#36665E',
     },
   },
 });

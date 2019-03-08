@@ -12,6 +12,17 @@ const styles = {
   flex: {
     flexGrow: 1,
   },
+  colorPrimary: {
+    backgroundColor: '#DFF2FD',
+    color: 'black',
+  },
+  siteIcon: {
+    width: 30,
+    height: 30,
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    marginRight: '1em',
+  },
 };
 
 class Header extends React.Component {
@@ -29,8 +40,14 @@ class Header extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" className={classes.colorPrimary}>
           <Toolbar>
+            <img
+              alt="A yellow leaf"
+              className={classes.siteIcon}
+              src="public/ms-icon-144x144.png"
+            />
+
             <Typography
               variant="title"
               color="inherit"
