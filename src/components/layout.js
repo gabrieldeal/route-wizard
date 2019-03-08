@@ -14,6 +14,7 @@ const Layout = ({ children }) => {
           site {
             siteMetadata {
               title
+              lang
             }
           }
         }
@@ -21,6 +22,7 @@ const Layout = ({ children }) => {
       render={(data) => (
         <>
           <Helmet
+            htmlAttributes={{ lang: data.site.siteMetadata.lang }}
             title={data.site.siteMetadata.title}
             meta={[
               {
