@@ -1,5 +1,4 @@
 import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import compose from 'recompose/compose';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -25,38 +24,11 @@ import workAroundCaltopoBug from '../lib/workAroundCaltopoBug';
 import { preadFile } from '../lib/readFile';
 
 const styles = () => ({
-  errorContainer: {
-    color: 'red',
-    fontWeight: 800,
-    marginBottom: 'auto',
-    marginLeft: '1em',
-    marginTop: 'auto',
-  },
   exportButtonsContainer: {
     display: 'flex',
   },
   newOrder: {
     paddingTop: '1em',
-  },
-  messagesContainer: {
-    display: 'flex',
-    marginBottom: 'auto',
-    marginLeft: '1em',
-    marginTop: 'auto',
-  },
-  notificationMessageContainer: {
-    fontWeight: 800,
-  },
-  textMessagesContainer: {
-    display: 'block',
-  },
-  progressSpinner: {
-    marginBottom: 'auto',
-    marginRight: '1em',
-    marginTop: 'auto',
-  },
-  readFileContainer: {
-    display: 'flex',
   },
 });
 
@@ -310,41 +282,15 @@ class IndexPage extends React.Component {
   renderReadFileButton() {
     return (
       <ReadFileButton
-        onChange={this.handleSelectedFile}
         disabled={this.props.isLoading}
+        errorMessage={this.props.error}
+        isLoading={this.props.isLoading}
+        notificationMessage={this.props.notificationMessage}
+        onChange={this.handleSelectedFile}
+        progressMessage={this.props.progressMessage}
       >
         Read route file
       </ReadFileButton>
-    );
-  }
-
-  renderError() {
-    return (
-      this.props.error && (
-        <div className={this.props.classes.errorContainer}>
-          Error: {this.props.error}
-        </div>
-      )
-    );
-  }
-
-  renderMessages() {
-    return (
-      <div className={this.props.classes.messagesContainer}>
-        {this.props.isLoading && (
-          <CircularProgress
-            className={this.props.classes.progressSpinner}
-            size={25}
-            thickness={7}
-          />
-        )}
-        <div className={this.props.classes.textMessagesContainer}>
-          <div className={this.props.classes.notificationMessageContainer}>
-            {this.props.notificationMessage}
-          </div>
-          <div>{this.props.progressMessage}</div>
-        </div>
-      </div>
     );
   }
 
@@ -381,12 +327,9 @@ class IndexPage extends React.Component {
   render() {
     return (
       <Layout>
+        <h1>Create databook from route</h1>
         {this.renderCheckboxes()}
-        <div className={this.props.classes.readFileContainer}>
-          {this.renderReadFileButton()}
-          {this.renderMessages()}
-          {this.renderError()}
-        </div>
+        {this.renderReadFileButton()}
         <div className={this.props.classes.exportButtonsContainer}>
           {this.renderExportSpreadsheetButton()}
           {this.renderExportGeoJsonButton()}

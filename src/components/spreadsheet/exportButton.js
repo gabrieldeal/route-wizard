@@ -21,6 +21,8 @@ const styles = (theme) => ({
 });
 
 class ExportButton extends React.Component {
+  // FIXME: Move this and the rest of the spreadsheet code out
+  // of this UI component.
   buildWorksheet() {
     const headerRow = this.props.columns.map((column) => column.name);
     const rows = [headerRow, ...this.props.rows];
