@@ -12,3 +12,8 @@
       delete: yes
       src: ../public/
       dest: ~/public_html/route-wizard
+  - name: Increment version in Git
+    command: ~/projects/personal-environment/bin/git-increment-version-tag
+    args:
+      chdir: ..
+    delegate_to: 127.0.0.1
