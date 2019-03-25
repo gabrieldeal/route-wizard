@@ -30,6 +30,7 @@ const styles = (theme) => ({
     padding: '1em',
   },
   datePickerForm: {
+    display: 'inline',
     marginBottom: 0,
   },
   progressSpinner: {
@@ -125,20 +126,20 @@ class MapPage extends React.Component {
         className={this.props.classes.datePickerContainer}
       >
         <h1>North American Climate Data</h1>
-        <div>Month & day to get climate data for:</div>
+        Click the map to get historic climate statistics for that location on
+        the 20-day time period centered on the selected day & month (the year is
+        not used).
         <form className={this.props.classes.datePickerForm} noValidate>
-          <div>
-            <TextField
-              defaultValue={this.state.defaultDate}
-              id="date"
-              type="date"
-              onChange={this.handleDatePickerChange}
-              className={this.props.classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </div>
+          <TextField
+            defaultValue={this.state.defaultDate}
+            id="date"
+            type="date"
+            onChange={this.handleDatePickerChange}
+            className={this.props.classes.textField}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
         </form>
       </div>
     );
