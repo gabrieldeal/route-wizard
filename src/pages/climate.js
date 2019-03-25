@@ -26,42 +26,13 @@ class ClimatePage extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
   };
-  static sweColumnLabel = (
-    <div key="1">
-      <a href="https://www.nrcs.usda.gov/wps/portal/nrcs/detail/null/?cid=nrcseprd1314833">
-        Min Snow water equivalent (in)
-      </a>
-    </div>
-  );
-  static columnTypes = {
-    // The order of the column types determines the order they are displayed in.
-    lon: ['Longitude', Formatters.floatToFixed],
-    lat: ['Latitude', Formatters.floatToFixed],
-    elevation: ['Elevation (ft)', Formatters.metersToFeet],
-    date: ['Date', Formatters.date],
-    dayl: ['Daylight (hours)', Formatters.secondsToHours],
-    tmax_max: ['Highest max temperature (F)', Formatters.celciusToFahrenheit],
-    tmax_avg: ['Avg max temperature (F)', Formatters.celciusToFahrenheit],
-    tmin_min: ['Lowest min temperature (F)', Formatters.celciusToFahrenheit],
-    tmin_avg: ['Avg min temperature (F)', Formatters.celciusToFahrenheit],
-    prcp_avg: ['Avg precipitation (in/day)', Formatters.millimetersToInches],
-    swe_min: [ClimatePage.sweColumnLabel, Formatters.kgPerSquareMeterToInches],
-    swe_avg: [
-      'Avg Snow water equivalent (in)',
-      Formatters.kgPerSquareMeterToInches,
-    ],
-    swe_max: [
-      'Max Snow water equivalent (in)',
-      Formatters.kgPerSquareMeterToInches,
-    ],
-  };
 
   columns() {
     if (!this.state.queries) {
       return [];
     }
 
-    return Object.entries(ClimatePage.columnTypes).map(([key, [name]]) => ({
+    return Object.entries(Formatters.typeMappings).map(([key, [name]]) => ({
       name,
       key,
     }));
@@ -84,7 +55,7 @@ class ClimatePage extends React.Component {
           return ''; // FIXME: display a message.
         }
 
-        const columnType = ClimatePage.columnTypes[column.key];
+        const columnType = Formatters.typeMappings[column.key];
         if (columnType) {
           return columnType[1](value);
         }

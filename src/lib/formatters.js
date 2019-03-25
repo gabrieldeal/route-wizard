@@ -35,3 +35,20 @@ export function kgPerSquareMeterToInches(swe) {
 export function date(date) {
   return date.format('LL');
 }
+
+export const typeMappings = {
+  // The order of the column types determines the order they are displayed in.
+  lon: ['Longitude', floatToFixed],
+  lat: ['Latitude', floatToFixed],
+  elevation: ['Elevation (ft)', metersToFeet],
+  date: ['Date', date],
+  dayl: ['Daylight (hours)', secondsToHours],
+  tmax_max: ['Highest max temperature (F)', celciusToFahrenheit],
+  tmax_avg: ['Avg max temperature (F)', celciusToFahrenheit],
+  tmin_min: ['Lowest min temperature (F)', celciusToFahrenheit],
+  tmin_avg: ['Avg min temperature (F)', celciusToFahrenheit],
+  prcp_avg: ['Avg precipitation (in/day)', millimetersToInches],
+  swe_min: ['Min Snow water equivalent (in)', kgPerSquareMeterToInches],
+  swe_avg: ['Avg Snow water equivalent (in)', kgPerSquareMeterToInches],
+  swe_max: ['Max Snow water equivalent (in)', kgPerSquareMeterToInches],
+};

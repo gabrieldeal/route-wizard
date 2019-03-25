@@ -1,15 +1,18 @@
 import 'leaflet/dist/leaflet.css';
+import * as Formatters from '../lib/formatters';
 import compose from 'recompose/compose';
 import dayjs from '../lib/climate/dayjs';
 import DayjsUtils from '@date-io/dayjs';
+import daymetClient from '../lib/climate/daymetClient';
 import debounce from 'lodash/debounce';
 import Layout from '../components/layout';
 import Leaflet from 'leaflet';
+import Marker from '../components/leaflet/Marker';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import withCss from '../components/withCss';
-import { Map, TileLayer } from 'react-leaflet';
+import { Map, Popup, TileLayer } from 'react-leaflet';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -42,6 +45,7 @@ class MapPage extends React.Component {
       height: 0,
       width: 0,
     },
+    climateData: null,
   };
   static propTypes = {
     classes: PropTypes.object.isRequired,
@@ -79,6 +83,24 @@ class MapPage extends React.Component {
   handleDatePickerChange = (event) =>
     this.setState({ date: dayjs.utc(event.target.value) });
 
+  handleMapClick = (event) => {
+    if (!this.state.date) {
+      return; // FIXME: display a message
+    }
+
+    const lat = event.latlng.lat;
+    const lon = event.latlng.lng; // FIXME: rename 'lon' to 'lng' in all my code?
+    const query = {
+      date: this.state.date,
+      lat, // FIXME: add this to the daymetClient response.
+      lon,
+    };
+
+    daymetClient({ queries: [query] }).then((data) =>
+      this.setState({ climateData: { ...data[0], lat, lng: lon } })
+    );
+  };
+
   // FIXME: Upgrade material-ui so I can use https://material-ui-pickers.dev/api/datepicker
   renderDatePicker() {
     return (
@@ -104,6 +126,41 @@ class MapPage extends React.Component {
     );
   }
 
+  renderClimatePopup() {
+    if (!this.state.climateData) {
+      return null;
+    }
+
+    const { date, lat, lng, ...data } = this.state.climateData;
+    const position = [lat, lng];
+    let content = Object.entries(data).map(([key, value], index) => {
+      const typeMapping = Formatters.typeMappings[key];
+      const [name, formatter] = typeMapping;
+
+      return (
+        <li key={index}>
+          {name}: {formatter(value)}
+        </li>
+      );
+    });
+    if (content.length === 0) {
+      content = 'No data available';
+    }
+
+    const dateFormatter = Formatters.typeMappings['date'][1];
+
+    return (
+      <Marker key={`${lat} ${lng}`} position={position}>
+        <Popup>
+          Climate summary for {dateFormatter(date)}:<ul>{content}</ul>
+          <p>
+            Data source: <a href="https://daymet.ornl.gov/">Daymet</a>
+          </p>
+        </Popup>
+      </Marker>
+    );
+  }
+
   renderMap() {
     if (this.state.dimensions.height <= 0 || this.state.dimensions.width <= 0) {
       return <div />;
@@ -119,6 +176,7 @@ class MapPage extends React.Component {
       <div className={this.props.classes.content} style={this.state.dimensions}>
         <Map
           center={mapConfig.center}
+          onClick={this.handleMapClick}
           zoom={mapConfig.zoom}
           style={this.state.dimensions}
         >
@@ -126,6 +184,7 @@ class MapPage extends React.Component {
             url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
             attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
           />
+          {this.renderClimatePopup()}
         </Map>
       </div>
     );
