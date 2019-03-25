@@ -63,6 +63,11 @@ class Header extends React.Component {
     navigate('/climate');
   };
 
+  handleGoToMapClick = () => {
+    this.setState({ anchorEl: null });
+    navigate('/map');
+  };
+
   render() {
     const { classes, siteTitle } = this.props;
 
@@ -106,6 +111,9 @@ class Header extends React.Component {
               </MenuItem>
               <MenuItem onClick={this.handleGoToClimatePageClick}>
                 Add climate data to spreadsheet
+              </MenuItem>
+              <MenuItem onClick={this.handleGoToMapClick}>
+                Climate data map
               </MenuItem>
             </Menu>
           </Toolbar>
