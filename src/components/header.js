@@ -21,14 +21,6 @@ const styles = {
     backgroundColor: '#DFF2FD',
     color: 'black',
   },
-  menuAnchorOrigin: {
-    vertical: 'top',
-    horizontal: 'right',
-  },
-  menuTransformOrigin: {
-    vertical: 'top',
-    horizontal: 'right',
-  },
   siteIcon: {
     width: 30,
     height: 30,
@@ -36,6 +28,15 @@ const styles = {
     marginBottom: 'auto',
     marginRight: '1em',
   },
+};
+
+const menuAnchorOrigin = {
+  vertical: 'top',
+  horizontal: 'right',
+};
+const menuTransformOrigin = {
+  vertical: 'top',
+  horizontal: 'right',
 };
 
 class Header extends React.Component {
@@ -94,11 +95,11 @@ class Header extends React.Component {
 
             <Menu
               anchorEl={this.state.anchorEl}
-              anchorOrigin={classes.menuAnchorOrigin}
+              anchorOrigin={menuAnchorOrigin}
               id="menu-appbar"
               onClose={this.handleClose}
               open={Boolean(this.state.anchorEl)}
-              transformOrigin={classes.menuTransformOrigin}
+              transformOrigin={menuTransformOrigin}
             >
               <MenuItem onClick={this.handleGoToRoutePageClick}>
                 Create databook from route
