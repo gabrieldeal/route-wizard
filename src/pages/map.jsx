@@ -1,5 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import * as Formatters from '../lib/formatters';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import compose from 'recompose/compose';
 import dayjs from '../lib/climate/dayjs';
 import DayjsUtils from '@date-io/dayjs';
@@ -30,6 +31,11 @@ const styles = (theme) => ({
   },
   datePickerForm: {
     marginBottom: 0,
+  },
+  progressSpinner: {
+    marginBottom: 'auto',
+    marginRight: '1em',
+    marginTop: 'auto',
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -98,14 +104,16 @@ class MapPage extends React.Component {
 
     const lat = event.latlng.lat;
     const lon = event.latlng.lng; // FIXME: rename 'lon' to 'lng' in all my code?
+    this.setState({ climateData: null, position: { lat, lng: lon } });
+
     const query = {
       date: this.state.date,
-      lat, // FIXME: add this to the daymetClient response.
+      lat,
       lon,
     };
 
     daymetClient({ queries: [query] }).then((data) =>
-      this.setState({ climateData: { ...data[0], lat, lng: lon } })
+      this.setState({ climateData: { ...data[0] } })
     );
   };
 
@@ -116,7 +124,8 @@ class MapPage extends React.Component {
         id="datePickerContainer"
         className={this.props.classes.datePickerContainer}
       >
-        <div>Month & day of climate data (year is required, but ignored):</div>
+        <h1>North American Climate Data</h1>
+        <div>Month & day to get climate data for:</div>
         <form className={this.props.classes.datePickerForm} noValidate>
           <div>
             <TextField
@@ -135,13 +144,18 @@ class MapPage extends React.Component {
     );
   }
 
-  renderClimatePopup() {
+  renderClimatePopupText() {
     if (!this.state.climateData) {
-      return null;
+      return (
+        <CircularProgress
+          className={this.props.classes.progressSpinner}
+          size={25}
+          thickness={7}
+        />
+      );
     }
 
-    const { date, lat, lng, ...data } = this.state.climateData;
-    const position = [lat, lng];
+    const { date, ...data } = this.state.climateData;
     let content = Object.entries(data).map(([key, value], index) => {
       const typeMapping = Formatters.typeMappings[key];
       const [name, formatter] = typeMapping;
@@ -153,19 +167,32 @@ class MapPage extends React.Component {
       );
     });
     if (content.length === 0) {
-      content = 'No data available';
+      return 'No data available';
     }
 
     const dateFormatter = Formatters.typeMappings['date'][1];
 
     return (
+      <div>
+        Climate summary for {dateFormatter(date)}:<ul>{content}</ul>
+        <p>
+          Data source: <a href="https://daymet.ornl.gov/">Daymet</a>
+        </p>
+      </div>
+    );
+  }
+
+  renderClimatePopup() {
+    if (!this.state.position) {
+      return null;
+    }
+
+    const { lat, lng } = this.state.position;
+    const position = [lat, lng];
+
+    return (
       <Marker key={`${lat} ${lng}`} position={position}>
-        <Popup>
-          Climate summary for {dateFormatter(date)}:<ul>{content}</ul>
-          <p>
-            Data source: <a href="https://daymet.ornl.gov/">Daymet</a>
-          </p>
-        </Popup>
+        <Popup>{this.renderClimatePopupText()}</Popup>
       </Marker>
     );
   }
