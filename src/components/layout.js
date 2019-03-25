@@ -6,7 +6,7 @@ import { StaticQuery, graphql } from 'gatsby';
 import Header from './header';
 import './layout.css';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, fullScreen }) => {
   return (
     <StaticQuery
       query={graphql`
@@ -35,11 +35,11 @@ const Layout = ({ children }) => {
               },
             ]}
           />
-          <Header siteTitle={data.site.siteMetadata.title} />
+          <Header id="header" siteTitle={data.site.siteMetadata.title} />
           <div
             style={{
               margin: '0 auto',
-              padding: '1rem 1.0875rem 1.45rem',
+              padding: fullScreen ? 0 : '1rem 1.0875rem 1.45rem',
             }}
           >
             {children}
@@ -52,6 +52,7 @@ const Layout = ({ children }) => {
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
+  fullScreen: PropTypes.bool,
   whatIsThis: PropTypes.element,
 };
 

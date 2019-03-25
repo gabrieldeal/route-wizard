@@ -67,7 +67,7 @@ class Header extends React.Component {
     const { classes, siteTitle } = this.props;
 
     return (
-      <div className={classes.root}>
+      <div id="navbar" className={classes.root}>
         <AppBar position="static" className={classes.colorPrimary}>
           <Toolbar>
             <img
