@@ -171,6 +171,13 @@ class MapPage extends React.Component {
       center: [47.5, -122.0],
       zoom: 8,
     };
+    const attribution =
+      'Map data: &copy; ' +
+      '<a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors,' +
+      ' <a href="http://viewfinderpanoramas.org">SRTM</a>' +
+      ' | Map style: &copy; ' +
+      '<a href="https://opentopomap.org">OpenTopoMap</a>' +
+      ' (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)';
 
     return (
       <div className={this.props.classes.content} style={this.state.dimensions}>
@@ -181,8 +188,8 @@ class MapPage extends React.Component {
           style={this.state.dimensions}
         >
           <TileLayer
-            url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
+            url="https://a.tile.opentopomap.org/{z}/{x}/{y}.png"
+            attribution={attribution}
           />
           {this.renderClimatePopup()}
         </Map>
