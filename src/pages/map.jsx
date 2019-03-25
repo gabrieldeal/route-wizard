@@ -39,14 +39,22 @@ const styles = (theme) => ({
 });
 
 class MapPage extends React.Component {
-  state = {
-    date: null,
-    dimensions: {
-      height: 0,
-      width: 0,
-    },
-    climateData: null,
-  };
+  constructor() {
+    super();
+
+    const today = dayjs().format('YYYY-MM-DD');
+
+    this.state = {
+      defaultDate: today,
+      date: today,
+      dimensions: {
+        height: 0,
+        width: 0,
+      },
+      climateData: null,
+    };
+  }
+
   static propTypes = {
     classes: PropTypes.object.isRequired,
   };
@@ -112,6 +120,7 @@ class MapPage extends React.Component {
         <form className={this.props.classes.datePickerForm} noValidate>
           <div>
             <TextField
+              defaultValue={this.state.defaultDate}
               id="date"
               type="date"
               onChange={this.handleDatePickerChange}
