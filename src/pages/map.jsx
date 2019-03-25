@@ -1,21 +1,43 @@
 import 'leaflet/dist/leaflet.css';
 import compose from 'recompose/compose';
+import dayjs from '../lib/climate/dayjs';
+import DayjsUtils from '@date-io/dayjs';
 import debounce from 'lodash/debounce';
 import Layout from '../components/layout';
 import Leaflet from 'leaflet';
 import PropTypes from 'prop-types';
 import React from 'react';
+import TextField from '@material-ui/core/TextField';
 import withCss from '../components/withCss';
 import { Map, TileLayer } from 'react-leaflet';
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import { withStyles } from '@material-ui/core/styles';
 
 Leaflet.Icon.Default.imagePath =
   '//cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/';
 
-const styles = {};
+const styles = (theme) => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  datePickerContainer: {
+    margin: 0,
+    padding: '1em',
+  },
+  datePickerForm: {
+    marginBottom: 0,
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+});
 
 class MapPage extends React.Component {
   state = {
+    date: null,
     dimensions: {
       height: 0,
       width: 0,
@@ -31,9 +53,11 @@ class MapPage extends React.Component {
       window.innerHeight || 0
     );
     const navbarHeight = document.getElementById('navbar').clientHeight;
+    const datePickerHeight = document.getElementById('datePickerContainer')
+      .clientHeight;
     const dimensions = {
       width: '100%',
-      height: viewportHeight - navbarHeight,
+      height: viewportHeight - navbarHeight - datePickerHeight,
     };
 
     this.setState({ dimensions });
@@ -51,6 +75,34 @@ class MapPage extends React.Component {
   }
 
   setOuterContainerDiv = (domElement) => (this.outerContainer = domElement);
+
+  handleDatePickerChange = (event) =>
+    this.setState({ date: dayjs.utc(event.target.value) });
+
+  // FIXME: Upgrade material-ui so I can use https://material-ui-pickers.dev/api/datepicker
+  renderDatePicker() {
+    return (
+      <div
+        id="datePickerContainer"
+        className={this.props.classes.datePickerContainer}
+      >
+        <div>Month & day of climate data (year is required, but ignored):</div>
+        <form className={this.props.classes.datePickerForm} noValidate>
+          <div>
+            <TextField
+              id="date"
+              type="date"
+              onChange={this.handleDatePickerChange}
+              className={this.props.classes.textField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </div>
+        </form>
+      </div>
+    );
+  }
 
   renderMap() {
     if (this.state.dimensions.height <= 0 || this.state.dimensions.width <= 0) {
@@ -80,7 +132,14 @@ class MapPage extends React.Component {
   }
 
   render() {
-    return <Layout fullScreen>{this.renderMap()}</Layout>;
+    return (
+      <MuiPickersUtilsProvider utils={DayjsUtils}>
+        <Layout fullScreen>
+          {this.renderDatePicker()}
+          {this.renderMap()}
+        </Layout>
+      </MuiPickersUtilsProvider>
+    );
   }
 }
 
