@@ -2,6 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import * as Formatters from '../lib/formatters';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import compose from 'recompose/compose';
+import convertToGeoJson from '../lib/convertToGeoJson';
 import dayjs from '../lib/climate/dayjs';
 import DayjsUtils from '@date-io/dayjs';
 import daymetClient from '../lib/climate/daymetClient';
@@ -11,10 +12,12 @@ import Leaflet from 'leaflet';
 import Marker from '../components/leaflet/Marker';
 import PropTypes from 'prop-types';
 import React from 'react';
+import ReadFileButton from '../components/readFileButton';
 import TextField from '@material-ui/core/TextField';
 import withCss from '../components/withCss';
-import { Map, Popup, TileLayer } from 'react-leaflet';
+import { GeoJSON, Map, Popup, TileLayer } from 'react-leaflet';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import { preadFile } from '../lib/readFile';
 import { withStyles } from '@material-ui/core/styles';
 
 if (typeof window !== 'undefined') {
@@ -40,6 +43,10 @@ const styles = (theme) => ({
     marginRight: '1em',
     marginTop: 'auto',
   },
+  readFileButtonContainer: {
+    display: 'inline-block',
+    verticalAlign: 'bottom',
+  },
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
@@ -61,6 +68,7 @@ class MapPage extends React.Component {
         width: 0,
       },
       climateData: null,
+      isLoading: false,
     };
   }
 
@@ -97,6 +105,18 @@ class MapPage extends React.Component {
 
   setOuterContainerDiv = (domElement) => (this.outerContainer = domElement);
 
+  // FIXME: Share this?
+  msg(data, progressMessage) {
+    this.setState({ progressMessage: progressMessage + '...' });
+
+    return new Promise((resolve) => {
+      // Pause a bit after setting the progress message to give us a chance to render.
+      const timeoutCallback = () => resolve(data);
+      const timeoutMs = 500;
+      setTimeout(timeoutCallback, timeoutMs);
+    });
+  }
+
   handleDatePickerChange = (event) =>
     this.setState({ date: dayjs.utc(event.target.value) });
 
@@ -118,6 +138,26 @@ class MapPage extends React.Component {
     daymetClient({ queries: [query] }).then((data) =>
       this.setState({ climateData: { ...data[0] } })
     );
+  };
+
+  handleError(errorMessage) {
+    this.setState({ errorMessage, isLoading: false });
+  }
+
+  handleSelectedFile = (event) => {
+    const file = event.target.files[0];
+    const fileName = file.name;
+
+    this.setState({ geoJson: null, isLoading: true });
+
+    this.msg(file, 'Reading file')
+      .then((file) => preadFile({ file }))
+      .then((fileContentsStr) => this.msg(fileContentsStr, 'Parsing file'))
+      .then((fileContentsStr) => {
+        const geoJson = convertToGeoJson({ fileContentsStr, fileName });
+        this.setState({ geoJson, isLoading: false, progressMessage: null });
+      })
+      .catch((error) => this.handleError(error));
   };
 
   // FIXME: Upgrade material-ui so I can use https://material-ui-pickers.dev/api/datepicker
@@ -143,6 +183,25 @@ class MapPage extends React.Component {
             }}
           />
         </form>
+        {this.renderReadRouteFileButton()}
+      </div>
+    );
+  }
+
+  renderReadRouteFileButton() {
+    return (
+      <div className={this.props.classes.readFileButtonContainer}>
+        <ReadFileButton
+          className={this.props.classes.readFileButton}
+          disabled={this.state.isLoading}
+          errorMessage={this.state.errorMessage}
+          isLoading={this.state.isLoading}
+          notificationMessage={this.state.notificationMessage}
+          onChange={this.handleSelectedFile}
+          progressMessage={this.state.progressMessage}
+        >
+          Read route file
+        </ReadFileButton>
       </div>
     );
   }
@@ -231,6 +290,7 @@ class MapPage extends React.Component {
             attribution={attribution}
           />
           {this.renderClimatePopup()}
+          {this.state.geoJson && <GeoJSON data={this.state.geoJson} />}
         </Map>
       </div>
     );
