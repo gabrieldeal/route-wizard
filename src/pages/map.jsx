@@ -217,7 +217,7 @@ class MapPage extends React.Component {
       );
     }
 
-    const { date, ...data } = this.state.climateData;
+    const { date, elevation, ...data } = this.state.climateData;
     let content = Object.entries(data).map(([key, value], index) => {
       const typeMapping = Formatters.typeMappings[key];
       const [name, formatter] = typeMapping;
@@ -232,11 +232,12 @@ class MapPage extends React.Component {
       return 'No data available';
     }
 
-    const dateFormatter = Formatters.typeMappings['date'][1];
+    const elevationFormatter = Formatters.typeMappings['elevation'][1];
 
     return (
       <div>
-        Climate summary for {dateFormatter(date)}:<ul>{content}</ul>
+        Climate summary for {date.format('MMM D')} at{' '}
+        {elevationFormatter(elevation)} feet elevation:<ul>{content}</ul>
         <p>
           Data source: <a href="https://daymet.ornl.gov/">Daymet</a>
         </p>
