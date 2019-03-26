@@ -3,7 +3,7 @@ export function floatToFixed(value) {
 }
 
 export function secondsToHours(seconds) {
-  return (seconds / 60).toFixed(1);
+  return (seconds / 60 / 60).toFixed(1);
 }
 
 const feetPerMeter = 3.28084;
