@@ -167,7 +167,7 @@ class MapPage extends React.Component {
         id="datePickerContainer"
         className={this.props.classes.datePickerContainer}
       >
-        <h1>North American Climate Data</h1>
+        <h1>North America Climate Data</h1>
         Click the map to get historic climate statistics for that location on
         the 20-day time period centered on the selected day & month (the year is
         not used).
