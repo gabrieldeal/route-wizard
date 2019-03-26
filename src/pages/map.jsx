@@ -17,8 +17,10 @@ import { Map, Popup, TileLayer } from 'react-leaflet';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import { withStyles } from '@material-ui/core/styles';
 
-Leaflet.Icon.Default.imagePath =
-  '//cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/';
+if (typeof window !== 'undefined') {
+  Leaflet.Icon.Default.imagePath =
+    '//cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/';
+}
 
 const styles = (theme) => ({
   container: {

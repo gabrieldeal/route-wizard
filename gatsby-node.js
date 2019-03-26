@@ -10,7 +10,7 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
       module: {
         rules: [
           {
-            test: /togpx/,
+            test: /togpx|leaflet/,
             use: loaders.null(),
           },
         ],
