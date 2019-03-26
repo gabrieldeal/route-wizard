@@ -78,7 +78,7 @@ class Header extends React.Component {
             <img
               alt="A yellow leaf"
               className={classes.siteIcon}
-              src="public/ms-icon-144x144.png"
+              src="/route-wizard/public/ms-icon-144x144.png"
             />
 
             <Typography
