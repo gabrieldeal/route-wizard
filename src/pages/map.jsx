@@ -117,8 +117,20 @@ class MapPage extends React.Component {
     });
   }
 
-  handleDatePickerChange = (event) =>
-    this.setState({ date: dayjs.utc(event.target.value) });
+  updateClimateData(query) {
+    daymetClient({ queries: [query] }).then((data) =>
+      this.setState({ climateData: { ...data[0] } })
+    );
+  }
+
+  handleDatePickerChange = (event) => {
+    const date = event.target.value ? event.target.value : null;
+    this.setState({ date, climateData: null });
+
+    if (date && this.state.position) {
+      this.updateClimateData({ date, ...this.state.position });
+    }
+  };
 
   handleMapClick = (event) => {
     if (!this.state.date) {
@@ -127,17 +139,10 @@ class MapPage extends React.Component {
 
     const lat = event.latlng.lat;
     const lon = event.latlng.lng; // FIXME: rename 'lon' to 'lng' in all my code?
-    this.setState({ climateData: null, position: { lat, lng: lon } });
+    const position = { lat, lon };
+    this.setState({ climateData: null, position });
 
-    const query = {
-      date: this.state.date,
-      lat,
-      lon,
-    };
-
-    daymetClient({ queries: [query] }).then((data) =>
-      this.setState({ climateData: { ...data[0] } })
-    );
+    this.updateClimateData({ date: this.state.date, ...position });
   };
 
   handleError(errorMessage) {
@@ -246,15 +251,15 @@ class MapPage extends React.Component {
   }
 
   renderClimatePopup() {
-    if (!this.state.position) {
+    if (!this.state.position || !this.state.date) {
       return null;
     }
 
-    const { lat, lng } = this.state.position;
-    const position = [lat, lng];
+    const { lat, lon } = this.state.position;
+    const position = [lat, lon];
 
     return (
-      <Marker key={`${lat} ${lng}`} position={position}>
+      <Marker key={`${lat} ${lon}`} position={position}>
         <Popup>{this.renderClimatePopupText()}</Popup>
       </Marker>
     );
