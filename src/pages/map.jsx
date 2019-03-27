@@ -244,10 +244,11 @@ class MapPage extends React.Component {
 
     return (
       <div>
-        Climate summary for {date.format('MMM D')} at{' '}
-        {elevationFormatter(elevation)} feet elevation:<ul>{content}</ul>
         <p>
+          Climate summary for {date.format('MMM D')} at{' '}
+          {elevationFormatter(elevation)} feet elevation:
         </p>
+        <ul>{content}</ul>
         <div>
           Data source: Thornton; P.E.; M.M. Thornton; B.W. Mayer; Y. Wei; R.
           Devarakonda; R.S. Vose; and R.B. Cook. 2016. Daymet: Daily Surface
