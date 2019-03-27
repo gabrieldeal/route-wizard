@@ -54,6 +54,8 @@ const styles = (theme) => ({
   },
 });
 
+const DEBOUNCE_MS = 500;
+
 class MapPage extends React.Component {
   constructor() {
     super();
@@ -91,7 +93,7 @@ class MapPage extends React.Component {
 
     this.setState({ dimensions });
   };
-  updateDimensions = debounce(this.updateDimensionsImmediately, 0.3);
+  updateDimensions = debounce(this.updateDimensionsImmediately, DEBOUNCE_MS);
 
   componentDidMount() {
     this.updateDimensions();
