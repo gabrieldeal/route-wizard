@@ -119,11 +119,12 @@ class MapPage extends React.Component {
     });
   }
 
-  updateClimateData(query) {
+  updateClimateDataImmediately = (query) => {
     daymetClient({ queries: [query] }).then((data) =>
       this.setState({ climateData: { ...data[0] } })
     );
-  }
+  };
+  updateClimateData = debounce(this.updateClimateDataImmediately, DEBOUNCE_MS);
 
   handleDatePickerChange = (event) => {
     const date = event.target.value ? event.target.value : null;
