@@ -24,6 +24,13 @@ function roundToMiles(meters) {
   return roundTo(meters * 0.000621371, 1);
 }
 
+function latlon(coordinate) {
+  return {
+    lat: coordinate.y,
+    lon: coordinate.x,
+  };
+}
+
 function createRows(realSegments) {
   if (realSegments.length == 0) {
     return [];
@@ -41,10 +48,12 @@ function createRows(realSegments) {
   const rows = segments.slice(0, segments.length - 1).map((segment, index) => {
     const nextSegment = segments[index + 1];
     const thisDistance = cumulativeDistance;
+    const coordinate = segment.line.getCoordinate(0);
 
     cumulativeDistance += segment.distance() || 0;
 
     return {
+      ...latlon(coordinate),
       cumulativeDistance: roundToMiles(thisDistance),
       description: segment.description(),
       distance: roundToMiles(segment.distance()),
@@ -58,7 +67,10 @@ function createRows(realSegments) {
     };
   });
 
+  const lastCoordinates = lastSegment.line.getCoordinates();
+  const lastCoordinate = lastCoordinates[lastCoordinates.length - 1];
   rows.push({
+    ...latlon(lastCoordinate),
     cumulativeDistance: roundToMiles(cumulativeDistance),
     description: segments[segments.length - 1].description(),
     from: segments[segments.length - 1].title,
@@ -85,6 +97,8 @@ const unfilteredColumns = [
   { key: 'users', name: 'Users' },
   { key: 'surface', name: 'Surface' },
   { key: 'locomotion', name: 'Locomotion' },
+  { key: 'lat', name: 'Latitude' },
+  { key: 'lon', name: 'Longitude' },
 ];
 
 function filterColumns(filteredRows) {
