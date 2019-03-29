@@ -234,9 +234,9 @@ class MapPage extends React.Component {
       >
         <h3>Instructions</h3>
         <p>
-          Click the map to get historic climate statistics for that location.
-          The statistics will be for the 20-day time period centered on the
-          selected day & month.
+          Choose a time of year below. Then click the map to get historic
+          climate statistics for that location. The statistics will be for the
+          20-day time period centered on the selected day & month.
         </p>
         <h3>Settings</h3>
         <div className={this.props.classes.datePickerForm}>
