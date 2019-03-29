@@ -346,8 +346,8 @@ class MapPage extends React.Component {
 
     const mapConfig = {
       // Use https://www.npmjs.com/package/react-geolocated to get the location?
-      center: [47.5, -122.0],
-      zoom: 8,
+      center: [47.5, -100.0],
+      zoom: 4,
     };
     const attribution =
       'Map data: &copy; ' +
