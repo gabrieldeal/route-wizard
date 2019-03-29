@@ -31,6 +31,17 @@ const styles = () => ({
 });
 
 function Status(props) {
+  if (
+    !(
+      props.isLoading ||
+      props.notificationMessage ||
+      props.progressMessage ||
+      props.errorMessage
+    )
+  ) {
+    return null;
+  }
+
   return (
     <div className={props.classes.messagesContainer}>
       {props.isLoading && (
