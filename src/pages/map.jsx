@@ -17,9 +17,9 @@ import Marker from '../components/leaflet/Marker';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReadFileButton from '../components/readFileButton';
-import TextField from '@material-ui/core/TextField';
 import withCss from '../components/withCss';
 import { GeoJSON, Map, Popup, TileLayer } from 'react-leaflet';
+import { InlineDatePicker } from 'material-ui-pickers';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import { preadFile } from '../lib/readFile';
 import { withStyles } from '@material-ui/core/styles';
@@ -152,8 +152,7 @@ class MapPage extends React.Component {
   };
   updateClimateData = debounce(this.updateClimateDataImmediately, DEBOUNCE_MS);
 
-  handleDatePickerChange = (event) => {
-    const date = event.target.value ? event.target.value : null;
+  handleDatePickerChange = (date) => {
     this.setState({ date, climateData: null });
 
     if (date && this.state.position) {
@@ -236,22 +235,23 @@ class MapPage extends React.Component {
         <h3>Instructions</h3>
         <p>
           Click the map to get historic climate statistics for that location.
-          The statistics will be for the 30-day time period centered on the
-          selected day & month (the year is not used).
+          The statistics will be for the 20-day time period centered on the
+          selected day & month.
         </p>
         <h3>Settings</h3>
-        <form className={this.props.classes.datePickerForm} noValidate>
-          <TextField
-            defaultValue={this.state.defaultDate}
-            id="date"
-            type="date"
+        <div className={this.props.classes.datePickerForm}>
+          <InlineDatePicker
+            keyboard
+            clearable
+            color="primary"
+            variant="outlined"
+            label="Time of year"
+            value={this.state.date}
             onChange={this.handleDatePickerChange}
-            className={this.props.classes.textField}
-            InputLabelProps={{
-              shrink: true,
-            }}
+            format="MM-DD"
+            mask={[/[01]/, /\d/, '/', /[0123]/, /\d/]}
           />
-        </form>
+        </div>
         {this.renderReadRouteFileButton()}
       </div>
     );
@@ -268,8 +268,9 @@ class MapPage extends React.Component {
           notificationMessage={this.state.notificationMessage}
           onChange={this.handleSelectedFile}
           progressMessage={this.state.progressMessage}
+          variant="outlined"
         >
-          Read route file
+          Display route file
         </ReadFileButton>
       </div>
     );

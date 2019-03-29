@@ -20,6 +20,10 @@ class ReadFileButton extends React.Component {
     classes: PropTypes.object.isRequired,
     disabled: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
+    variant: PropTypes.string,
+  };
+  static defaultProps = {
+    variant: 'contained',
   };
 
   render() {
@@ -31,7 +35,7 @@ class ReadFileButton extends React.Component {
     };
 
     return (
-      <div>
+      <React.Fragment>
         <input
           className={classes.input}
           id="route-file"
@@ -42,7 +46,7 @@ class ReadFileButton extends React.Component {
           <div className={classes.wrapper}>
             <Button
               color="primary"
-              variant="contained"
+              variant={this.props.variant}
               component="span"
               className={classes.button}
               disabled={disabled}
@@ -51,7 +55,7 @@ class ReadFileButton extends React.Component {
             </Button>
           </div>
         </label>
-      </div>
+      </React.Fragment>
     );
   }
 }

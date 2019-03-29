@@ -18,7 +18,13 @@ function ReadFileButtonWithStatus(props) {
     'notificationMessage',
     'progressMessage',
   ];
-  const buttonProps = ['isLoading', 'children', 'disabled', 'onChange'];
+  const buttonProps = [
+    'isLoading',
+    'children',
+    'disabled',
+    'onChange',
+    'variant',
+  ];
 
   return (
     <div className={props.classes.readFileContainer}>
