@@ -1,5 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import * as Formatters from '../lib/formatters';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import compose from 'recompose/compose';
 import convertToGeoJson from '../lib/convertToGeoJson';
@@ -7,6 +8,9 @@ import dayjs from '../lib/climate/dayjs';
 import DayjsUtils from '@date-io/dayjs';
 import daymetClient from '../lib/climate/daymetClient';
 import debounce from 'lodash/debounce';
+import Drawer from '@material-ui/core/Drawer';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import IconButton from '@material-ui/core/IconButton';
 import Layout from '../components/layout';
 import Leaflet from 'leaflet';
 import Marker from '../components/leaflet/Marker';
@@ -26,17 +30,34 @@ if (typeof window !== 'undefined') {
 }
 
 const styles = (theme) => ({
+  settingsButton: {
+    '&:hover': {
+      backgroundColor: '#f4f4f4',
+    },
+    border: '2px solid rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'white',
+    left: 2,
+    top: 150,
+    position: 'absolute',
+    transform: 'rotate(90deg)',
+    zIndex: 500,
+  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
   },
   datePickerContainer: {
+    width: 250,
     margin: 0,
     padding: '1em',
+    zIndex: 501,
   },
   datePickerForm: {
     display: 'inline',
     marginBottom: 0,
+  },
+  drawerHeader: {
+    float: 'right',
   },
   progressSpinner: {
     marginBottom: 'auto',
@@ -69,6 +90,7 @@ class MapPage extends React.Component {
         height: 0,
         width: 0,
       },
+      drawerOpen: true,
       climateData: null,
       isLoading: false,
     };
@@ -78,17 +100,21 @@ class MapPage extends React.Component {
     classes: PropTypes.object.isRequired,
   };
 
+  toggleDrawer = (drawerOpen) => () => {
+    this.setState({
+      drawerOpen,
+    });
+  };
+
   updateDimensionsImmediately = () => {
     var viewportHeight = Math.max(
       document.documentElement.clientHeight,
       window.innerHeight || 0
     );
     const navbarHeight = document.getElementById('navbar').clientHeight;
-    const datePickerHeight = document.getElementById('datePickerContainer')
-      .clientHeight;
     const dimensions = {
       width: '100%',
-      height: viewportHeight - navbarHeight - datePickerHeight,
+      height: viewportHeight - navbarHeight,
     };
 
     this.setState({ dimensions });
@@ -168,17 +194,48 @@ class MapPage extends React.Component {
       .catch((error) => this.handleError(error));
   };
 
-  // FIXME: Upgrade material-ui so I can use https://material-ui-pickers.dev/api/datepicker
+  renderOpenDrawerButton() {
+    return (
+      <IconButton
+        size="large"
+        className={this.props.classes.settingsButton}
+        color="primary"
+        onClick={this.toggleDrawer(true)}
+        variant="outlined"
+      >
+        <ExpandLess />
+      </IconButton>
+    );
+  }
+
+  renderDrawer() {
+    return (
+      <Drawer open={this.state.drawerOpen} onClose={this.toggleDrawer(false)}>
+        <div tabIndex={0}>
+          <div className={this.props.classes.drawerHeader}>
+            <IconButton onClick={this.toggleDrawer(false)}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          {this.renderDatePicker()}
+        </div>
+      </Drawer>
+    );
+  }
+
   renderDatePicker() {
     return (
       <div
         id="datePickerContainer"
         className={this.props.classes.datePickerContainer}
       >
-        <h1>North America Climate Data</h1>
-        Click the map to get historic climate statistics for that location on
-        the 20-day time period centered on the selected day & month (the year is
-        not used).
+        <h3>Instructions</h3>
+        <p>
+          Click the map to get historic climate statistics for that location.
+          The statistics will be for the 30-day time period centered on the
+          selected day & month (the year is not used).
+        </p>
+        <h3>Settings</h3>
         <form className={this.props.classes.datePickerForm} noValidate>
           <TextField
             defaultValue={this.state.defaultDate}
@@ -318,7 +375,8 @@ class MapPage extends React.Component {
     return (
       <MuiPickersUtilsProvider utils={DayjsUtils}>
         <Layout fullScreen>
-          {this.renderDatePicker()}
+          {this.renderOpenDrawerButton()}
+          {this.renderDrawer()}
           {this.renderMap()}
         </Layout>
       </MuiPickersUtilsProvider>
