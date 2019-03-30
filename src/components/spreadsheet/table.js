@@ -14,6 +14,7 @@ const styles = (theme) => ({
     marginTop: theme.spacing.unit * 3,
   },
   tableContainer: {
+    overflowX: 'auto',
     marginTop: theme.spacing.unit * 3,
     paddingLeft: theme.spacing.unit * 1,
     paddingRight: theme.spacing.unit * 1,
