@@ -289,16 +289,20 @@ class MapPage extends React.Component {
     }
 
     const { date, elevation, ...data } = this.state.climateData;
-    let content = Object.entries(data).map(([key, value], index) => {
-      const typeMapping = Formatters.typeMappings[key];
-      const [name, formatter] = typeMapping;
+    let content = Object.entries(Formatters.typeMappings).map(
+      ([key, [name, formatter]], index) => {
+        const value = data[key];
+        if (typeof value === 'undefined') {
+          return null;
+        }
 
-      return (
-        <li key={index}>
-          {name}: {formatter(value)}
-        </li>
-      );
-    });
+        return (
+          <li key={index}>
+            {name}: {formatter(value)}
+          </li>
+        );
+      }
+    );
     if (content.length === 0) {
       return 'No data available';
     }
