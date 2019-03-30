@@ -86,14 +86,17 @@ export function parse({ data, type }) {
     findColumnToPropertyMapping({ actualColumns, ...dateConfig }),
   ];
 
-  const queries = rows.map((row) =>
-    fromPairs(
+  const queries = rows.map((row) => {
+    const query = fromPairs(
       columnToPropertyMappings.map(([column, propertyName, converter]) => [
         propertyName,
         converter(row[column]),
       ])
-    )
-  );
+    );
+    query.row = row;
+
+    return query;
+  });
 
   return { queries, workBook };
 }

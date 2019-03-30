@@ -32,10 +32,18 @@ class ClimatePage extends React.Component {
       return [];
     }
 
-    return Object.entries(Formatters.typeMappings).map(([key, [name]]) => ({
-      name,
-      key,
-    }));
+    const climateColumns = Object.entries(Formatters.typeMappings)
+      .map(([key, [name]]) => ({
+        name,
+        key,
+      }))
+      .filter(({ key }) => !['lat', 'lon', 'date'].includes(key));
+
+    const originalColumns = Object.keys(this.state.queries[0].row).map(
+      (key) => ({ name: key, key: key })
+    );
+
+    return climateColumns.concat(originalColumns);
   }
 
   isEmpty(value) {
@@ -52,7 +60,7 @@ class ClimatePage extends React.Component {
       columns.map((column) => {
         const value = query[column.key];
         if (this.isEmpty(value)) {
-          return ''; // FIXME: display a message.
+          return query.row[column.key];
         }
 
         const columnType = Formatters.typeMappings[column.key];
