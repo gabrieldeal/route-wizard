@@ -1,6 +1,7 @@
 import * as Formatters from '../lib/formatters';
 import * as Spreadsheet from '../lib/climate/spreadsheet';
 import compose from 'recompose/compose';
+import DaymetCitation from '../components/daymetCitation';
 import daymetClient from '../lib/climate/daymetClient';
 import Layout from '../components/layout';
 import PropTypes from 'prop-types';
@@ -173,7 +174,7 @@ class ClimatePage extends React.Component {
           rows={this.rows()}
         />
         <div className={this.props.classes.footer}>
-          Climate data source: <a href="https://daymet.ornl.gov/">Daymet</a>
+          <DaymetCitation />
         </div>
       </Layout>
     );
