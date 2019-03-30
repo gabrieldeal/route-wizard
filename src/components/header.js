@@ -62,14 +62,14 @@ class Header extends React.Component {
     navigate('/');
   };
 
-  handleGoToClimatePageClick = () => {
+  handleGoToClimateSpreadsheetPageClick = () => {
     this.setState({ anchorEl: null });
-    navigate('/climate');
+    navigate('/climateSpreadsheet');
   };
 
-  handleGoToMapClick = () => {
+  handleGoToClimateMapClick = () => {
     this.setState({ anchorEl: null });
-    navigate('/map');
+    navigate('/climateMap');
   };
 
   render() {
@@ -113,10 +113,10 @@ class Header extends React.Component {
               <MenuItem onClick={this.handleGoToRoutePageClick}>
                 Create databook from route
               </MenuItem>
-              <MenuItem onClick={this.handleGoToClimatePageClick}>
+              <MenuItem onClick={this.handleGoToClimateSpreadsheetPageClick}>
                 Add climate data to spreadsheet
               </MenuItem>
-              <MenuItem onClick={this.handleGoToMapClick}>
+              <MenuItem onClick={this.handleGoToClimateMapClick}>
                 Climate data map
               </MenuItem>
             </Menu>
