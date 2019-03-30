@@ -89,7 +89,7 @@ const unfilteredColumns = [
   { key: 'to', name: 'Ending point' },
   {
     key: 'distance',
-    name: 'Distance fron starting point to ending point (mi)',
+    name: 'Distance from starting point to ending point (mi)',
   },
   { key: 'gain', name: 'Elevation gain (feet)' },
   { key: 'loss', name: 'Elevation loss (feet)' },
