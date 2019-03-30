@@ -196,6 +196,7 @@ class IndexPage extends React.Component {
   }
 
   strip(geoJson) {
+    // 'shouldSort' looks wrong but is right.
     if (!this.props.shouldSort) {
       return geoJson;
     }

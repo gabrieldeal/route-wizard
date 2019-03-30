@@ -5,6 +5,7 @@ function shouldConvert(feature) {
   return shouldSort(feature) && TITLE_REGEXP.test(feature.properties.title);
 }
 
+// FIXME: Rename this to normalizeLineTitles(). It does more than strip numeric prefixes.
 export default function({ geoJson, shouldStripTitleNumber }) {
   const count = geoJson.features.filter(shouldConvert).length;
   const numDigits = count.toString().length;
