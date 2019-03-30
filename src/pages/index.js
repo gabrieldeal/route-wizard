@@ -310,7 +310,9 @@ class IndexPage extends React.Component {
         columns={this.props.columns}
         disabled={this.props.isLoading}
         rows={this.rows()}
-      />
+      >
+        Download spreadsheet
+      </SpreadsheetExportButton>
     );
   }
 

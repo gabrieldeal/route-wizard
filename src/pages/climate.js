@@ -6,12 +6,16 @@ import Layout from '../components/layout';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReadFileButton from '../components/readFileButton';
+import SpreadsheetExportButton from '../components/spreadsheet/exportButton';
 import SpreadsheetTable from '../components/spreadsheet/table';
 import withCss from '../components/withCss';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = {
   footer: { marginTop: '1em' },
+  exportButtonsContainer: {
+    display: 'flex',
+  },
 };
 
 class ClimatePage extends React.Component {
@@ -129,19 +133,40 @@ class ClimatePage extends React.Component {
       });
   };
 
+  renderReadSpreadsheetButton() {
+    return (
+      <ReadFileButton
+        isLoading={this.state.isLoading}
+        onChange={this.handleReadFile}
+        errorMessage={this.state.errorMessage}
+        notificationMessage={this.state.notificationMessage}
+        progressMessage={this.state.progressMessage}
+      >
+        Read spreadsheet
+      </ReadFileButton>
+    );
+  }
+
+  renderExportSpreadsheetButton() {
+    return (
+      <SpreadsheetExportButton
+        columns={this.columns()}
+        disabled={this.state.isLoading}
+        rows={this.rows()}
+      >
+        Download updated spreadsheet
+      </SpreadsheetExportButton>
+    );
+  }
+
   render() {
     return (
       <Layout>
         <h1>Add climate data to spreadsheet (beta)</h1>
-        <ReadFileButton
-          isLoading={this.state.isLoading}
-          onChange={this.handleReadFile}
-          errorMessage={this.state.errorMessage}
-          notificationMessage={this.state.notificationMessage}
-          progressMessage={this.state.progressMessage}
-        >
-          Read spreadsheet
-        </ReadFileButton>
+        {this.renderReadSpreadsheetButton()}
+        <div className={this.props.classes.exportButtonsContainer}>
+          {this.renderExportSpreadsheetButton()}
+        </div>
         <SpreadsheetTable
           columns={this.columns()}
           isLoading={this.state.isLoading}

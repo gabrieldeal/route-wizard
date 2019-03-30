@@ -67,7 +67,7 @@ class ExportButton extends React.Component {
           disabled={disabled}
           variant="contained"
         >
-          Download spreadsheet
+          {this.props.children}
         </Button>
         <Menu {...bindMenu(popupState)}>
           <MenuItem onClick={makeHandleClick(this.exportXlsx)}>XLSX</MenuItem>
@@ -87,6 +87,7 @@ class ExportButton extends React.Component {
 }
 
 ExportButton.propTypes = {
+  children: PropTypes.node.isRequired,
   classes: PropTypes.object.isRequired,
   columns: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
