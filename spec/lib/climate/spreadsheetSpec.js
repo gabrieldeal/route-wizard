@@ -10,9 +10,42 @@ describe('climate/spreadsheet', () => {
 45,-100,2015-06-07,FFF,BBB
 `;
     const expectedData = [
-      { lat: 47, lon: -122, date: dayjs.utc('1996-12-31') },
-      { lat: 45, lon: -100, date: dayjs.utc('1997-01-05') },
-      { lat: 45, lon: -100, date: dayjs.utc('2015-06-07') },
+      {
+        lat: 47,
+        lon: -122,
+        date: dayjs.utc('1996-12-31'),
+        row: {
+          lat: 47,
+          Lon: -122,
+          date: new Date('1996-12-31'),
+          foo: 'FOO',
+          bar: 'BAR',
+        },
+      },
+      {
+        lat: 45,
+        lon: -100,
+        date: dayjs.utc('1997-01-05'),
+        row: {
+          lat: 45,
+          Lon: -100,
+          date: new Date('1997-01-05'),
+          foo: 'FFF',
+          bar: 'BBB',
+        },
+      },
+      {
+        lat: 45,
+        lon: -100,
+        date: dayjs.utc('2015-06-07'),
+        row: {
+          lat: 45,
+          Lon: -100,
+          date: new Date('2015-06-07'),
+          foo: 'FFF',
+          bar: 'BBB',
+        },
+      },
     ];
 
     const { queries } = Spreadsheet.parse({ data: csv, type: 'binary' });
