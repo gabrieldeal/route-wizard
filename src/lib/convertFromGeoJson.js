@@ -1,5 +1,5 @@
 import togpx from 'togpx';
-import tokml from 'tokml';
+import tokml from '@maphubs/tokml';
 
 export function toGpx(origGeoJson) {
   // Filter out folders:
