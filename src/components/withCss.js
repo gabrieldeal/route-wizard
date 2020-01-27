@@ -1,14 +1,15 @@
 // This is lifted from https://github.com/mui-org/material-ui/tree/master/examples/gatsby
 
 import CssBaseline from '@material-ui/core/CssBaseline';
-import JssProvider from 'react-jss/lib/JssProvider';
 import React from 'react';
+import { JssProvider } from 'react-jss';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { SheetsRegistry } from 'jss';
+
 import {
   createMuiTheme,
   createGenerateClassName,
 } from '@material-ui/core/styles';
-import { MuiThemeProvider } from '@material-ui/core/styles';
-import { SheetsRegistry } from 'jss';
 
 // A theme with custom primary and secondary color.
 // It's optional.

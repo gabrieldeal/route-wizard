@@ -1,5 +1,5 @@
 import convertFileNameExtension from '../lib/convertFileNameExtension';
-import { saveAs } from 'file-saver/FileSaver';
+import { saveAs } from 'file-saver';
 
 export default function({
   fileContents,

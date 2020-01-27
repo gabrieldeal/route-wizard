@@ -7,7 +7,7 @@
 // From https://github.com/mui-org/material-ui/blob/master/examples/gatsby/gatsby-ssr.js#L6
 const React = require('react');
 const { renderToString } = require('react-dom/server');
-const JssProvider = require('react-jss/lib/JssProvider').default;
+const JssProvider = require('react-jss').default;
 const getPageContext = require('./src/components/withCss').getPageContext;
 
 function replaceRenderer({
