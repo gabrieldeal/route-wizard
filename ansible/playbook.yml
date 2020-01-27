@@ -11,7 +11,7 @@
     synchronize:
       delete: yes
       src: ../public/
-      dest: ~/public_html/route-wizard
+      dest: /var/lib/docker/volumes/dogabrielx_letsencrypt-config/_data/www/route-wizard/
   - name: Increment version in Git
     command: ~/projects/personal-environment/bin/git-increment-version-tag
     args:
