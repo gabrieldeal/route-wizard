@@ -35,6 +35,8 @@ describe('Route', function() {
         cumulativeDistance: 0,
         distance: 0.5,
         gain: 0,
+        lat: 47.47511401111552,
+        lon: -120.90226650303521,
         loss: 0,
       },
       {
@@ -44,6 +46,8 @@ describe('Route', function() {
         cumulativeDistance: 0.5,
         distance: 1.2,
         gain: 0,
+        lat: 47.47249217509707,
+        lon: -120.89125895263321,
         loss: 857,
       },
       {
@@ -53,6 +57,8 @@ describe('Route', function() {
         cumulativeDistance: 0.5 + 1.2 + 0.1,
         distance: 0.7,
         gain: 0,
+        lat: 47.471749099922384,
+        lon: -120.88853359287896,
         loss: 0,
       },
       {
@@ -62,12 +68,16 @@ describe('Route', function() {
         cumulativeDistance: 0.5 + 1.2 + 0.7,
         distance: 2.2,
         gain: 1124,
+        lat: 47.46578617091729,
+        lon: -120.87694687259508,
         loss: 1424,
       },
       {
         cumulativeDistance: 0.5 + 1.2 + 0.7 + 2.2,
         description: '',
         from: 'The End',
+        lat: 47.4702116118904,
+        lon: -120.86119651859917,
       },
     ];
     const fixtureName = 'two-segments.json'; // https://caltopo.com/m/PLN5
@@ -84,12 +94,16 @@ describe('Route', function() {
         cumulativeDistance: 0,
         distance: 0.7,
         gain: 0,
+        lat: 47.47524454206689,
+        lon: -120.90248107910156,
         loss: 814,
       },
       {
         cumulativeDistance: 0.7,
         description: '',
         from: 'The End',
+        lat: 47.47182162177658,
+        lon: -120.88891983032227,
       },
     ];
     const fixtureName = 'marker-at-start-of-segment.json'; // https://caltopo.com/m/8J5M
@@ -106,12 +120,16 @@ describe('Route', function() {
         cumulativeDistance: 0,
         distance: 0.7,
         gain: 0,
+        lat: 47.47524454206689,
+        lon: -120.90248107910156,
         loss: 814,
       },
       {
         cumulativeDistance: 0.7,
         description: '',
         from: 'The End',
+        lat: 47.47182162177658,
+        lon: -120.88891983032227,
       },
     ];
     const fixtureName = 'untitled-marker-at-start-of-segment.json';
@@ -128,12 +146,16 @@ describe('Route', function() {
         cumulativeDistance: 0,
         distance: 0.7,
         gain: 0,
+        lat: 47.47524454206689,
+        lon: -120.90248107910156,
         loss: 814,
       },
       {
         description: 'Marker description',
         cumulativeDistance: 0.7,
         from: 'Marker at end of line',
+        lat: 47.47182162177658,
+        lon: -120.88891983032227,
       },
     ];
     const fixtureName = 'marker-at-end-of-segment.json'; // https://caltopo.com/m/8J5M
@@ -150,12 +172,16 @@ describe('Route', function() {
         cumulativeDistance: 0,
         distance: 0.7,
         gain: 0,
+        lat: 47.47524454206689,
+        lon: -120.90248107910156,
         loss: 814,
       },
       {
         cumulativeDistance: 0.7,
         description: 'Point description',
         from: 'The End',
+        lat: 47.47182162177658,
+        lon: -120.88891983032227,
       },
     ];
     const fixtureName = 'untitled-marker-at-end-of-segment.json';
@@ -177,6 +203,9 @@ describe('Route', function() {
         cumulativeDistance: 0,
         distance: 0.4,
         gain: 883,
+        lat: 47.454239382837734,
+        lon: -120.89638710021973,
+
         loss: 0,
       },
       {
@@ -187,6 +216,9 @@ describe('Route', function() {
         cumulativeDistance: 0.4,
         distance: 0.6,
         gain: 1398,
+        lat: 47.45999645438458,
+        lon: -120.89428157550041,
+
         loss: 0,
       },
       {
@@ -198,11 +230,15 @@ describe('Route', function() {
         loss: 0,
         cumulativeDistance: 0.4 + 0.6,
         distance: 0.9,
+        lat: 47.467343305600814,
+        lon: -120.8964048750426,
       },
       {
         cumulativeDistance: 0.4 + 0.6 + 0.9,
         description: '',
         from: 'The End',
+        lat: 47.47530255574356,
+        lon: -120.90145111083984,
       },
     ];
     const fixtureName = 'markers-in-middle-of-segment.json';
