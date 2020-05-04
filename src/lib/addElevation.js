@@ -1,6 +1,6 @@
 export default function addElevation({
   geoJson,
-  server = 'apps.yellowleaf.org',
+  server = 'yellowleaf.org',
   path = '/elevation-service',
   port = 443,
   protocol = 'https',

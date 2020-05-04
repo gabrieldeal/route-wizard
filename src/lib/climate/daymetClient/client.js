@@ -3,7 +3,7 @@ import objectHash from 'object-hash';
 import { Api, Gateway } from 'daymet-single-pixel-client';
 
 // Using yellowleaf as a proxy to add CORS headers.
-Gateway.init({ url: 'https://apps.yellowleaf.org/daymet/single-pixel' });
+Gateway.init({ url: 'https://yellowleaf.org/daymet/single-pixel' });
 
 function resolver(lat, lon, format, options) {
   return objectHash({ lat, lon, format, options });
