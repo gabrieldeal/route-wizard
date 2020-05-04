@@ -111,10 +111,10 @@ class Header extends React.Component {
               transformOrigin={menuTransformOrigin}
             >
               <MenuItem onClick={this.handleGoToRoutePageClick}>
-                Create databook from route
+                Create databook spreadsheet from route
               </MenuItem>
               <MenuItem onClick={this.handleGoToClimateSpreadsheetPageClick}>
-                Add climate data to spreadsheet
+                Add climate data to databook spreadsheet
               </MenuItem>
               <MenuItem onClick={this.handleGoToClimateMapClick}>
                 Climate data map
