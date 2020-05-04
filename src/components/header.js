@@ -57,9 +57,9 @@ class Header extends React.Component {
     this.setState({ anchorEl: null });
   };
 
-  handleGoToRoutePageClick = () => {
+  handleGoToDatabookSpreadsheetPageClick = () => {
     this.setState({ anchorEl: null });
-    navigate('/');
+    navigate('/databookSpreadsheet');
   };
 
   handleGoToClimateSpreadsheetPageClick = () => {
@@ -112,14 +112,14 @@ class Header extends React.Component {
               open={Boolean(this.state.anchorEl)}
               transformOrigin={menuTransformOrigin}
             >
-              <MenuItem onClick={this.handleGoToRoutePageClick}>
+              <MenuItem onClick={this.handleGoToClimateMapClick}>
+                Climate data map
+              </MenuItem>
+              <MenuItem onClick={this.handleGoToDatabookSpreadsheetPageClick}>
                 Create databook spreadsheet from route
               </MenuItem>
               <MenuItem onClick={this.handleGoToClimateSpreadsheetPageClick}>
                 Add climate data to databook spreadsheet
-              </MenuItem>
-              <MenuItem onClick={this.handleGoToClimateMapClick}>
-                Climate data map
               </MenuItem>
             </Menu>
           </Toolbar>
