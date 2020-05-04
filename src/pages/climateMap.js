@@ -147,14 +147,18 @@ class MapPage extends React.Component {
   }
 
   updateClimateDataImmediately = (query) => {
-    daymetClient({ queries: [query] }).then((data) =>
-      this.setState({ climateData: { ...data[0] } })
-    );
+    daymetClient({ queries: [query] })
+      .then((data) => this.setState({ climateData: { ...data[0] } }))
+      .catch(this.handleClimatePopupError);
   };
   updateClimateData = debounce(this.updateClimateDataImmediately, DEBOUNCE_MS);
 
   handleDatePickerChange = (date) => {
-    this.setState({ date, climateData: null });
+    this.setState({
+      climateData: null,
+      climatePopupErrorMessage: null,
+      date,
+    });
 
     if (date && this.state.position) {
       this.updateClimateData({ date, ...this.state.position });
@@ -169,13 +173,17 @@ class MapPage extends React.Component {
     const lat = event.latlng.lat;
     const lon = event.latlng.lng; // FIXME: rename 'lon' to 'lng' in all my code?
     const position = { lat, lon };
-    this.setState({ climateData: null, position });
+    this.setState({
+      climateData: null,
+      climatePopupErrorMessage: null,
+      position,
+    });
 
     this.updateClimateData({ date: this.state.date, ...position });
   };
 
-  handleError(errorMessage) {
-    this.setState({ errorMessage, isLoading: false });
+  handleRouteFileError(routeFileErrorMessage) {
+    this.setState({ routeFileErrorMessage, isLoading: false });
   }
 
   handleSelectedFile = (event) => {
@@ -191,7 +199,7 @@ class MapPage extends React.Component {
         const geoJson = convertToGeoJson({ fileContentsStr, fileName });
         this.setState({ geoJson, isLoading: false, progressMessage: null });
       })
-      .catch((error) => this.handleError(error));
+      .catch((error) => this.handleRouteFileError(error));
   };
 
   renderOpenDrawerButton() {
@@ -264,7 +272,7 @@ class MapPage extends React.Component {
         <ReadFileButton
           className={this.props.classes.readFileButton}
           disabled={this.state.isLoading}
-          errorMessage={this.state.errorMessage}
+          errorMessage={this.state.routeFileErrorMessage}
           isLoading={this.state.isLoading}
           notificationMessage={this.state.notificationMessage}
           onChange={this.handleSelectedFile}
@@ -277,7 +285,23 @@ class MapPage extends React.Component {
     );
   }
 
+  handleClimatePopupError = () => {
+    const climatePopupErrorMessage =
+      'Error calling Daymet. Did you click outside of North America?';
+
+    this.setState({ climatePopupErrorMessage, isLoading: false });
+  };
+
   renderClimatePopupText() {
+    if (this.state.climatePopupErrorMessage) {
+      return (
+        <div>
+          Error while querying Daymet for climate data. Did you click outside
+          the US?
+        </div>
+      );
+    }
+
     if (!this.state.climateData) {
       return (
         <CircularProgress

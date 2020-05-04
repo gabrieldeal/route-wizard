@@ -17,6 +17,15 @@ function groupByQueryId(responsesByQueryId, response) {
   return responsesByQueryId;
 }
 
+function rejectIfError(response) {
+  if (response.error) {
+    console.error('Got error when querying Daymet:', response);
+    return Promise.reject();
+  }
+
+  return response;
+}
+
 export default async function({
   clientImpl = client,
   concurrency = 2,
@@ -32,14 +41,9 @@ export default async function({
   const actions = flatten(queries).map(({ date, queryId, ...query }) => {
     return () =>
       clientImpl(query)
+        .then(rejectIfError)
         .then(normalizeResponse)
-        .then((response) => ({ date, queryId, ...response }))
-        .catch((error) => {
-          // FIXME: show message in UI.
-          console.warn('Query failed:', query);
-          console.warn('With error:', error);
-          return { queryId, error: 'Failed' };
-        });
+        .then((response) => ({ date, queryId, ...response }));
   });
   const responses = await pAll(actions, { concurrency });
   const responsesByQueryId = responses.reduce(groupByQueryId, new Map());
