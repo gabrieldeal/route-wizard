@@ -79,11 +79,13 @@ class Header extends React.Component {
       <div id="navbar" className={classes.root}>
         <AppBar position="static" className={classes.colorPrimary}>
           <Toolbar>
-            <img
-              alt="A yellow leaf"
-              className={classes.siteIcon}
-              src="/route-wizard/public/ms-icon-144x144.png"
-            />
+            <a href="/">
+              <img
+                alt="A yellow leaf"
+                className={classes.siteIcon}
+                src="./public/ms-icon-144x144.png"
+              />
+            </a>
 
             <Typography
               variant="title"
