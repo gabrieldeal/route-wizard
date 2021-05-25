@@ -42,6 +42,7 @@ class IndexPage extends React.Component {
     fileName: PropTypes.string,
     processedGeoJson: PropTypes.object,
     isLoading: PropTypes.bool.isRequired,
+    isOutAndBack: PropTypes.bool.isRequired,
     notificationMessage: PropTypes.string,
     progressMessage: PropTypes.string,
     rows: PropTypes.array,
@@ -50,6 +51,7 @@ class IndexPage extends React.Component {
     setFileName: PropTypes.func.isRequired,
     setProcessedGeoJson: PropTypes.func.isRequired,
     setIsLoading: PropTypes.func.isRequired,
+    setIsOutAndBack: PropTypes.func.isRequired,
     setNotificationMessage: PropTypes.func.isRequired,
     setProgressMessage: PropTypes.func.isRequired,
     setRows: PropTypes.func.isRequired,
@@ -68,7 +70,8 @@ class IndexPage extends React.Component {
   componentDidUpdate(prevProps) {
     if (
       this.props.unprocessedGeoJson &&
-      (prevProps.shouldAddElevation !== this.props.shouldAddElevation ||
+      (prevProps.isOutAndBack !== this.props.isOutAndBack ||
+        prevProps.shouldAddElevation !== this.props.shouldAddElevation ||
         prevProps.shouldReverse !== this.props.shouldReverse ||
         prevProps.shouldSort !== this.props.shouldSort ||
         prevProps.shouldStripTitleNumber !== this.props.shouldStripTitleNumber)
@@ -157,6 +160,10 @@ class IndexPage extends React.Component {
         this.msg(geoJson, 'Changing titles', this.props.shouldSort)
       )
       .then((geoJson) => this.strip(geoJson))
+      .then((geoJson) =>
+        this.msg(geoJson, 'Creating out-n-back', this.props.isOutAndBack)
+      )
+      .then((geoJson) => this.createOutAndBack(geoJson))
       .then((geoJson) => this.msg(geoJson, 'Creating the spreadsheet'))
       .then((geoJson) => this.createSpreadsheet(geoJson))
       .then(({ geoJson, spreadsheet }) => {
@@ -215,8 +222,25 @@ class IndexPage extends React.Component {
     return reverseGeoJson(geoJson);
   }
 
-  createSpreadsheet(geoJson) {
-    const segments = createSegments(geoJson);
+  createOutAndBack(geoJson) {
+    let segments;
+    if (!this.props.isOutAndBack) {
+      segments = createSegments(geoJson);
+    } else {
+      const outSegments = createSegments(geoJson);
+      const backSegments = createSegments(reverseGeoJson(geoJson));
+      segments = [...outSegments, ...backSegments];
+      // The back segment will not be added to the GeoJSON.
+      // That breaks the "downloaded updated route file" button a little.
+    }
+
+    return {
+      geoJson,
+      segments,
+    };
+  }
+
+  createSpreadsheet({ geoJson, segments }) {
     const spreadsheet = createSpreadsheet(segments);
 
     return {
@@ -269,6 +293,12 @@ class IndexPage extends React.Component {
           disabled: this.props.isLoading,
           onChange: this.props.setShouldReverse,
           label: 'Reverse the route',
+        })}
+        {this.renderCheckbox({
+          checked: this.props.isOutAndBack,
+          disabled: this.props.isLoading,
+          onChange: this.props.setIsOutAndBack,
+          label: 'Turn into an out-n-back',
         })}
         {this.renderCheckbox({
           checked: this.props.shouldAddElevation,
@@ -351,6 +381,7 @@ const enhance = compose(
   withState('fileName', 'setFileName'),
   withState('processedGeoJson', 'setProcessedGeoJson'),
   withState('isLoading', 'setIsLoading', false),
+  withState('isOutAndBack', 'setIsOutAndBack', false),
   withState('unprocessedGeoJson', 'setUnprocessedGeoJson'),
   withState('notificationMessage', 'setNotificationMessage'),
   withState('rows', 'setRows', []),
